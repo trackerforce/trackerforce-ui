@@ -1,23 +1,10 @@
-<!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <img
-    width="50"
-    alt="Angular Logo"
-    src="../assets//tf_icon_white_trans.png"
-  />
+  <a routerLink="/"><img width="50" alt="Angular Logo" src="../assets/tf_icon_white_trans.png" /></a>
   <span>Trackerforce Management</span>
-    <div class="spacer"></div>
+  <div class="spacer"></div>
+  <a class="nav-item nav-link" routerLink="/login">Sign in</a>
 </div>
 
 <div class="content" role="main">
-  <div class="card-container">
-    <img src="../assets/trackerforce_1280_white_trans.png"/>
-  </div>
-
-  <footer>
-  </footer>
+  <router-outlet> </router-outlet>
 </div>
-
-<router-outlet>
-  
-</router-outlet>

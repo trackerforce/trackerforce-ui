@@ -1,1 +1,25 @@
-<p>login works!</p>
+<mat-card>
+    <img mat-card-image src="assets\trackerforce_1280_grey.png" alt="Trackerforce Logo">
+    <mat-card-content>
+        <div *ngIf="!loading">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <mat-form-field>
+                    <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50" placeholder="E-mail"
+                        autocomplete="off" formControlName="email" required>
+                    <mat-error>
+                        Please provide a valid Email
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
+                        placeholder="Password" formControlName="password" required>
+                    <mat-error>
+                        Please provide a valid password
+                    </mat-error>
+                </mat-form-field>
+                <button mat-raised-button color="warn">Login</button>
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            </form>
+        </div>
+    </mat-card-content>
+</mat-card>
