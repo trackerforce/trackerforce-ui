@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, mapTo, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
-import { Tokens } from '../models/tokens';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { AuthAccess } from '../models/auth-access';
 
 @Injectable({
   providedIn: 'root'
@@ -34,19 +34,19 @@ export class AuthService {
     this.currentUser = this.userInfoSubject.asObservable();
   }
 
-  login(user: { email: string, password: string }): Observable<boolean> {
-    return this.http.post<any>(`${environment.apiUrl}/admin/login`, user)
+  login(user: { username: string, password: string }): Observable<boolean> {
+    return this.http.post<AuthAccess>(`${environment.apiUrl}/identity/v1/authenticate`, user)
       .pipe(
         tap(auth => {
-          this.doLoginUser(auth.admin, auth.jwt);
-          this.currentTokenSubject.next(auth.jwt.token);
+          this.doLoginUser(auth);
+          this.currentTokenSubject.next(auth.token);
         }),
         mapTo(true),
         catchError(this.handleError));
   }
 
   signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
-    return this.http.post<any>(`${environment.apiUrl}/admin/signup`, user)
+    return this.http.post<any>(`${environment.apiUrl}/identity/v1/register`, user)
       .pipe(
         tap(signup => signup != undefined),
         mapTo(true),
@@ -60,7 +60,7 @@ export class AuthService {
 
   logout(deleted: boolean = false) {
     if (!deleted) {
-      this.http.post<any>(`${environment.apiUrl}/admin/logout`, null).subscribe();
+      this.http.post<any>(`${environment.apiUrl}/identity/v1/logout`, null).subscribe();
     }
     this.currentTokenSubject.next("");
     this.doLogoutUser();
@@ -71,10 +71,10 @@ export class AuthService {
   }
 
   refreshToken() {
-    return this.http.post<any>(`${environment.apiUrl}/admin/refresh/me`, {
+    return this.http.post<any>(`${environment.apiUrl}/identity/v1/refresh`, {
       'refreshToken': this.getRefreshToken()
     }).pipe(
-      tap((tokens: Tokens) => this.storeJwtToken(tokens), 
+      tap((auth: AuthAccess) => this.storeTokens(auth), 
       () => this.cleanSession()));
   }
 
@@ -107,28 +107,27 @@ export class AuthService {
       errorMessage = `Error: ${result.error.message}`;
     } else {
       if (result.status === 401 || result.status === 422) {
-        errorMessage = 'Invalid email/password';
+        errorMessage = 'Invalid username/password';
       } else if (result.status === 400) {
         errorMessage = result.error.error;
       } else {
         ConsoleLogger.printError(result);
-        errorMessage = `Switcher API is offline`;
+        errorMessage = `Trackerforce is offline`;
       }
     }
     return throwError(errorMessage);
   }
 
-  private doLoginUser(user: any, tokens: Tokens) {
+  private doLoginUser(auth: AuthAccess) {
     const userData = JSON.stringify({ 
-      name: user.name,
-      email: user.email,
-      sessionid: user.id
+      name: auth.access.username,
+      sessionid: auth.access.id
     });
 
     localStorage.setItem(AuthService.USER_INFO, userData);
     this.userInfoSubject.next(userData);
-    this.loggedUser = user.email;
-    this.storeTokens(tokens);
+    this.loggedUser = auth.access.username;
+    this.storeTokens(auth);
   }
 
   private doLogoutUser() {
@@ -140,14 +139,9 @@ export class AuthService {
     return localStorage.getItem(this.REFRESH_TOKEN);
   }
 
-  private storeJwtToken(tokens: Tokens) {
-    localStorage.setItem(AuthService.JWT_TOKEN, tokens.token);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
-  }
-
-  private storeTokens(tokens: Tokens) {
-    localStorage.setItem(AuthService.JWT_TOKEN, tokens.token);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
+  private storeTokens(auth: AuthAccess) {
+    localStorage.setItem(AuthService.JWT_TOKEN, auth.token);
+    localStorage.setItem(this.REFRESH_TOKEN, auth.refreshToken);
   }
 
   private removeTokens() {

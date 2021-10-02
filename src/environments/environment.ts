@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://switcher-api-staging.herokuapp.com',
+  apiUrl: 'http://localhost:8070',
 };
 
 /*

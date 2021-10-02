@@ -4,10 +4,10 @@
         <div *ngIf="!loading">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <mat-form-field>
-                    <input matInput type="email" id="email" (keyup)="onKey($event)" maxlength="50" placeholder="E-mail"
-                        autocomplete="off" formControlName="email" required>
+                    <input matInput id="username" (keyup)="onKey($event)" maxlength="50" placeholder="Username"
+                        autocomplete="off" formControlName="username" required>
                     <mat-error>
-                        Please provide a valid Email
+                        Please provide a valid Username
                     </mat-error>
                 </mat-form-field>
                 <mat-form-field>
