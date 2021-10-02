@@ -16,16 +16,16 @@ export class AuthAccess {
 
 export class Access {
     id: string;
-    username: string;
+    email: string;
     organization: Organzation;
 
     constructor(
         id: string,
-        username: string,
+        email: string,
         organization: Organzation
     ) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.organization = organization;
     }
 }

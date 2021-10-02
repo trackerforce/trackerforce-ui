@@ -34,7 +34,7 @@ export class AuthService {
     this.currentUser = this.userInfoSubject.asObservable();
   }
 
-  login(user: { username: string, password: string }): Observable<boolean> {
+  login(user: { email: string, password: string }): Observable<boolean> {
     return this.http.post<AuthAccess>(`${environment.apiUrl}/identity/v1/authenticate`, user)
       .pipe(
         tap(auth => {
@@ -120,13 +120,13 @@ export class AuthService {
 
   private doLoginUser(auth: AuthAccess) {
     const userData = JSON.stringify({ 
-      name: auth.access.username,
+      name: auth.access.email,
       sessionid: auth.access.id
     });
 
     localStorage.setItem(AuthService.USER_INFO, userData);
     this.userInfoSubject.next(userData);
-    this.loggedUser = auth.access.username;
+    this.loggedUser = auth.access.email;
     this.storeTokens(auth);
   }
 

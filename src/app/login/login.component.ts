@@ -15,12 +15,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private unsubscribe: Subject<void> = new Subject();
 
     loginForm!: FormGroup;
-    loading = false;
-    forgotPassword = false;
     returnUrl: string | undefined;
     error: string = '';
-    success: string = '';
-    status: string = '';
 
     constructor(
         private formBuilder: FormBuilder,
@@ -35,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            username: ['', [Validators.required]],
+            email: ['', [Validators.required]],
             password: ['', Validators.required]
         });
     }
@@ -45,27 +41,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
-        if (this.loginForm?.invalid || this.forgotPassword) {
+        if (this.loginForm?.invalid)
             return;
-        }
-
-        this.loading = true;
 
         this.authService.login({
-            username: this.f?.username.value,
+            email: this.f?.email.value,
             password: this.f?.password.value
         }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
                 this.router.navigateByUrl(this.returnUrl || "/");
                 this.authService.releaseOldSessions.emit(true);
             }
-            this.loading = false;
         }, error => {
             ConsoleLogger.printError(error);
             this.error = error;
-            this.loading = false;
-        }
-        );
+        });
     }
 
     ngOnDestroy() {
@@ -75,10 +65,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     onKey(event: any) {
         this.error = '';
-    }
-
-    onForgotPassword() {
-        this.forgotPassword = true;
     }
 
 }
