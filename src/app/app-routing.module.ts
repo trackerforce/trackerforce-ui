@@ -6,6 +6,10 @@ import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  {
+    path: ':tenant',
+    loadChildren: () => import('./logged/logged.module').then(mod => mod.LoggedModule)
+  },
 ];
 
 @NgModule({

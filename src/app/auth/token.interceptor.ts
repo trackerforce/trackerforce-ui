@@ -24,9 +24,9 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.authService.getJwtToken()) {
-      request = this.addToken(request, this.authService.getJwtToken() || "");
+      request = this.setHeader(request, this.authService.getJwtToken() || "");
     }
-
+    
     return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401 
         && request.url !== `${environment.apiUrl}/identity/v1/authenticate`
@@ -38,10 +38,11 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
     }));
   }
 
-  private addToken(request: HttpRequest<any>, token: string) {
+  private setHeader(request: HttpRequest<any>, token: string) {
     return request.clone({
       setHeaders: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'X-Tenant': this.authService.getUserInfo('tenant')
       }
     });
   }
@@ -55,7 +56,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
         switchMap((token: any) => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.token);
-          return next.handle(this.addToken(request, token.token));
+          return next.handle(this.setHeader(request, token.token));
         }),
         catchError((error) => {
           this.router.navigate(['/login']);
@@ -67,7 +68,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
         filter(token => token != null),
         take(1),
         switchMap(jwt => {
-          return next.handle(this.addToken(request, jwt));
+          return next.handle(this.setHeader(request, jwt));
         }));
     }
   }

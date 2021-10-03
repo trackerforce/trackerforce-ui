@@ -1,9 +1,15 @@
-<div class="toolbar" role="banner">
-  <a routerLink="/"><img width="50" alt="Angular Logo" src="../assets/tf_icon_white_trans.png" /></a>
-  <span>Trackerforce Management</span>
-  <div class="spacer"></div>
-  <a class="nav-item nav-link" routerLink="/login">Sign in</a>
-</div>
+<nav class="navbar navbar-expand toolbar" style="box-shadow: 0px 0px 10px 10px #262b31;">
+  <a routerLink="/">
+      <img src="assets\tf_icon_white_trans.png" width="50" alt="Trackerforce Logo" />
+  </a>
+  <mat-divider class="divider-style"></mat-divider>
+  <div class="navbar-nav" style="width: 100%;">
+      <a class="nav-item nav-link" routerLink="/{{tenant}}" *ngIf="currentToken">Dashboard</a>
+      <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
+      <a class="nav-item nav-link menu-border-left" routerLink="/signup" *ngIf="!currentToken">Sign Up</a>
+      <a class="nav-item nav-link menu-border-left" routerLink="/" (click)="logout()" *ngIf="currentToken">Sign Out</a>
+  </div>
+</nav>
 
 <div class="content" role="main">
   <router-outlet> </router-outlet>

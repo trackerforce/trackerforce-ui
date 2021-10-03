@@ -1,1 +1,31 @@
-<p>home works!</p>
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sticky">
+            <div class="sidebar-header">
+                <a routerLink="/{{tenant}}" (click)="toggleMenu()">
+                    <img src="assets\trackerforce_1280_white_trans.png" style="width: 200px;" />
+                </a>
+            </div>
+            <div class="spacer"></div>
+            <ul class="list-unstyled components">
+                <li><a routerLink="/{{tenant}}/agents" (click)="toggleMenu()"><i class="fas fa-users"></i>Agents</a></li>
+                <li><a routerLink="/{{tenant}}/tasks" (click)="toggleMenu()"><i class="fas fa-clipboard-check"></i>Tasks</a></li>
+                <li><a routerLink="/{{tenant}}/procedures" (click)="toggleMenu()"><i class="fas fa-tasks"></i>Procedures</a></li>
+                <li><a routerLink="/{{tenant}}/templates" (click)="toggleMenu()"><i class="fas fa-book-open"></i>Templates</a></li>
+                <li><a routerLink="/{{tenant}}/globals" (click)="toggleMenu()"><i class="fas fa-globe"></i>Globals</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="content">
+        <div id="sidebarCollapse" class="container-fluid sticky">
+            <img class="logo" src="assets\trackerforce_1280_white_trans.png" />
+            <button type="button" id="sidebarCollapseBtn" class="btn btn-info" (click)="toggleMenu()">
+                <i class="fas fa-align-left"></i>
+            </button>
+        </div>
+        <div id="component" class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

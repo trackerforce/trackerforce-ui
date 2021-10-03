@@ -24,7 +24,7 @@ export class AuthService {
   private userInfoSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  loggedUser: string = "";
+  loggedUser: String = "";
 
   constructor(private http: HttpClient) {
     this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(AuthService.JWT_TOKEN) || "");
@@ -45,6 +45,22 @@ export class AuthService {
         catchError(this.handleError));
   }
 
+  loginAgent(user: { email: string, password: string }, tenant: string): Observable<boolean> {
+    return this.http.post<AuthAccess>(`${environment.apiUrl}/identity/agent/v1/authenticate`, user, {
+      headers: {
+        'X-Tenant': tenant
+      }
+    })
+      .pipe(
+        tap(auth => {
+          this.doLoginUser(auth);
+          this.currentTokenSubject.next(auth.token);
+          this.setUserInfo('tenant', tenant);
+        }),
+        mapTo(true),
+        catchError(this.handleError));
+  }
+
   signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
     return this.http.post<any>(`${environment.apiUrl}/identity/v1/register`, user)
       .pipe(
@@ -58,12 +74,11 @@ export class AuthService {
     this.doLogoutUser();
   }
 
-  logout(deleted: boolean = false) {
-    if (!deleted) {
-      this.http.post<any>(`${environment.apiUrl}/identity/v1/logout`, null).subscribe();
-    }
-    this.currentTokenSubject.next("");
-    this.doLogoutUser();
+  logout() {
+    this.http.post<any>(`${environment.apiUrl}/identity/v1/logout`, {}).subscribe(_ => {
+      this.currentTokenSubject.next("");
+      this.doLogoutUser();
+    });
   }
 
   isLoggedIn() {
@@ -74,8 +89,8 @@ export class AuthService {
     return this.http.post<any>(`${environment.apiUrl}/identity/v1/refresh`, {
       'refreshToken': this.getRefreshToken()
     }).pipe(
-      tap((auth: AuthAccess) => this.storeTokens(auth), 
-      () => this.cleanSession()));
+      tap((auth: AuthAccess) => this.storeTokens(auth),
+        () => this.cleanSession()));
   }
 
   isAlive(): Observable<any> {
@@ -89,7 +104,8 @@ export class AuthService {
   setUserInfo(key: string, value: string): void {
     if (localStorage.getItem(AuthService.USER_INFO)) {
       const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO) || "");
-      userData[`${key}`] = value;
+      userData[key] = value;
+
       localStorage.setItem(AuthService.USER_INFO, JSON.stringify(userData));
       this.userInfoSubject.next(userData);
     }
@@ -119,8 +135,9 @@ export class AuthService {
   }
 
   private doLoginUser(auth: AuthAccess) {
-    const userData = JSON.stringify({ 
+    const userData = JSON.stringify({
       name: auth.access.email,
+      tenant: auth.access.organization.name,
       sessionid: auth.access.id
     });
 
