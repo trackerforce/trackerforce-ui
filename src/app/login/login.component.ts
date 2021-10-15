@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     loginForm!: FormGroup;
     returnUrl: string | undefined;
     error: string = '';
+    type: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -31,8 +32,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
+            selectedLoginType: ['admin', [Validators.required]],
             email: ['', [Validators.required]],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
+            tenant: []
         });
     }
 
@@ -40,13 +43,25 @@ export class LoginComponent implements OnInit, OnDestroy {
         return this.loginForm?.controls;
     }
 
-    onSubmit() {
-        if (this.loginForm?.invalid)
-            return;
-
+    private onSubmitAdmin() {
         this.authService.login({
             email: this.f?.email.value,
             password: this.f?.password.value
+        }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
+            if (success) {
+                this.router.navigateByUrl(this.returnUrl || "/" + this.authService.getUserInfo('tenant'));
+                this.authService.releaseOldSessions.emit(true);
+            }
+        }, error => {
+            ConsoleLogger.printError(error);
+            this.error = error;
+        });
+    }
+
+    private onSubmitAgent() {
+        this.authService.login({
+            email: this.f.email.value,
+            password: this.f.password.value
         }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
                 this.router.navigateByUrl(this.returnUrl || "/");
@@ -63,8 +78,29 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.unsubscribe.complete();
     }
 
+    onSubmit() {
+        if (this.loginForm?.invalid)
+            return;
+
+        if (this.type)
+            this.onSubmitAgent();
+        else
+            this.onSubmitAdmin();
+    }
+
     onKey(event: any) {
         this.error = '';
+    }
+
+    onChangeType() {
+        this.type = this.f.selectedLoginType.value == 'agent'
+
+        if (this.type)
+            this.loginForm.get('tenant')?.setValidators([Validators.required]);
+        else
+            this.loginForm.get('tenant')?.setValidators([]);
+
+        this.loginForm.get('tenant')?.updateValueAndValidity();
     }
 
 }
