@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 export class HomeComponent implements OnInit {
 
   tenant: string | undefined;
+  currentView: string = 'home'
 
   constructor(
     private route: ActivatedRoute,
@@ -19,22 +20,35 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.url.subscribe(() =>  this.setMenuSelection(this.route.snapshot?.firstChild?.data.view));
   }
 
-  toggleMenu(): void {
+  private setMenuSelection(selectionMenu?: string) {
+    document.getElementById(this.currentView)?.classList.remove('selected-view');
+
+    if (selectionMenu) {
+      document.getElementById(selectionMenu)?.classList.add('selected-view');
+      this.currentView = selectionMenu;
+    }
+  }
+
+  toggleMenu(selection?: HTMLElement): void {
     const sideBar = document.getElementById('sidebar') || undefined;
     const content = document.getElementById('content') || undefined;
+
+    if (selection)
+      this.setMenuSelection(selection.id);
 
     if (sideBar == undefined || content == undefined)
       return;
 
     if (sideBar.className == 'active') {
-      sideBar.className = "";
-      content.className = "";
+      sideBar.className = '';
+      content.className = '';
     } else {
       window.scrollTo(0, 0);
-      sideBar.className = "active";
-      content.className = "hide";
+      sideBar.className = 'active';
+      content.className = 'hide';
     }
   }
 

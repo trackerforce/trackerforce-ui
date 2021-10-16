@@ -1,3 +1,9 @@
+mat-divider {
+  width: 80%;
+  margin: 0 auto;
+  background-color: lightgrey;
+}
+
 a,
 a:hover,
 a:focus {
@@ -69,6 +75,11 @@ a[aria-expanded="true"] {
   background: #24292E;
 }
 
+#sidebar ul li .selected-view {
+  color: #24292E !important;
+  background: #fff !important;
+}
+
 #sidebar ul li svg {
   width: 20px;
   margin-right: 10px;
@@ -110,14 +121,6 @@ a[data-toggle="collapse"] {
   padding: 30px;
   min-height: 800px;
   margin-bottom: 10px;
-}
-
-.spacer {
-  display: inherit;
-  width: 80%;
-  height: 1px;
-  margin: 0 auto;
-  background-color: lightgrey;
 }
 
 #sidebarCollapse {

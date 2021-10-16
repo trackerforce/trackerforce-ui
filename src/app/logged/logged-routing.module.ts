@@ -11,11 +11,11 @@ import { TemplatesComponent } from './templates/templates.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], 
     children: [
-      { path: 'agents', component: AgentsComponent },
-      { path: 'tasks', component: TasksComponent },
-      { path: 'procedures', component: ProceduresComponent },
-      { path: 'templates', component: TemplatesComponent },
-      { path: 'globals', component: GlobalsComponent }
+      { path: 'agents', component: AgentsComponent, data: { view: 'agents' } },
+      { path: 'tasks', component: TasksComponent, data: { view: 'tasks' } },
+      { path: 'procedures', component: ProceduresComponent, data: { view: 'procedures' } },
+      { path: 'templates', component: TemplatesComponent, data: { view: 'templates' } },
+      { path: 'globals', component: GlobalsComponent, data: { view: 'globals' } },
     ]
   }
 ];
