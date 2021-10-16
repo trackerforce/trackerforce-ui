@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -21,6 +21,11 @@ export class AgentService extends ApiService {
   public listAgents(agent?: Agent): Observable<Paginable<Agent>> {
     let params = this.paramFromObject(agent);
     return this.http.get<Paginable<Agent>>(`${environment.managementServiceUrl}/management/agent/v1/`, { params })
+      .pipe(catchError(super.handleError));
+  }
+
+  public createAgent(agent: Agent): Observable<Agent> {
+    return this.http.post<Agent>(`${environment.managementServiceUrl}/management/agent/v1/create`, agent)
       .pipe(catchError(super.handleError));
   }
 

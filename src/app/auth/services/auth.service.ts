@@ -61,8 +61,26 @@ export class AuthService {
         catchError(this.handleError));
   }
 
-  signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
-    return this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/register`, user)
+  signup(user: { email: string, password: string }, organization: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/register`, {
+      email: user.email,
+      password: user.password,
+      organization: {
+        name: organization
+      }
+    })
+      .pipe(
+        tap(signup => signup != undefined),
+        mapTo(true),
+        catchError(this.handleError));
+  }
+
+  signupAgent(user: { email: string, password: string, access_code: string }, organization: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.identityServiceUrl}/identity/agent/v1/activate`, {
+      email: user.email,
+      password: user.access_code,
+      new_password: user.password
+    }, { headers: {  'X-Tenant': organization } })
       .pipe(
         tap(signup => signup != undefined),
         mapTo(true),

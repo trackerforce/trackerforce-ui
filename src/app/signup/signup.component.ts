@@ -45,12 +45,12 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   private onSubmitAdmin() {
-    this.authService.login({
-      email: this.f?.email.value,
-      password: this.f?.password.value
-    }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
+    this.authService.signup({
+      email: this.f.email.value,
+      password: this.f.password.value
+    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
       if (success) {
-        this.router.navigateByUrl(this.returnUrl || "/" + this.authService.getUserInfo('tenant'));
+        this.router.navigateByUrl('/login');
         this.authService.releaseOldSessions.emit(true);
       }
     }, error => {
@@ -60,12 +60,13 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   private onSubmitAgent() {
-    this.authService.loginAgent({
+    this.authService.signupAgent({
       email: this.f.email.value,
-      password: this.f.password.value
+      password: this.f.password.value,
+      access_code: this.f.temp_password.value
     }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
       if (success) {
-        this.router.navigateByUrl(this.returnUrl || "/" + this.authService.getUserInfo('tenant'));
+        this.router.navigateByUrl('/login');
         this.authService.releaseOldSessions.emit(true);
       }
     }, error => {

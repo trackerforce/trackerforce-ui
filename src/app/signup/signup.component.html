@@ -22,7 +22,7 @@
             </mat-form-field>
             <mat-form-field *ngIf="type">
                 <input matInput type="text" id="temp_password" (keyup)="onKey($event)" maxlength="10"
-                    placeholder="Access Code" formControlName="temp_password" required>
+                    placeholder="Access Code" formControlName="temp_password" autocomplete="off" required>
                 <mat-error>
                     Please provide a valid Access Code
                 </mat-error>

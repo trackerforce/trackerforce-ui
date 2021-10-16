@@ -6,7 +6,8 @@
     <mat-card-content>
         <form class="form-container" [formGroup]="agentForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
-                <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name" required>
+                <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name"
+                    autocomplete="off" required>
                 <mat-error>
                     Please provide a valid Name
                 </mat-error>
