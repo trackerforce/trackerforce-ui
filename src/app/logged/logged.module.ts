@@ -8,6 +8,11 @@ import { TasksComponent } from './tasks/tasks.component';
 import { ProceduresComponent } from './procedures/procedures.component';
 import { TemplatesComponent } from './templates/templates.component';
 import { GlobalsComponent } from './globals/globals.component';
+import { AppMaterialModule } from '../shared/app-material.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AgentCreateComponent } from './agent-create/agent-create.component';
+import { AgentSearchComponent } from './agent-search/agent-search.component';
+import { AgentListComponent } from './agent-list/agent-list.component';
 
 
 @NgModule({
@@ -17,11 +22,16 @@ import { GlobalsComponent } from './globals/globals.component';
     TasksComponent,
     ProceduresComponent,
     TemplatesComponent,
-    GlobalsComponent
+    GlobalsComponent,
+    AgentCreateComponent,
+    AgentSearchComponent,
+    AgentListComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
-    LoggedRoutingModule
+    LoggedRoutingModule,
+    AppMaterialModule
   ]
 })
 export class LoggedModule { }

@@ -35,7 +35,7 @@ export class AuthService {
   }
 
   login(user: { email: string, password: string }): Observable<boolean> {
-    return this.http.post<AuthAccess>(`${environment.apiUrl}/identity/v1/authenticate`, user)
+    return this.http.post<AuthAccess>(`${environment.identityServiceUrl}/identity/v1/authenticate`, user)
       .pipe(
         tap(auth => {
           this.doLoginUser(auth);
@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   loginAgent(user: { email: string, password: string }, tenant: string): Observable<boolean> {
-    return this.http.post<AuthAccess>(`${environment.apiUrl}/identity/agent/v1/authenticate`, user, {
+    return this.http.post<AuthAccess>(`${environment.identityServiceUrl}/identity/agent/v1/authenticate`, user, {
       headers: {
         'X-Tenant': tenant
       }
@@ -62,7 +62,7 @@ export class AuthService {
   }
 
   signup(user: { name: string, email: string, password: string, token: string }): Observable<boolean> {
-    return this.http.post<any>(`${environment.apiUrl}/identity/v1/register`, user)
+    return this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/register`, user)
       .pipe(
         tap(signup => signup != undefined),
         mapTo(true),
@@ -75,7 +75,7 @@ export class AuthService {
   }
 
   logout() {
-    this.http.post<any>(`${environment.apiUrl}/identity/v1/logout`, {}).subscribe(_ => {
+    this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/logout`, {}).subscribe(_ => {
       this.currentTokenSubject.next("");
       this.doLogoutUser();
     });
@@ -86,7 +86,7 @@ export class AuthService {
   }
 
   refreshToken() {
-    return this.http.post<any>(`${environment.apiUrl}/identity/v1/refresh`, {
+    return this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/refresh`, {
       'refreshToken': this.getRefreshToken()
     }).pipe(
       tap((auth: AuthAccess) => this.storeTokens(auth),
@@ -94,7 +94,7 @@ export class AuthService {
   }
 
   isAlive(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/check`).pipe(catchError(this.handleError));
+    return this.http.get<any>(`${environment.identityServiceUrl}/check`).pipe(catchError(this.handleError));
   }
 
   getJwtToken() {

@@ -1,0 +1,27 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>New</mat-card-title>
+        <mat-card-subtitle>Create Agents to operate Trackerforce Session</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <form class="form-container" [formGroup]="agentForm" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+                <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name" required>
+                <mat-error>
+                    Please provide a valid Name
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput id="email" type="email" maxlength="50" placeholder="E-mail" autocomplete="off"
+                    formControlName="email" required>
+                <mat-error>
+                    Please provide a valid E-mail
+                </mat-error>
+            </mat-form-field>
+            <div>
+                <button mat-raised-button color="primary">Create</button>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </form>
+    </mat-card-content>
+</mat-card>

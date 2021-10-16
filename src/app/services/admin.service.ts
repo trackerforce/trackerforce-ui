@@ -16,11 +16,11 @@ export class AdminService extends ApiService {
   }
 
   public getAdmin(): Observable<Admin> {
-    return this.http.get<Admin>(`${environment.apiUrl}/admin/me`).pipe(catchError(super.handleError));
+    return this.http.get<Admin>(`${environment.identityServiceUrl}/admin/me`).pipe(catchError(super.handleError));
   }
 
   public getAdminById(id: string): Observable<Admin> {
-    return this.http.get<Admin>(`${environment.apiUrl}/admin/${id}`).pipe(catchError(super.handleError));
+    return this.http.get<Admin>(`${environment.identityServiceUrl}/admin/${id}`).pipe(catchError(super.handleError));
   }
 
 }
