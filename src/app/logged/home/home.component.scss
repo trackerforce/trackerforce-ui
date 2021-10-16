@@ -156,17 +156,25 @@ a[data-toggle="collapse"] {
   #sidebarCollapse {
     transition: top 0.3s;
     display: block;
-    background: #999;
+    background: #24292e;
     height: 80px;
     top: 0;
     padding-top: 10px;
     z-index: 2;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 10px 0px #000;
   }
 
   #sidebarCollapseBtn {
     display: block;
     float: right;
-    box-shadow: 0px 0px 5px gray;
+    box-shadow: 0px 0px 5px #000;
+    border-radius: 2rem;
+  }
+
+  #sidebarCollapseBtn:hover {
+    background: white;
+    color: black;
   }
 
   #content.hide {

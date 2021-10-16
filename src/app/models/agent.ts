@@ -1,8 +1,8 @@
 export class Agent {
-    id: string | undefined;
-    name: string | undefined;
-    email: string | undefined;
-    active: boolean = false;
-    online: boolean = false;
-    cases: string[] | undefined;
+    id?: string = "";
+    name?: string = "";
+    email?: string = "";
+    active?: boolean = false;
+    online?: boolean = false;
+    cases?: string[] = [];
 }

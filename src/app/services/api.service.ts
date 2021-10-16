@@ -1,7 +1,19 @@
+import { HttpParams } from "@angular/common/http";
 import { throwError } from "rxjs";
 
 export class ApiService {
-    
+
+    protected paramFromObject(obj: any) {
+        let params = new HttpParams();
+        if (obj) {
+            Object.keys(obj).forEach(item => {
+                params = params.set(item, JSON.parse(JSON.stringify(obj))[item]);
+            });
+        }
+        
+        return params;
+    }
+
     handleError(error: any) {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {

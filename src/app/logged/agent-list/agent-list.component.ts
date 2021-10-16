@@ -29,13 +29,18 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent))
 
+    this.loadData();
+  }
+
+  private loadData(agent?: Agent) {
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.agentService.listAgents().pipe(takeUntil(this.unsubscribe))
+          return this.agentService.listAgents(agent).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
           this.isLoadingResults = false;
