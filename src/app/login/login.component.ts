@@ -59,12 +59,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     private onSubmitAgent() {
-        this.authService.login({
+        this.authService.loginAgent({
             email: this.f.email.value,
             password: this.f.password.value
-        }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
+        }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
-                this.router.navigateByUrl(this.returnUrl || "/");
+                this.router.navigateByUrl(this.returnUrl || "/" + this.authService.getUserInfo('tenant'));
                 this.authService.releaseOldSessions.emit(true);
             }
         }, error => {

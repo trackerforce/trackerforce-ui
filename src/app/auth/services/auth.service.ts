@@ -53,7 +53,7 @@ export class AuthService {
     })
       .pipe(
         tap(auth => {
-          this.doLoginUser(auth);
+          this.doLoginUser(auth, tenant);
           this.currentTokenSubject.next(auth.token);
           this.setUserInfo('tenant', tenant);
         }),
@@ -134,10 +134,10 @@ export class AuthService {
     return throwError(errorMessage);
   }
 
-  private doLoginUser(auth: AuthAccess) {
+  private doLoginUser(auth: AuthAccess, tenant?: string) {
     const userData = JSON.stringify({
       name: auth.access.email,
-      tenant: auth.access.organization.name,
+      tenant: tenant ? tenant : auth.access.organization.name,
       sessionid: auth.access.id
     });
 

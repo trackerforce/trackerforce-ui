@@ -5,7 +5,7 @@
             <mat-radio-group color="warn" formControlName="selectedLoginType" (change)="onChangeType()">
                 <mat-radio-button value="admin" [checked]="true">Admin</mat-radio-button>
                 <mat-radio-button value="agent">Agent</mat-radio-button>
-            </mat-radio-group>              
+            </mat-radio-group>
             <mat-form-field>
                 <input matInput id="email" type="email" (keyup)="onKey($event)" maxlength="50" placeholder="E-mail"
                     autocomplete="off" formControlName="email" required>
@@ -22,7 +22,7 @@
             </mat-form-field>
             <mat-form-field *ngIf="type">
                 <input matInput type="tenant" id="tenant" (keyup)="onKey($event)" maxlength="50"
-                    placeholder="Organization Id" formControlName="tenant" required>
+                    placeholder="Organization Id" autocomplete="off" formControlName="tenant" required>
                 <mat-error>
                     Please provide a valid Organization Id
                 </mat-error>
