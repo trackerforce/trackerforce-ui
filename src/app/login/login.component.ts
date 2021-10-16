@@ -95,12 +95,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     onChangeType() {
         this.type = this.f.selectedLoginType.value == 'agent'
 
+        const tenant = this.loginForm.get('tenant')!;
         if (this.type)
-            this.loginForm.get('tenant')?.setValidators([Validators.required]);
+            tenant.setValidators([Validators.required]);
         else
-            this.loginForm.get('tenant')?.setValidators([]);
+            tenant.setValidators([]);
 
-        this.loginForm.get('tenant')?.updateValueAndValidity();
+        tenant.updateValueAndValidity();
     }
 
 }

@@ -12,11 +12,13 @@ import { AuthService } from './auth/services/auth.service';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { LoginComponent } from './login/login.component';
 import { AppMaterialModule } from './shared/app-material.module';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     FormsModule,
