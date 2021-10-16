@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { Paginable } from '../models/paginable';
+import { PageSetup, Paginable } from '../models/paginable';
 import { Agent } from '../models/agent';
 
 @Injectable({
@@ -18,8 +18,10 @@ export class AgentService extends ApiService {
     super();
   }
 
-  public listAgents(agent?: Agent): Observable<Paginable<Agent>> {
+  public listAgents(agent?: Agent, pageSetup?: PageSetup): Observable<Paginable<Agent>> {
     let params = this.paramFromObject(agent);
+    params = this.paramFromObject(pageSetup);
+
     return this.http.get<Paginable<Agent>>(`${environment.managementServiceUrl}/management/agent/v1/`, { params })
       .pipe(catchError(super.handleError));
   }

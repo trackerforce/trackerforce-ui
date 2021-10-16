@@ -17,6 +17,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['name', 'email', 'active', 'online'];
   data: Agent[] = [];
 
+  resultSize = 10;
   resultsLength = 0;
   isLoadingResults = true;
 
@@ -34,13 +35,21 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
     this.loadData();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
   private loadData(agent?: Agent) {
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.agentService.listAgents(agent).pipe(takeUntil(this.unsubscribe))
+          return this.agentService.listAgents(agent, { 
+            size: this.resultSize, 
+            page: this.paginator.pageIndex 
+          }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
           this.isLoadingResults = false;
@@ -52,11 +61,6 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
           return data.data;
         })
       ).subscribe(data => this.data = data);
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
 }
