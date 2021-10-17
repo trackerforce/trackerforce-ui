@@ -12,6 +12,7 @@ import { AppMaterialModule } from '../shared/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgentEditComponent } from './agent/agent-edit/agent-edit.component';
 import { TaskCreateComponent } from './task/task-create/task-create.component';
+import { TaskListComponent } from './task/task-list/task-list.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { TaskCreateComponent } from './task/task-create/task-create.component';
     AgentSearchComponent,
     AgentListComponent,
     AgentEditComponent,
-    TaskCreateComponent
+    TaskCreateComponent,
+    TaskListComponent
   ],
   imports: [
     ReactiveFormsModule,
