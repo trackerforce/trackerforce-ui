@@ -1,0 +1,87 @@
+<form class="form-container" [formGroup]="taskForm">
+    <section>
+        <mat-form-field appearance="fill">
+            <input matInput type="text" id="description" maxlength="200" placeholder="Description"
+                formControlName="description" autocomplete="off" required>
+            <mat-error>
+                Please provide a valid Description
+            </mat-error>
+        </mat-form-field>
+        <div class="row">
+            <div class="col">
+                <mat-form-field appearance="fill">
+                    <mat-label>Type</mat-label>
+                    <mat-select formControlName="type" (selectionChange)="onTypeChange()" required>
+                        <mat-option *ngFor="let type of displayTaskTypes" [value]="type">
+                            {{type.name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>
+                        Please provide a valid Type
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-label>
+                    Type defines which data type is being inputed.<br />
+                    Some types cannot be used by the learning engine.
+                </mat-label>
+            </div>
+        </div>
+    </section>
+    <section>
+        <mat-divider class="col"></mat-divider>
+        <div class="row panel-checks-title">
+            <mat-icon>settings</mat-icon>
+            <h3><strong>Task Settings</strong></h3>
+        </div>
+        <div class="row panel-description">
+            <mat-label>
+                Configure how your task must behave internally and who can visualize it in the Session.
+            </mat-label>
+        </div>
+        <div class="row">
+            <div class="col panel-checks">
+                <mat-checkbox formControlName="learn" [disabled]="learnDisabled">Learn</mat-checkbox>
+                <mat-checkbox formControlName="hidden">Hidden</mat-checkbox>
+            </div>
+            <div class="col">
+                <ul>
+                    <li><strong>Learn</strong>: Task will be trained by the Machine Learning Engine</li>
+                    <li><strong>Hidden</strong>: indicated that this task is only visible to Agents</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section>
+        <mat-divider class="col"></mat-divider>
+        <div class="row panel-checks-title">
+            <mat-icon>help</mat-icon>
+            <h3><strong>Helper</strong></h3>
+        </div>
+        <div class="row panel-description">
+            <mat-label>
+                Describe the content that will be displayed for additional information about this task.
+            </mat-label>
+        </div>
+        <mat-form-field appearance="fill">
+            <input matInput type="text" id="helper_content" maxlength="200" placeholder="Content"
+                formControlName="helper_content" autocomplete="off">
+        </mat-form-field>
+        <div class="row">
+            <div class="col">
+                <mat-form-field appearance="fill">
+                    <mat-label>Render Type</mat-label>
+                    <mat-select id="helper_rendertype" formControlName="helper_rendertype">
+                        <mat-option *ngFor="let type of displayRenderTypes" [value]="type">
+                            {{type}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-label>Render Type defines how the Session will render the helper content</mat-label>
+            </div>
+        </div>
+    </section>
+</form>

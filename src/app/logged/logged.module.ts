@@ -11,6 +11,7 @@ import { GlobalsComponent } from './global';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListDetailsComponent } from './task/task-list-details/task-list-details.component';
+import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { TaskListDetailsComponent } from './task/task-list-details/task-list-det
     TaskCreateComponent,
     TaskListComponent,
     TaskEditComponent,
-    TaskListDetailsComponent
+    TaskListDetailsComponent,
+    TaskDetailComponent
   ],
   imports: [
     ReactiveFormsModule,

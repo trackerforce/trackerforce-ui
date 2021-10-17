@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
