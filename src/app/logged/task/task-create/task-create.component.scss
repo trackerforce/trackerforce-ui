@@ -1,0 +1,44 @@
+mat-icon {
+    margin-right: .2rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-divider {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  float: inline-end;
+  margin-right: .5rem;
+}
+
+.mat-expansion-panel-header-description {
+  text-align: end;
+  display: initial;
+}
+
+.panel-checks-title {
+  margin-left: .1rem;
+}
+
+.panel-description {
+  margin-left: .1rem;
+  margin-bottom: 2rem;
+}
+
+.panel-checks {
+  display: grid;
+}
+
+.col ul {
+  list-style: none;
+  display: contents;
+
+  li {
+    margin-bottom: 1rem;
+  }
+}

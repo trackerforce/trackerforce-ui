@@ -1,28 +1,37 @@
-<mat-card>
-    <mat-card-header>
-        <mat-card-title>Search</mat-card-title>
-        <mat-card-subtitle>Find Agents registered to this organization</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <form class="form-container" [formGroup]="agentForm" (ngSubmit)="onSubmit()">
-            <mat-form-field>
-                <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name"
-                    autocomplete="off">
-                <mat-error>
-                    Please provide a valid Name
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput id="email" type="email" maxlength="50" placeholder="E-mail" autocomplete="off"
-                    formControlName="email">
-                <mat-error>
-                    Please provide a valid E-mail
-                </mat-error>
-            </mat-form-field>
+<mat-accordion>
+    <mat-expansion-panel #mep="matExpansionPanel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>search</mat-icon>Search
+            </mat-panel-title>
+            <mat-panel-description>
+                Find Agents registered to this organization
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <form class="form-container" [formGroup]="agentForm">
+            <section>
+                <mat-divider class="col"></mat-divider>
+                <mat-form-field>
+                    <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name"
+                        autocomplete="off">
+                    <mat-error>
+                        Please provide a valid Name
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput id="email" type="email" maxlength="50" placeholder="E-mail" autocomplete="off"
+                        formControlName="email">
+                    <mat-error>
+                        Please provide a valid E-mail
+                    </mat-error>
+                </mat-form-field>
+            </section>
             <div>
-                <button mat-raised-button color="primary">Find</button>
+                <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Find</button>
+                <button type="button" (click)="mep.expanded = false;" mat-raised-button>Cancel</button>
             </div>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </form>
-    </mat-card-content>
-</mat-card>
+    </mat-expansion-panel>
+</mat-accordion>

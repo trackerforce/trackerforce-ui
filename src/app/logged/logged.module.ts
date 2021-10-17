@@ -11,6 +11,7 @@ import { GlobalsComponent } from './global';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgentEditComponent } from './agent/agent-edit/agent-edit.component';
+import { TaskCreateComponent } from './task/task-create/task-create.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { AgentEditComponent } from './agent/agent-edit/agent-edit.component';
     AgentCreateComponent,
     AgentSearchComponent,
     AgentListComponent,
-    AgentEditComponent
+    AgentEditComponent,
+    TaskCreateComponent
   ],
   imports: [
     ReactiveFormsModule,
