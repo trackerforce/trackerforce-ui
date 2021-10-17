@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -10,12 +11,20 @@ import { AgentService } from 'src/app/services/agent.service';
 @Component({
   selector: 'app-agent-list',
   templateUrl: './agent-list.component.html',
-  styleUrls: ['./agent-list.component.scss']
+  styleUrls: ['./agent-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class AgentListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  displayedColumns: string[] = ['edit', 'name', 'email', 'active', 'online'];
+  displayedColumns: string[] = ['action_edit', 'name', 'email'];
+  expandedElement: Agent | undefined;
   data: Agent[] = [];
 
   resultsLength = 0;
@@ -61,6 +70,10 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
           return data.data;
         })
       ).subscribe(data => this.data = data);
+  }
+
+  getColumns(): string[] {
+    return this.displayedColumns.filter(col => !col.startsWith('action'));
   }
 
   getAgentEdit(agentId: string): string {
