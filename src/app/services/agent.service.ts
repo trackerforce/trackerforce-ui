@@ -26,6 +26,11 @@ export class AgentService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
+  public getAgent(id: string) {
+    return this.http.get<Agent>(`${environment.managementServiceUrl}/management/agent/v1/${id}`)
+      .pipe(catchError(super.handleError));
+  }
+
   public createAgent(agent: Agent): Observable<Agent> {
     return this.http.post<Agent>(`${environment.managementServiceUrl}/management/agent/v1/create`, agent)
       .pipe(catchError(super.handleError));
