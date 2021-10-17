@@ -4,19 +4,6 @@ mat-spinner {
   top: 20px;
 }
 
-mat-divider {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
-
-mat-lebel {
-  margin-left: 1rem;
-}
-
-mat-icon {
-  float: right;
-}
-
 svg {
   color: red;
 }
@@ -59,12 +46,6 @@ tr.element-row:not(.expanded-row):active {
   font-weight: bold;
   font-size: 40px;
   line-height: normal;
-}
-
-.element-description {
-  mat-form-field {
-    margin-left: 1rem;
-  }
 }
 
 .element-description-attribution {

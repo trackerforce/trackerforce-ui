@@ -3,16 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { LoggedRoutingModule } from './logged-routing.module';
 import { HomeComponent } from './home/home.component';
-import { AgentsComponent, AgentCreateComponent, AgentListComponent, AgentSearchComponent } from './agent';
-import { TasksComponent } from './task';
+import { AgentsComponent, AgentCreateComponent, AgentListComponent, AgentSearchComponent, AgentEditComponent } from './agent';
+import { TasksComponent, TaskCreateComponent, TaskListComponent, TaskEditComponent } from './task';
 import { ProceduresComponent } from './procedure';
 import { TemplatesComponent } from './template';
 import { GlobalsComponent } from './global';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AgentEditComponent } from './agent/agent-edit/agent-edit.component';
-import { TaskCreateComponent } from './task/task-create/task-create.component';
-import { TaskListComponent } from './task/task-list/task-list.component';
+import { TaskListDetailsComponent } from './task/task-list-details/task-list-details.component';
 
 
 @NgModule({
@@ -28,7 +26,9 @@ import { TaskListComponent } from './task/task-list/task-list.component';
     AgentListComponent,
     AgentEditComponent,
     TaskCreateComponent,
-    TaskListComponent
+    TaskListComponent,
+    TaskEditComponent,
+    TaskListDetailsComponent
   ],
   imports: [
     ReactiveFormsModule,

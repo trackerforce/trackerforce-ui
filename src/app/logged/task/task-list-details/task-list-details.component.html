@@ -1,0 +1,26 @@
+<div class="element-description">
+    <div>
+        <mat-label><mat-icon>help</mat-icon>{{task?.helper?.content}}</mat-label>
+        <mat-divider></mat-divider>
+    </div>
+    <mat-form-field appearance="outline">
+        <mat-label>Created At</mat-label>
+        <input matInput [value]="task?.createdAt | date:'short'" [readonly]=true>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Updated At</mat-label>
+        <input matInput [value]="task?.updatedAt | date:'short'" [readonly]=true>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <input matInput [value]="task?.type" [readonly]=true>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Learn</mat-label>
+        <input matInput [value]="task?.learn" [readonly]=true>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Hidden</mat-label>
+        <input matInput [value]="task?.hidden" [readonly]=true>
+    </mat-form-field>
+</div>

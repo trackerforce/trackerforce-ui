@@ -75,8 +75,8 @@ export class TaskListComponent implements AfterViewInit, OnDestroy {
     return this.displayedColumns.filter(col => !col.startsWith('action'));
   }
 
-  getAgentEdit(agentId: string): string {
-    return `/${this.authService.getUserInfo('tenant')}/agent/${agentId}`
+  getTaskEdit(taskid: string): string {
+    return `/${this.authService.getUserInfo('tenant')}/task/${taskid}`
   }
 
 }

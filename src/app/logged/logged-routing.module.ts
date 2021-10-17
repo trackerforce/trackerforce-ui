@@ -5,7 +5,7 @@ import { AgentsComponent, AgentEditComponent } from './agent';
 import { GlobalsComponent } from './global';
 import { HomeComponent } from './home/home.component';
 import { ProceduresComponent } from './procedure';
-import { TasksComponent } from './task';
+import { TasksComponent, TaskEditComponent } from './task';
 import { TemplatesComponent } from './template';
 
 const routes: Routes = [
@@ -14,6 +14,7 @@ const routes: Routes = [
       { path: 'agents', component: AgentsComponent, data: { view: 'agents' } },
       { path: 'agent/:agentid', component: AgentEditComponent, data: { view: 'agents' } },
       { path: 'tasks', component: TasksComponent, data: { view: 'tasks' } },
+      { path: 'task/:taskid', component: TaskEditComponent, data: { view: 'tasks' } },
       { path: 'procedures', component: ProceduresComponent, data: { view: 'procedures' } },
       { path: 'templates', component: TemplatesComponent, data: { view: 'templates' } },
       { path: 'globals', component: GlobalsComponent, data: { view: 'globals' } },
