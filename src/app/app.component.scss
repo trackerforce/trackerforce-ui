@@ -25,17 +25,13 @@ p {
 }
 
 .toolbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   height: 60px;
   display: flex;
   align-items: center;
   background-color: #24292E;
   color: white;
   font-weight: 600;
-  box-shadow: 0px 0px 10px 10px #262b31;
+  box-shadow: 0px 0px 0px 1px #383e46;
 }
 
 .content {
