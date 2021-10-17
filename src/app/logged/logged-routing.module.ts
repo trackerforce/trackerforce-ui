@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth/guards/auth.guard';
-import { AgentsComponent } from './agents/agents.component';
+import { AgentsComponent, AgentEditComponent } from './agent';
 import { GlobalsComponent } from './globals/globals.component';
 import { HomeComponent } from './home/home.component';
 import { ProceduresComponent } from './procedures/procedures.component';
@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], 
     children: [
       { path: 'agents', component: AgentsComponent, data: { view: 'agents' } },
+      { path: 'agent/:agentid', component: AgentEditComponent, data: { view: 'agents' } },
       { path: 'tasks', component: TasksComponent, data: { view: 'tasks' } },
       { path: 'procedures', component: ProceduresComponent, data: { view: 'procedures' } },
       { path: 'templates', component: TemplatesComponent, data: { view: 'templates' } },

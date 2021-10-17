@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
 import { AgentService } from 'src/app/services/agent.service';
 
@@ -14,10 +15,9 @@ import { AgentService } from 'src/app/services/agent.service';
 export class AgentListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  displayedColumns: string[] = ['name', 'email', 'active', 'online'];
+  displayedColumns: string[] = ['edit', 'name', 'email', 'active', 'online'];
   data: Agent[] = [];
 
-  resultSize = 10;
   resultsLength = 0;
   isLoadingResults = true;
 
@@ -25,6 +25,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
+    private authService: AuthService,
     private agentService: AgentService
   ) { }
 
@@ -47,13 +48,12 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
         switchMap(() => {
           this.isLoadingResults = true;
           return this.agentService.listAgents(agent, { 
-            size: this.resultSize, 
+            size: this.paginator.pageSize, 
             page: this.paginator.pageIndex 
           }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
           this.isLoadingResults = false;
-
           if (data === null)
             return [];
 
@@ -61,6 +61,10 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
           return data.data;
         })
       ).subscribe(data => this.data = data);
+  }
+
+  getAgentEdit(agentId: string): string {
+    return `/${this.authService.getUserInfo('tenant')}/agent/${agentId};`
   }
 
 }
