@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AgentsComponent, AgentEditComponent } from './agent';
-import { GlobalsComponent } from './globals/globals.component';
+import { GlobalsComponent } from './global';
 import { HomeComponent } from './home/home.component';
-import { ProceduresComponent } from './procedures/procedures.component';
-import { TasksComponent } from './tasks/tasks.component';
-import { TemplatesComponent } from './templates/templates.component';
+import { ProceduresComponent } from './procedure';
+import { TasksComponent } from './task';
+import { TemplatesComponent } from './template';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], 

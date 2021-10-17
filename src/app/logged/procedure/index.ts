@@ -1,0 +1,1 @@
+export * from './procedures/procedures.component';
