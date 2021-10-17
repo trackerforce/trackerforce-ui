@@ -43,48 +43,53 @@ a:focus {
   margin-left: 10px;
   margin-bottom: 10px;
   border-radius: 1rem;
-}
 
-#sidebar .sidebar-header {
-  padding: 20px;
-  background: #24292e;
-  border-radius: 1rem;
-}
+  .sidebar-header {
+    padding: 20px;
+    background: #24292e;
+    border-radius: 1rem;
+  }
 
-#sidebar ul.components {
-  padding: 20px 0;
-}
+  ul.components {
+    padding: 20px 0;
+  }
 
-#sidebar ul p {
-  color: #fff;
-  padding: 10px;
-}
+  ul {
+    li {
+      list-style-type: none;
 
-#sidebar ul li a {
-  padding: 10px;
-  display: block;
-  font-size: medium;
-}
+      .active>a, a[aria-expanded="true"] {
+        color: #fff;
+        background: #24292E;
+      }
 
-#sidebar ul li a:hover {
-  color: #24292E !important;
-  background: #fff !important;
-}
+      .selected-view {
+        color: #24292E !important;
+        background: #fff !important;
+      }
 
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
-  color: #fff;
-  background: #24292E;
-}
+      a {
+        padding: 10px;
+        display: block;
+        font-size: medium;
+      }
 
-#sidebar ul li .selected-view {
-  color: #24292E !important;
-  background: #fff !important;
-}
+      a:hover {
+        color: #24292E !important;
+        background: #fff !important;
+      }
 
-#sidebar ul li svg {
-  width: 20px;
-  margin-right: 10px;
+      svg {
+        width: 20px;
+        margin-right: 10px;
+      }
+    }
+
+    p {
+      color: #fff;
+      padding: 10px;
+    }
+  } 
 }
 
 .sticky {
