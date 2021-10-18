@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { Option } from 'src/app/models/task';
 
 @Component({
@@ -7,36 +8,46 @@ import { Option } from 'src/app/models/task';
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit {
+export class TaskDetailComponent implements OnChanges {
   @Input() taskForm!: FormGroup;
+  @Input() showOptions: boolean = false;
+  @Input() loading: boolean = true;
 
   displayRenderTypes: string[] = ['PLAINTEXT', 'MARKDOWN', 'HTML'];
   displayTaskTypes: any[] = TASK_TYPES;
-  learnDisabled: boolean = false;
-  showOptions: boolean = false;
 
   constructor(
   ) { }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    this.onTypeChange();
+  }
+
+  private checkOptions(value: typeof TASK_TYPES) {
+    this.showOptions = value[0].options;
+    if (this.showOptions)
+      this.taskForm.get('options')?.setValidators([Validators.required]);
+    else
+      this.taskForm.get('options')?.setValidators([]);
+  }
+
+  private checkLearn(value: typeof TASK_TYPES) {
+    if (value[0].learn) {
+      this.taskForm.get('learn')?.enable();
+    } else {
+      this.taskForm.get('learn')?.disable();
+      this.taskForm.get('learn')?.setValue(false);
+    }
   }
 
   onTypeChange() {
     const value = TASK_TYPES.filter(selection =>
       this.taskForm.get('type')?.value === selection.value);
 
-    if (value[0].learn)
-      this.taskForm.get('learn')?.enable();
-    else {
-      this.taskForm.get('learn')?.disable();
-      this.taskForm.get('learn')?.setValue(false);
+    if (value.length) {
+      this.checkLearn(value);
+      this.checkOptions(value);
     }
-
-    this.showOptions = value[0].options;
-    if (this.showOptions)
-      this.taskForm.get('options')?.setValidators([Validators.required]);
-    else 
-      this.taskForm.get('options')?.setValidators([]);
   }
 
 }
@@ -69,7 +80,7 @@ const TASK_TYPES = [
     name: 'Checkbox',
     value: 'CHECK',
     learn: true,
-    options: false    
+    options: false
   }, {
     name: 'Radio',
     value: 'RADIO',

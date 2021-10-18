@@ -1,6 +1,7 @@
-<form class="form-container" [formGroup]="taskForm">
+<form *ngIf="!loading" class="form-container" [formGroup]="taskForm">
     <section>
         <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
             <input matInput type="text" id="description" maxlength="200" placeholder="Description"
                 formControlName="description" autocomplete="off" required>
             <mat-error>
@@ -31,6 +32,7 @@
         <div *ngIf="showOptions" class="row">
             <div class="col">
                 <mat-form-field appearance="fill">
+                    <mat-label>Options</mat-label>
                     <input matInput type="text" id="options" maxlength="500" placeholder="Options"
                         formControlName="options" autocomplete="off" required>
                     <mat-error>
@@ -59,7 +61,7 @@
         </div>
         <div class="row">
             <div class="col panel-checks">
-                <mat-checkbox formControlName="learn" [disabled]="learnDisabled">Learn</mat-checkbox>
+                <mat-checkbox formControlName="learn">Learn</mat-checkbox>
                 <mat-checkbox formControlName="hidden">Hidden</mat-checkbox>
             </div>
             <div class="col">
@@ -82,6 +84,7 @@
             </mat-label>
         </div>
         <mat-form-field appearance="fill">
+            <mat-label>Content</mat-label>
             <input matInput type="text" id="helper_content" maxlength="200" placeholder="Content"
                 formControlName="helper_content" autocomplete="off">
         </mat-form-field>

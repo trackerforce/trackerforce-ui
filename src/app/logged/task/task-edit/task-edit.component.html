@@ -6,10 +6,10 @@
         <mat-card-title>Edit</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <app-task-detail [taskForm]="taskForm"></app-task-detail>
+        <app-task-detail [taskForm]="taskForm" [showOptions]="hasOptions()" [loading]="loading"></app-task-detail>
         <div class="form-container">
             <div>
-                <button type="submit" (click)="onSubmit('update')" mat-raised-button color="primary">Update</button>
+                <button type="submit" (click)="onSubmit('update')" mat-raised-button color="primary" [disabled]="true">Update</button>
                 <button type="button" (click)="onSubmit('cancel')" mat-raised-button>Cancel</button>
             </div>
         </div>

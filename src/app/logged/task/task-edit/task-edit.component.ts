@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -29,8 +28,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,
-    private snackBar: MatSnackBar
+    private router: Router
   ) { 
     this.route.params.subscribe(params => this._taskid = params.taskid);
   }
@@ -40,6 +38,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     this.taskForm = this.formBuilder.group({
       description: ['', Validators.required],
       type: ['', Validators.required],
+      options: [''],
       learn: [''],
       hidden: [''],
       helper_content: [''],
@@ -51,6 +50,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
         this.task = task;
         this.taskForm.get('description')?.setValue(this.task.description);
         this.taskForm.get('type')?.setValue(this.task.type);
+        this.taskForm.get('options')?.setValue(this.task.options?.map(opt => opt.value));
         this.taskForm.get('learn')?.setValue(this.task.learn);
         this.taskForm.get('hidden')?.setValue(this.task.hidden);
         this.taskForm.get('helper_content')?.setValue(this.task.helper?.content);
@@ -74,6 +74,10 @@ export class TaskEditComponent implements OnInit, OnDestroy {
       return;
 
     return this.router.navigate([`${this.authService.getUserInfo('tenant')}/tasks`]);
+  }
+
+  hasOptions(): boolean {
+    return this.taskForm.get('options')?.value;
   }
 
 }
