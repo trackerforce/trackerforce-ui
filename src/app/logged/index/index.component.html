@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-title-group>
+        <mat-card-title>Welcome</mat-card-title>
+        <mat-card-subtitle>{{getInfo('name')}} - logged as {{getRole()}} for {{getInfo('tenant')}}</mat-card-subtitle>
+        <img mat-card-sm-image src="assets/tf_icon_white_trans.png">
+    </mat-card-title-group>
+    <mat-card-content>
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="getRole() == 'Agent'">
+    <mat-card-title-group>
+        <mat-card-title>My Cases</mat-card-title>
+    </mat-card-title-group>
+    <mat-card-content>
+    </mat-card-content>
+</mat-card>

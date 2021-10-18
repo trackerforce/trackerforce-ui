@@ -36,4 +36,9 @@ export class AgentService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
+  public getMe() {
+    return this.http.get<Agent>(`${environment.managementServiceUrl}/management/agent/v1/me`)
+      .pipe(catchError(super.handleError));
+  }
+
 }

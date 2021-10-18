@@ -40,6 +40,7 @@ export class AuthService {
         tap(auth => {
           this.doLoginUser(auth);
           this.currentTokenSubject.next(auth.token);
+          this.setUserInfo('access', 'root');
         }),
         mapTo(true),
         catchError(this.handleError));
@@ -56,6 +57,7 @@ export class AuthService {
           this.doLoginUser(auth, tenant);
           this.currentTokenSubject.next(auth.token);
           this.setUserInfo('tenant', tenant);
+          this.setUserInfo('access', 'agent');
         }),
         mapTo(true),
         catchError(this.handleError));

@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListDetailsComponent } from './task/task-list-details/task-list-details.component';
 import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 import { TaskSearchComponent } from './task/task-search/task-search.component';
+import { IndexComponent } from './index/index.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { TaskSearchComponent } from './task/task-search/task-search.component';
     TaskEditComponent,
     TaskListDetailsComponent,
     TaskDetailComponent,
-    TaskSearchComponent
+    TaskSearchComponent,
+    IndexComponent
   ],
   imports: [
     ReactiveFormsModule,
