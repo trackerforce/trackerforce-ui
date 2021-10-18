@@ -8,8 +8,10 @@ export class ApiService {
         if (obj) {
             Object.keys(obj).forEach(item => {
                 const value = JSON.parse(JSON.stringify(obj))[item];
-                if (value)
+                if (value) {
+                    console.log('value', value, 'item', item)
                     params = params.set(item, value);
+                }
             });
         }
         

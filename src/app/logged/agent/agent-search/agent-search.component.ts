@@ -34,4 +34,10 @@ export class AgentSearchComponent implements OnInit {
     });
   }
 
+  onClear() {
+    this.agentForm.reset();
+    this.agentForm.clearValidators();
+    this.agentService.agent.next({});
+  }
+
 }

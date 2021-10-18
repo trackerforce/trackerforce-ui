@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { AgentService } from 'src/app/services/agent.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-task-search',
@@ -9,29 +9,33 @@ import { AgentService } from 'src/app/services/agent.service';
 })
 export class TaskSearchComponent implements OnInit {
 
-  agentForm!: FormGroup;
+  taskForm!: FormGroup;
   error: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
-    private agentService: AgentService
+    private taskService: TaskService
   ) { }
 
   ngOnInit(): void {
-    this.agentForm = this.formBuilder.group({
-      email: [''],
-      name: ['']
+    this.taskForm = this.formBuilder.group({
+      description: ['', Validators.required]
     });
   }
 
   onSubmit() {
-    if (this.agentForm?.invalid)
+    if (this.taskForm?.invalid)
       return;
 
-    this.agentService.agent.next({
-      name: this.agentForm.get('name')?.value,
-      email: this.agentForm.get('email')?.value
+    this.taskService.task.next({
+      description: this.taskForm.get('description')?.value
     });
+  }
+
+  onClear() {
+    this.taskForm.reset();
+    this.taskForm.clearValidators();
+    this.taskService.task.next({ description: '' });
   }
 
 }

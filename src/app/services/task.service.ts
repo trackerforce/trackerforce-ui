@@ -19,10 +19,10 @@ export class TaskService extends ApiService {
     super();
   }
 
-  public listTasks(agent?: Task, pageSetup?: PageSetup): Observable<Paginable<Task>> {
-    let params = this.paramFromObject(agent);
-    params = this.paramFromObject(pageSetup);
-
+  public listTasks(task?: Task, pageSetup?: PageSetup): Observable<Paginable<Task>> {
+    let params = this.paramFromObject(task);
+    params = this.paramFromObject(pageSetup, params);
+    
     return this.http.get<Paginable<Task>>(`${environment.managementServiceUrl}/management/task/v1/`, { params })
       .pipe(catchError(super.handleError));
   }

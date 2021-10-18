@@ -20,7 +20,7 @@ export class AgentService extends ApiService {
 
   public listAgents(agent?: Agent, pageSetup?: PageSetup): Observable<Paginable<Agent>> {
     let params = this.paramFromObject(agent);
-    params = this.paramFromObject(pageSetup);
+    params = this.paramFromObject(pageSetup, params);
 
     return this.http.get<Paginable<Agent>>(`${environment.managementServiceUrl}/management/agent/v1/`, { params })
       .pipe(catchError(super.handleError));
