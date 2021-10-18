@@ -1,4 +1,4 @@
-<mat-spinner *ngIf="isLoadingResults" [diameter]=20></mat-spinner>
+<mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
 <table mat-table [dataSource]="data" matSort matSortActive="name" matSortDisableClear matSortDirection="desc"
     multiTemplateDataRows class="mat-elevation-z8">
 

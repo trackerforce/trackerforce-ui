@@ -12,7 +12,7 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Type</mat-label>
                     <mat-select formControlName="type" (selectionChange)="onTypeChange()" required>
-                        <mat-option *ngFor="let type of displayTaskTypes" [value]="type">
+                        <mat-option *ngFor="let type of displayTaskTypes" [value]="type.value">
                             {{type.name}}
                         </mat-option>
                     </mat-select>
@@ -25,6 +25,23 @@
                 <mat-label>
                     Type defines which data type is being inputed.<br />
                     Some types cannot be used by the learning engine.
+                </mat-label>
+            </div>
+        </div>
+        <div *ngIf="showOptions" class="row">
+            <div class="col">
+                <mat-form-field appearance="fill">
+                    <input matInput type="text" id="options" maxlength="500" placeholder="Options"
+                        formControlName="options" autocomplete="off" required>
+                    <mat-error>
+                        Please provide a valid Options
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-label>
+                    Include all options separated by comma.<br />
+                    e.g. Option 1, Option 2, Option 3
                 </mat-label>
             </div>
         </div>

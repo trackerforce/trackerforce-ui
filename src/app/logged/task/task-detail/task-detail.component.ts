@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
+import { Option } from 'src/app/models/task';
 
 @Component({
   selector: 'app-task-detail',
@@ -7,12 +8,12 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit {
-
   @Input() taskForm!: FormGroup;
 
   displayRenderTypes: string[] = ['PLAINTEXT', 'MARKDOWN', 'HTML'];
-  displayTaskTypes: any[] = taskTypes;
+  displayTaskTypes: any[] = TASK_TYPES;
   learnDisabled: boolean = false;
+  showOptions: boolean = false;
 
   constructor(
   ) { }
@@ -21,40 +22,63 @@ export class TaskDetailComponent implements OnInit {
   }
 
   onTypeChange() {
-    if (this.taskForm.get('type')?.value.learn)
+    const value = TASK_TYPES.filter(selection =>
+      this.taskForm.get('type')?.value === selection.value);
+
+    if (value[0].learn)
       this.taskForm.get('learn')?.enable();
     else {
       this.taskForm.get('learn')?.disable();
       this.taskForm.get('learn')?.setValue(false);
     }
+
+    this.showOptions = value[0].options;
+    if (this.showOptions)
+      this.taskForm.get('options')?.setValidators([Validators.required]);
+    else 
+      this.taskForm.get('options')?.setValidators([]);
   }
 
 }
 
-const taskTypes = [
+export const toOptions = (options: string): Option[] | null => {
+  if (options) {
+    const opts = options.split(',');
+    return options.split(',').map(opt => new Option(opt.trim()));
+  }
+  return null;
+};
+
+const TASK_TYPES = [
   {
     name: 'Plain text',
     value: 'TEXT',
-    learn: false
+    learn: false,
+    options: false
   }, {
     name: 'Plain multiline text',
     value: 'MULTILINE_TEXT',
-    learn: false
+    learn: false,
+    options: false
   }, {
     name: 'Number',
     value: 'NUMBER',
-    learn: true
+    learn: true,
+    options: false
   }, {
     name: 'Checkbox',
     value: 'CHECK',
-    learn: true
+    learn: true,
+    options: false    
   }, {
     name: 'Radio',
     value: 'RADIO',
-    learn: true
+    learn: true,
+    options: true
   }, {
     name: 'Drilldown',
     value: 'DRILLDOWN',
-    learn: true
+    learn: true,
+    options: true
   }
-]
+];

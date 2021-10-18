@@ -18,6 +18,7 @@ export class AgentEditComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   private _agentid: string = '';
 
+  loading = true;
   action: string = 'cancel';
   agentForm!: FormGroup;
   error: string = '';
@@ -40,6 +41,7 @@ export class AgentEditComponent implements OnInit, OnDestroy {
       name: ['', Validators.required]
     });
 
+    this.loading = true;
     this.agentService.getAgent(this._agentid).pipe(takeUntil(this.unsubscribe)).subscribe(agent => {
       if (agent) {
         this.agent = agent;
@@ -49,6 +51,8 @@ export class AgentEditComponent implements OnInit, OnDestroy {
     }, error => {
       ConsoleLogger.printError('Failed to load Agent', error);
       this.error = error;
+    }, () => {
+      this.loading = false;
     });
   }
 

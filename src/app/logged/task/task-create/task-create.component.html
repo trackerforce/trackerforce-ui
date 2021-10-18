@@ -11,9 +11,9 @@
         
         <app-task-detail [taskForm]="taskForm"></app-task-detail>
         <div>
-            <button type="submit" (click)="onSubmit(); mep.expanded = false;" mat-raised-button color="primary">Create</button>
-            <button type="button" (click)="mep.expanded = false;" mat-raised-button>Cancel</button>
+            <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button color="primary">Create</button>
+            <button type="button" (click)="mep.expanded = false; error = '';" mat-raised-button>Cancel</button>
         </div>
-        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     </mat-expansion-panel>
 </mat-accordion>
+<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>

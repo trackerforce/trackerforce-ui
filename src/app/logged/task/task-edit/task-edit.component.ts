@@ -1,7 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { Task } from 'src/app/models/task';
+import { TaskService } from 'src/app/services/task.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-task-edit',
@@ -10,21 +16,27 @@ import { Subject } from 'rxjs';
 })
 export class TaskEditComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+  private _taskid: string = '';
 
-  displayRenderTypes: string[] = ['PLAINTEXT'];
-  displayTaskTypes: any[] = taskTypes;
-
-  learnDisabled: boolean = false;
-  taskCreateExpanded: boolean = false;
+  loading = true;
+  action: string = 'cancel';
   taskForm!: FormGroup;
   error: string = '';
+  task?: Task = undefined;
 
   constructor(
     private formBuilder: FormBuilder,
+    private taskService: TaskService,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
     private snackBar: MatSnackBar
-  ) { }
+  ) { 
+    this.route.params.subscribe(params => this._taskid = params.taskid);
+  }
 
   ngOnInit(): void {
+    this.loading = true;
     this.taskForm = this.formBuilder.group({
       description: ['', Validators.required],
       type: ['', Validators.required],
@@ -33,6 +45,23 @@ export class TaskEditComponent implements OnInit, OnDestroy {
       helper_content: [''],
       helper_rendertype: ['']
     });
+
+    this.taskService.getTask(this._taskid).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
+      if (task) {
+        this.task = task;
+        this.taskForm.get('description')?.setValue(this.task.description);
+        this.taskForm.get('type')?.setValue(this.task.type);
+        this.taskForm.get('learn')?.setValue(this.task.learn);
+        this.taskForm.get('hidden')?.setValue(this.task.hidden);
+        this.taskForm.get('helper_content')?.setValue(this.task.helper?.content);
+        this.taskForm.get('helper_rendertype')?.setValue(this.task.helper?.renderType);
+      }
+    }, error => {
+      ConsoleLogger.printError('Failed to load Agent', error);
+      this.error = error;
+    }, () => {
+      this.loading = false;
+    });
   }
 
   ngOnDestroy() {
@@ -40,45 +69,11 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onSubmit() {
+  onSubmit(action: string) {
     if (this.taskForm?.invalid)
       return;
+
+    return this.router.navigate([`${this.authService.getUserInfo('tenant')}/tasks`]);
   }
 
-  onTypeChange() {
-    if (this.taskForm.get('type')?.value.learn)
-      this.taskForm.get('learn')?.enable();
-    else {
-      this.taskForm.get('learn')?.disable();
-      this.taskForm.get('learn')?.setValue(false);
-    }
-  }
 }
-
-const taskTypes = [
-  {
-    name: 'Plain text',
-    value: 'TEXT',
-    learn: false
-  }, {
-    name: 'Plain multiline text',
-    value: 'MULTILINE_TEXT',
-    learn: false
-  }, {
-    name: 'Number',
-    value: 'NUMBER',
-    learn: true
-  }, {
-    name: 'Checkbox',
-    value: 'CHECK',
-    learn: true
-  }, {
-    name: 'Radio',
-    value: 'RADIO',
-    learn: true
-  }, {
-    name: 'Drilldown',
-    value: 'DRILLDOWN',
-    learn: true
-  }
-]

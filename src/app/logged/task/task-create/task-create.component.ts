@@ -7,6 +7,7 @@ import { Helper } from 'src/app/models/helper';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { toOptions } from '../task-detail/task-detail.component';
 
 @Component({
   selector: 'app-task-create',
@@ -30,6 +31,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.taskForm = this.formBuilder.group({
       description: ['', Validators.required],
       type: ['', Validators.required],
+      options: [''],
       learn: [''],
       hidden: [''],
       helper_content: [''],
@@ -43,14 +45,17 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.taskForm?.invalid)
+    if (this.taskForm?.invalid) {
+      this.error = 'Task has missing paramters'
       return;
+    }
 
     const task: Task = {
       description: this.taskForm.get('description')?.value,
-      type: this.taskForm.get('type')?.value.value,
+      type: this.taskForm.get('type')?.value,
       learn: this.taskForm.get('learn')?.value,
-      hidden: this.taskForm.get('hidden')?.value
+      hidden: this.taskForm.get('hidden')?.value,
+      options: toOptions(this.taskForm.get('options')?.value)
     }
 
     const helper: Helper = {

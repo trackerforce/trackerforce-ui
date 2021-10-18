@@ -28,7 +28,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   data: Agent[] = [];
 
   resultsLength = 0;
-  isLoadingResults = true;
+  loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -55,14 +55,14 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
       .pipe(
         startWith({}),
         switchMap(() => {
-          this.isLoadingResults = true;
+          this.loading = true;
           return this.agentService.listAgents(agent, { 
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex 
           }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
-          this.isLoadingResults = false;
+          this.loading = false;
           if (data === null)
             return [];
 
