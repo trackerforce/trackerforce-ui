@@ -58,7 +58,8 @@ export class TaskListComponent implements AfterViewInit, OnDestroy {
           this.loading = true;
           return this.taskService.listTasks(task, { 
             size: this.paginator.pageSize, 
-            page: this.paginator.pageIndex 
+            page: this.paginator.pageIndex,
+            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
           }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {

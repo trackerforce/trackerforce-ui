@@ -58,14 +58,15 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
           this.loading = true;
           return this.agentService.listAgents(agent, { 
             size: this.paginator.pageSize, 
-            page: this.paginator.pageIndex 
+            page: this.paginator.pageIndex,
+            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
           }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
           this.loading = false;
           if (data === null)
             return [];
-
+          
           this.resultsLength = data.items;
           return data.data;
         })
