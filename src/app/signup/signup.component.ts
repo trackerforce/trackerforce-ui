@@ -26,7 +26,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/']);
     }
   }
 

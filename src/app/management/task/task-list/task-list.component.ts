@@ -77,7 +77,7 @@ export class TaskListComponent implements AfterViewInit, OnDestroy {
   }
 
   getTaskEdit(taskid: string): string {
-    return `/${this.authService.getUserInfo('tenant')}/task/${taskid}`
+    return `/${this.authService.getManagementOrgPath()}/task/${taskid}`
   }
 
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { LoggedRoutingModule } from './logged-routing.module';
+import { LoggedRoutingModule } from './management-routing.module';
 import { HomeComponent } from './home/home.component';
 import { AgentsComponent, AgentCreateComponent, AgentListComponent, AgentSearchComponent, AgentEditComponent } from './agent';
 import { TasksComponent, TaskCreateComponent, TaskListComponent, TaskEditComponent } from './task';
@@ -13,7 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListDetailsComponent } from './task/task-list-details/task-list-details.component';
 import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 import { TaskSearchComponent } from './task/task-search/task-search.component';
-import { IndexHomeComponent } from './index';
+import { IndexHomeComponent } from './index/index';
 import { MyCasesComponent } from './index/my-cases/my-cases.component';
 
 

@@ -1,34 +1,36 @@
-<mat-card>
-    <img mat-card-image src="assets\trackerforce_1280_grey.png" alt="Trackerforce Logo">
-    <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <mat-radio-group color="warn" formControlName="selectedLoginType" (change)="onChangeType()">
-                <mat-radio-button value="admin" [checked]="true">Admin</mat-radio-button>
-                <mat-radio-button value="agent">Agent</mat-radio-button>
-            </mat-radio-group>
-            <mat-form-field *ngIf="type">
-                <input matInput type="tenant" id="tenant" (keyup)="onKey($event)" maxlength="50"
-                    placeholder="Organization Id" autocomplete="off" formControlName="tenant" required>
-                <mat-error>
-                    Please provide a valid Organization Id
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput id="email" type="email" (keyup)="onKey($event)" maxlength="50" placeholder="E-mail"
-                    autocomplete="off" formControlName="email" required>
-                <mat-error>
-                    Please provide a valid E-mail
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
-                    placeholder="Password" formControlName="password" required>
-                <mat-error>
-                    Please provide a valid password
-                </mat-error>
-            </mat-form-field>
-            <button mat-raised-button color="warn">Login</button>
-            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-        </form>
-    </mat-card-content>
-</mat-card>
+<div class="card-container">
+    <mat-card>
+        <img mat-card-image src="assets\trackerforce_1280_grey.png" alt="Trackerforce Logo">
+        <mat-card-content>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <mat-radio-group color="warn" formControlName="selectedLoginType" (change)="onChangeType()">
+                    <mat-radio-button value="admin" [checked]="true">Admin</mat-radio-button>
+                    <mat-radio-button value="agent">Agent</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field *ngIf="type">
+                    <input matInput type="tenant" id="tenant" (keyup)="onKey($event)" maxlength="50"
+                        placeholder="Organization Id" autocomplete="off" formControlName="tenant" required>
+                    <mat-error>
+                        Please provide a valid Organization Id
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput id="email" type="email" (keyup)="onKey($event)" maxlength="50" placeholder="E-mail"
+                        autocomplete="off" formControlName="email" required>
+                    <mat-error>
+                        Please provide a valid E-mail
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
+                        placeholder="Password" formControlName="password" required>
+                    <mat-error>
+                        Please provide a valid password
+                    </mat-error>
+                </mat-form-field>
+                <button mat-raised-button color="warn">Login</button>
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

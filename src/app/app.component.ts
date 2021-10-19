@@ -16,8 +16,8 @@ export class AppComponent {
     private router: Router,
     private authService: AuthService
   ) {
-    this.tenant = this.authService.getUserInfo('tenant');
     this.authService.currentToken.subscribe(token => {
+      this.tenant = this.authService.getUserInfo('tenant');
       this.currentToken = token;
     });
   }

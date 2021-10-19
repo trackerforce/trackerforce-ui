@@ -137,6 +137,10 @@ export class AuthService {
     return "";
   }
 
+  getManagementOrgPath(): string {
+    return `/management/${this.getUserInfo('tenant')}`;
+  }
+
   private handleError(result: any) {
     let errorMessage = '';
     if (result.error instanceof ErrorEvent) {

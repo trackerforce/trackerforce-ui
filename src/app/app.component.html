@@ -4,7 +4,8 @@
   </a>
   <mat-divider class="divider-style"></mat-divider>
   <div class="navbar-nav" style="width: 100%;">
-      <a class="nav-item nav-link" routerLink="/{{tenant}}" *ngIf="currentToken">Dashboard</a>
+      <a class="nav-item nav-link" routerLink="/management/{{tenant}}" *ngIf="currentToken">Management</a>
+      <a class="nav-item nav-link" routerLink="/session/{{tenant}}" *ngIf="currentToken">Session</a>
       <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
       <a class="nav-item nav-link menu-border-left" routerLink="/signup" *ngIf="!currentToken">Sign Up</a>
       <a class="nav-item nav-link menu-border-left" routerLink="/" (click)="logout()" *ngIf="currentToken">Sign Out</a>

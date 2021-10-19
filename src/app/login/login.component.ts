@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private authService: AuthService
     ) {
         if (this.authService.isLoggedIn()) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/']);
         }
     }
 
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: this.f?.password.value
         }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
-                this.router.navigateByUrl(this.returnUrl || "/" + this.authService.getUserInfo('tenant'));
+                this.router.navigateByUrl(this.returnUrl || "/");
                 this.authService.releaseOldSessions.emit(true);
             }
         }, error => {
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: this.f.password.value
         }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
-                this.router.navigateByUrl(this.returnUrl || "/" + this.authService.getUserInfo('tenant'));
+                this.router.navigateByUrl(this.returnUrl || "/");
                 this.authService.releaseOldSessions.emit(true);
             }
         }, error => {

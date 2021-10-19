@@ -65,7 +65,7 @@ export class AgentEditComponent implements OnInit, OnDestroy {
     if (this.agentForm?.invalid)
       return;
 
-    return this.router.navigate([`${this.authService.getUserInfo('tenant')}/agents`]);
+    return this.router.navigate([`${this.authService.getManagementOrgPath()}/agents`]);
   }
 
 }

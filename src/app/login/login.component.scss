@@ -1,6 +1,6 @@
 mat-card {
   max-width: 400px;
-  margin: 2em auto;
+  margin: auto;
   text-align: center;
 }
 
@@ -11,4 +11,8 @@ mat-form-field {
 
 mat-radio-button {
   margin-right: 1rem;
+}
+
+.card-container {
+  margin: 2rem;
 }

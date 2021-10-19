@@ -9,8 +9,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   {
-    path: ':tenant',
-    loadChildren: () => import('./logged/logged.module').then(mod => mod.LoggedModule)
+    path: 'management/:tenant',
+    loadChildren: () => import('./management/management.module').then(mod => mod.LoggedModule)
   },
 ];
 

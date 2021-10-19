@@ -73,7 +73,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     if (this.taskForm?.invalid)
       return;
 
-    return this.router.navigate([`${this.authService.getUserInfo('tenant')}/tasks`]);
+    return this.router.navigate([`${this.authService.getManagementOrgPath()}/tasks`]);
   }
 
   hasOptions(): boolean {

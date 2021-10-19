@@ -77,7 +77,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   }
 
   getAgentEdit(agentId: string): string {
-    return `/${this.authService.getUserInfo('tenant')}/agent/${agentId}`
+    return `/${this.authService.getManagementOrgPath()}/agent/${agentId}`
   }
 
 }

@@ -4,7 +4,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { AgentsComponent, AgentEditComponent } from './agent';
 import { GlobalsComponent } from './global';
 import { HomeComponent } from './home/home.component';
-import { IndexHomeComponent } from './index';
+import { IndexHomeComponent } from './index/index';
 import { ProceduresComponent } from './procedure';
 import { TasksComponent, TaskEditComponent } from './task';
 import { TemplatesComponent } from './template';
