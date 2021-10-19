@@ -35,7 +35,7 @@ export class TaskSearchComponent implements OnInit {
   onClear() {
     this.taskForm.reset();
     this.taskForm.clearValidators();
-    this.taskService.task.next({ description: '' });
+    this.taskService.task.next({});
   }
 
 }
