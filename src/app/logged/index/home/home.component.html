@@ -7,10 +7,4 @@
     <mat-card-content>
     </mat-card-content>
 </mat-card>
-<mat-card *ngIf="getRole() == 'Agent'">
-    <mat-card-title-group>
-        <mat-card-title>My Cases</mat-card-title>
-    </mat-card-title-group>
-    <mat-card-content>
-    </mat-card-content>
-</mat-card>
+<app-my-cases *ngIf="getRole() == 'Agent'"></app-my-cases>

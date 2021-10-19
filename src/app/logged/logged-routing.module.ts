@@ -4,7 +4,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { AgentsComponent, AgentEditComponent } from './agent';
 import { GlobalsComponent } from './global';
 import { HomeComponent } from './home/home.component';
-import { IndexComponent } from './index/index.component';
+import { IndexHomeComponent } from './index';
 import { ProceduresComponent } from './procedure';
 import { TasksComponent, TaskEditComponent } from './task';
 import { TemplatesComponent } from './template';
@@ -12,7 +12,7 @@ import { TemplatesComponent } from './template';
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], 
     children: [
-      { path: '', component: IndexComponent, data: { view: 'home' } },
+      { path: '', component: IndexHomeComponent, data: { view: 'home' } },
       { path: 'agents', component: AgentsComponent, data: { view: 'agents' } },
       { path: 'agent/:agentid', component: AgentEditComponent, data: { view: 'agents' } },
       { path: 'tasks', component: TasksComponent, data: { view: 'tasks' } },

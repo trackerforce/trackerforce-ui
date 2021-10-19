@@ -13,7 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListDetailsComponent } from './task/task-list-details/task-list-details.component';
 import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 import { TaskSearchComponent } from './task/task-search/task-search.component';
-import { IndexComponent } from './index/index.component';
+import { IndexHomeComponent } from './index';
+import { MyCasesComponent } from './index/my-cases/my-cases.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { IndexComponent } from './index/index.component';
     TaskListDetailsComponent,
     TaskDetailComponent,
     TaskSearchComponent,
-    IndexComponent
+    IndexHomeComponent,
+    MyCasesComponent
   ],
   imports: [
     ReactiveFormsModule,

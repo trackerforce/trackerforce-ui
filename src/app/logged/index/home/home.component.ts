@@ -7,11 +7,11 @@ import { AgentService } from 'src/app/services/agent.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
-  selector: 'app-index',
-  templateUrl: './index.component.html',
-  styleUrls: ['./index.component.scss']
+  selector: 'app-index-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
-export class IndexComponent implements OnInit, OnDestroy {
+export class IndexHomeComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   agent?: Agent;
@@ -23,18 +23,22 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.getRole() === 'Agent') {
-      this.agentServie.getMe().pipe(takeUntil(this.unsubscribe)).subscribe(agent => {
-        if (agent)
-          this.agent = agent;
-      }, error => {
-        ConsoleLogger.printError('Failed to fetch Agent', error);
-      });
+      this.loadAgent();
     }
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private loadAgent() {
+    this.agentServie.getMe().pipe(takeUntil(this.unsubscribe)).subscribe(agent => {
+      if (agent)
+        this.agent = agent;
+    }, error => {
+      ConsoleLogger.printError('Failed to fetch Agent', error);
+    });
   }
 
   getInfo(key: string) {
