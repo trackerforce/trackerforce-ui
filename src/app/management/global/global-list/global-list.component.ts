@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/services/auth.service';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -34,7 +33,6 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private authService: AuthService,
     private globalService: GlobalService
   ) { }
 

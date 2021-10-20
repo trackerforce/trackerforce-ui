@@ -7,19 +7,13 @@ import { AgentsComponent, AgentCreateComponent, AgentListComponent, AgentSearchC
 import { TasksComponent, TaskCreateComponent, TaskListComponent, TaskEditComponent } from './task';
 import { ProceduresComponent } from './procedure';
 import { TemplatesComponent } from './template';
-import { GlobalsComponent } from './global';
+import { GlobalsComponent, GlobalCreateComponent, GlobalListComponent, GlobalListDetailsComponent, GlobalSearchComponent, GlobalSelectionComponent } from './global';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListDetailsComponent } from './task/task-list-details/task-list-details.component';
 import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 import { TaskSearchComponent } from './task/task-search/task-search.component';
-import { IndexHomeComponent } from './index/index';
-import { MyCasesComponent } from './index/my-cases/my-cases.component';
-import { GlobalListComponent } from './global/global-list/global-list.component';
-import { GlobalCreateComponent } from './global/global-create/global-create.component';
-import { GlobalSearchComponent } from './global/global-search/global-search.component';
-import { GlobalListDetailsComponent } from './global/global-list-details/global-list-details.component';
-import { GlobalSelectionComponent } from './global/global-selection/global-selection.component';
+import { IndexHomeComponent, MyCasesComponent } from './index';
 
 
 @NgModule({
