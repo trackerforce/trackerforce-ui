@@ -5,21 +5,21 @@
                 <mat-icon>library_add</mat-icon>New
             </mat-panel-title>
             <mat-panel-description>
-                Create Agents to operate Trackerforce Session
+                <span class="hide">Create Agents to operate Trackerforce Session</span>
             </mat-panel-description>
         </mat-expansion-panel-header>
 
         <form class="form-container" [formGroup]="agentForm">
             <section>
-                <mat-divider class="col"></mat-divider>
-                <mat-form-field>
+                <span class="show">Create Agents to operate Trackerforce Session</span>
+                <mat-form-field appearance="fill">
                     <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name"
                         autocomplete="off" required>
                     <mat-error>
                         Please provide a valid Name
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field>
+                <mat-form-field appearance="fill">
                     <input matInput id="email" type="email" maxlength="50" placeholder="E-mail" autocomplete="off"
                         formControlName="email" required>
                     <mat-error>

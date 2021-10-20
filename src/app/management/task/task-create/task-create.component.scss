@@ -7,3 +7,9 @@ button {
   float: inline-end;
   margin-right: .5rem;
 }
+
+@media only screen and (max-width: 450px) {
+  .hide {
+    display: none;
+  }
+}

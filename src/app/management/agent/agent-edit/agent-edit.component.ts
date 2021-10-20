@@ -61,10 +61,14 @@ export class AgentEditComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onSubmit(action: string) {
+  onSubmit() {
     if (this.agentForm?.invalid)
       return;
 
+    return this.router.navigate([`${this.authService.getManagementOrgPath()}/agents`]);
+  }
+
+  onCancel() {
     return this.router.navigate([`${this.authService.getManagementOrgPath()}/agents`]);
   }
 

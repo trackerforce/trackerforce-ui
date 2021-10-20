@@ -5,13 +5,12 @@
                 <mat-icon>search</mat-icon>Search
             </mat-panel-title>
             <mat-panel-description>
-                Find Tasks
+                <span class="hide">Find Tasks</span>
             </mat-panel-description>
         </mat-expansion-panel-header>
 
         <form class="form-container" [formGroup]="taskForm">
             <section>
-                <mat-divider class="col"></mat-divider>
                 <mat-form-field>
                     <input matInput type="text" id="description" maxlength="50" placeholder="Description" formControlName="description"
                         autocomplete="off">

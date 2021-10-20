@@ -5,13 +5,13 @@
                 <mat-icon>search</mat-icon>Search
             </mat-panel-title>
             <mat-panel-description>
-                Find Agents registered to this organization
+                <span class="hide">Find Agents registered to this organization</span>
             </mat-panel-description>
         </mat-expansion-panel-header>
 
         <form class="form-container" [formGroup]="agentForm">
             <section>
-                <mat-divider class="col"></mat-divider>
+                <span class="show">Find Agents registered to this organization</span>
                 <mat-form-field>
                     <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name"
                         autocomplete="off">

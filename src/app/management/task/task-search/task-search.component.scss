@@ -20,3 +20,9 @@ mat-divider {
   text-align: end;
   display: initial;
 }
+
+@media only screen and (max-width: 450px) {
+  .hide {
+    display: none;
+  }
+}
