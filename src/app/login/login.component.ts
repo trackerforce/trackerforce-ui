@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: this.f?.password.value
         }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
-                this.router.navigateByUrl(this.returnUrl || "/");
+                this.router.navigateByUrl(this.returnUrl || this.authService.getManagementOrgPath());
                 this.authService.releaseOldSessions.emit(true);
             }
         }, error => {
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: this.f.password.value
         }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
             if (success) {
-                this.router.navigateByUrl(this.returnUrl || "/");
+                this.router.navigateByUrl(this.returnUrl || this.authService.getManagementOrgPath());
                 this.authService.releaseOldSessions.emit(true);
             }
         }, error => {
