@@ -1,0 +1,16 @@
+<div class="wrapper">
+    <form>
+        <mat-form-field appearance="fill">
+            <mat-label>Global Description</mat-label>
+            <input type="text" placeholder="Select..." aria-label="Number" matInput [formControl]="globalForm"
+                [matAutocomplete]="auto" required>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let global of filteredOptions | async" [value]="global">
+                    {{global.description}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+            <button type="button" (click)="onSubmit()" mat-raised-button color="primary">Select</button>
+    </form>
+</div>
+<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>

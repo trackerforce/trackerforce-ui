@@ -1,0 +1,32 @@
+<mat-accordion>
+    <mat-expansion-panel #mep="matExpansionPanel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>library_add</mat-icon>New
+            </mat-panel-title>
+            <mat-panel-description>
+                Add new features to your subscription
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <app-global-selection (selectedGlobal)="selectGlobal($event)"></app-global-selection>
+        <form *ngIf="selectedGlobal" class="form-container" [formGroup]="globalForm">
+            <section>
+                <mat-divider class="col"></mat-divider>
+                <mat-form-field class="element-editable" appearance="fill" *ngFor=" let attrib of getAttributes()">
+                    <mat-label>{{attrib}}</mat-label>
+                    <input matInput [value]="selectedGlobal?.attributes[attrib]" formControlName="{{attrib}}" autocomplete="off"
+                        required>
+                    <mat-error>
+                        Please provide a valid value
+                    </mat-error>
+                </mat-form-field>
+            </section>
+            <div>
+                <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Create</button>
+                <button type="button" (click)="mep.expanded = false;" mat-raised-button>Cancel</button>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </form>
+    </mat-expansion-panel>
+</mat-accordion>

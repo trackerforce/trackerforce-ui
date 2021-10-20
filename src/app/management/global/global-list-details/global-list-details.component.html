@@ -1,0 +1,29 @@
+<form [formGroup]="globalForm">
+    <div class="element-description">
+        <mat-form-field appearance="outline">
+            <mat-label>Key</mat-label>
+            <input matInput [value]="global?.key" [readonly]=true>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Created At</mat-label>
+            <input matInput [value]="global?.createdAt | date:'short'" [readonly]=true>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Updated At</mat-label>
+            <input matInput [value]="global?.updatedAt | date:'short'" [readonly]=true>
+        </mat-form-field>
+        <mat-form-field class="element-editable" appearance="fill" *ngFor=" let attrib of getAttributes()">
+            <mat-label>{{attrib}}</mat-label>
+            <input matInput [value]="global?.attributes[attrib]" formControlName="{{attrib}}" autocomplete="off"
+                required>
+            <mat-error>
+                Please provide a valid value
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="element-control">
+        <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Update</button>
+        <button type="button" mat-raised-button [disabled]=true>Delete</button>
+    </div>
+    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+</form>

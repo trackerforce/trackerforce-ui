@@ -15,6 +15,11 @@ import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 import { TaskSearchComponent } from './task/task-search/task-search.component';
 import { IndexHomeComponent } from './index/index';
 import { MyCasesComponent } from './index/my-cases/my-cases.component';
+import { GlobalListComponent } from './global/global-list/global-list.component';
+import { GlobalCreateComponent } from './global/global-create/global-create.component';
+import { GlobalSearchComponent } from './global/global-search/global-search.component';
+import { GlobalListDetailsComponent } from './global/global-list-details/global-list-details.component';
+import { GlobalSelectionComponent } from './global/global-selection/global-selection.component';
 
 
 @NgModule({
@@ -36,7 +41,12 @@ import { MyCasesComponent } from './index/my-cases/my-cases.component';
     TaskDetailComponent,
     TaskSearchComponent,
     IndexHomeComponent,
-    MyCasesComponent
+    MyCasesComponent,
+    GlobalListComponent,
+    GlobalCreateComponent,
+    GlobalSearchComponent,
+    GlobalListDetailsComponent,
+    GlobalSelectionComponent
   ],
   imports: [
     ReactiveFormsModule,
