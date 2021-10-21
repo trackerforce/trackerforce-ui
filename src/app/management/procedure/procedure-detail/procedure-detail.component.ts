@@ -31,8 +31,7 @@ export class ProcedureDetailComponent implements AfterViewInit {
   }
 
   onSelectTask(selectedTask: Task) {
-    const tasks: Task[] = this.procedureForm.get('tasks')?.value
-
+    const tasks: Task[] = this.procedureForm.get('tasks')?.value;
     if (!tasks.filter(task => task.id === selectedTask.id).length) {
       this.addTask.emit(selectedTask);
       this.procedureTasks.next(tasks);
@@ -42,4 +41,5 @@ export class ProcedureDetailComponent implements AfterViewInit {
   onRemoveTask(event: Task) {
     this.removeTask.emit(event);
   }
+
 }

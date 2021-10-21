@@ -48,8 +48,10 @@ export class TaskSelectionComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.selectedTask.emit(this.taskForm.value);
-    this.taskForm.reset();
+    if (this.taskForm.value) {
+      this.selectedTask.emit(this.taskForm.value);
+      this.taskForm.reset();
+    }
   }
 
   displayFn(task: Task): string {

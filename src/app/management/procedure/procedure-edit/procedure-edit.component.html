@@ -6,8 +6,12 @@
         <mat-card-title>Edit</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <app-procedure-detail *ngIf="!loading" (addTask)="onAddTask($event)" (removeTask)="onRemoveTask($event)"
-            [procedureForm]="procedureForm" [loading]="loading"></app-procedure-detail>
+        <app-procedure-detail *ngIf="!loading" 
+            (addTask)="onAddTask($event)" 
+            (removeTask)="onRemoveTask($event)"
+            [procedureForm]="procedureForm" 
+            [loading]="loading">
+        </app-procedure-detail>
         <div class="form-container">
             <div>
                 <button type="submit" (click)="onSubmit()" mat-raised-button color="primary"

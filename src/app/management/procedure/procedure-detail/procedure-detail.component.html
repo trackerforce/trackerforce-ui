@@ -30,7 +30,10 @@
         </div>
         <app-task-selection (selectedTask)="onSelectTask($event)"></app-task-selection>
         <br />
-        <app-task-list [procedureChild]="true" [procedureTasks]="procedureTasks" (removeTask)="onRemoveTask($event)">
+        <app-task-list 
+            [procedureChild]="true" 
+            [procedureTasks]="procedureTasks" 
+            (removeTask)="onRemoveTask($event)">
         </app-task-list>
     </section>
     <section>

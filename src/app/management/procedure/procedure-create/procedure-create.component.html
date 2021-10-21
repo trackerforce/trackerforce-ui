@@ -9,8 +9,12 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <app-procedure-detail (addTask)="onAddTask($event)" (removeTask)="onRemoveTask($event)"
-            [procedureForm]="procedureForm" [loading]="false"></app-procedure-detail>
+        <app-procedure-detail 
+            (addTask)="onAddTask($event)" 
+            (removeTask)="onRemoveTask($event)"
+            [procedureForm]="procedureForm"
+            [loading]="false">
+        </app-procedure-detail>
         <div>
             <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button
                 color="primary">Create</button>

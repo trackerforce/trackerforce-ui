@@ -7,13 +7,13 @@ import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
-import { detailsAnimation, rowsAnimation } from 'src/app/_helpers/animations';
+import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
-  animations: [detailsAnimation, rowsAnimation ]
+  animations: [detailsAnimation, fadeAnimation]
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
@@ -56,9 +56,11 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private loadProcedureData() {
     this.procedureTasks.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
+      if (data) {
+        this.loading = false;
         this.dataSource = new MatTableDataSource(data);
         this.resultsLength = data.length;
-        this.loading = false;
+      }
     });
   }
 
@@ -68,8 +70,8 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
         startWith({}),
         switchMap(() => {
           this.loading = true;
-          return this.taskService.listTasks(task, { 
-            size: this.paginator.pageSize, 
+          return this.taskService.listTasks(task, {
+            size: this.paginator.pageSize,
             page: this.paginator.pageIndex,
             sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
           }).pipe(takeUntil(this.unsubscribe))
@@ -93,11 +95,15 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
     return `/${this.authService.getManagementOrgPath()}/task/${taskid}`
   }
 
-  onRemove(selectedTask: Task) {
+  onRemove(event: Event, selectedTask: Task) {
+    event.stopPropagation();
+
     if (this.procedureChild) {
-      this.dataSource = new MatTableDataSource(this.dataSource.data.filter(task => task.id !== selectedTask.id));
-      this.resultsLength = this.dataSource.data.length;
       this.removeTask.emit(selectedTask);
+      
+      this.dataSource.data = this.dataSource.data.filter(task => task.id !== selectedTask.id);
+      this.dataSource.filter = "";
+      this.resultsLength = this.dataSource.data.length;
     }
   }
 

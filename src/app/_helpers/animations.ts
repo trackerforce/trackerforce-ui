@@ -1,14 +1,10 @@
-import { trigger, sequence, animate, transition, style, state } from '@angular/animations';
+import { trigger, animate, transition, style, state } from '@angular/animations';
 
-export const rowsAnimation =
-    trigger('rowsAnimation', [
-        transition('void => *', [
-            style({ height: '*', opacity: '0', transform: 'translateX(-550px)', 'box-shadow': 'none' }),
-            sequence([
-                animate(".35s ease", style({ height: '*', opacity: '.2', transform: 'translateX(0)', 'box-shadow': 'none' })),
-                animate(".35s ease", style({ height: '*', opacity: 1, transform: 'translateX(0)' }))
-            ])
-        ])
+export const fadeAnimation =
+    trigger('fadeAnimation', [
+        state('in', style({ opacity: 1 })),
+        transition(':enter', [style({ opacity: 0 }), animate(400)]),
+        transition(':leave', animate(400, style({ opacity: 0 })))
     ]);
 
 export const detailsAnimation =
