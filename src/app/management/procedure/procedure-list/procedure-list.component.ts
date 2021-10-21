@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -7,18 +6,13 @@ import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
+import { detailsAnimation, rowsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-procedure-list',
   templateUrl: './procedure-list.component.html',
   styleUrls: ['./procedure-list.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  animations: [rowsAnimation, detailsAnimation]
 })
 export class ProcedureListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -6,18 +5,13 @@ import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
+import { detailsAnimation, rowsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-global-list',
   templateUrl: './global-list.component.html',
   styleUrls: ['./global-list.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  animations: [rowsAnimation, detailsAnimation]
 })
 export class GlobalListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
