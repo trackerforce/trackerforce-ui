@@ -1,0 +1,33 @@
+<form [formGroup]="templateForm">
+    <div class="element-description">
+        <mat-form-field appearance="outline">
+            <mat-label>Created At</mat-label>
+            <input matInput [value]="template?.createdAt | date:'short'" [readonly]=true>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Updated At</mat-label>
+            <input matInput [value]="template?.updatedAt | date:'short'" [readonly]=true>
+        </mat-form-field>
+        <mat-form-field class="element-editable" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput [value]="template?.name" formControlName="name" autocomplete="off"
+                required>
+            <mat-error>
+                Please provide a valid Name
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="element-editable" appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput [value]="template?.description" formControlName="description" autocomplete="off"
+                required>
+            <mat-error>
+                Please provide a valid Description
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="element-control">
+        <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Update</button>
+        <button type="button" mat-raised-button [disabled]=true>Delete</button>
+    </div>
+    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+</form>

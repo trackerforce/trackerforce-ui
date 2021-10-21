@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { merge, Subject } from 'rxjs';
-import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
@@ -14,12 +15,15 @@ import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
   styleUrls: ['./procedure-list.component.scss'],
   animations: [detailsAnimation, fadeAnimation]
 })
-export class ProcedureListComponent implements AfterViewInit, OnDestroy {
+export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+  @Input() templateChild!: boolean;
+  @Input() templateProcedures!: Subject<Procedure[]>;
+  @Output() removeProcedure = new EventEmitter<Procedure>();
 
-  displayedColumns: string[] = ['action_edit', 'name'];
+  displayedColumns: string[] = ['action', 'name'];
   expandedElement: Procedure | undefined;
-  data: Procedure[] = [];
+  dataSource!: MatTableDataSource<Procedure>;
 
   resultsLength = 0;
   loading = true;
@@ -32,16 +36,32 @@ export class ProcedureListComponent implements AfterViewInit, OnDestroy {
     private procedureService: ProcedureService
   ) { }
 
-  ngAfterViewInit(): void {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.procedureService.procedure.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
+  ngOnInit(): void {
+    if (this.templateChild)
+      this.loadTemplateData();
+  }
 
-    this.loadData();
+  ngAfterViewInit(): void {
+    if (!this.templateChild) {
+      this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+      this.procedureService.procedure.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
+      this.loadData();
+    }
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private loadTemplateData() {
+    this.templateProcedures.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
+      if (data) {
+        this.loading = false;
+        this.dataSource = new MatTableDataSource(data);
+        this.resultsLength = data.length;
+      }
+    });
   }
 
   private loadData(procedure?: Procedure) {
@@ -64,15 +84,27 @@ export class ProcedureListComponent implements AfterViewInit, OnDestroy {
           this.resultsLength = data.items;
           return data.data;
         })
-      ).subscribe(data => this.data = data);
+        ).subscribe(data => this.dataSource = new MatTableDataSource(data));
   }
 
   getColumns(): string[] {
     return this.displayedColumns.filter(col => !col.startsWith('action'));
   }
 
-  getTaskEdit(taskid: string): string {
-    return `/${this.authService.getManagementOrgPath()}/procedure/${taskid}`
+  getProcedureEdit(procedureid: string): string {
+    return `/${this.authService.getManagementOrgPath()}/procedure/${procedureid}`
+  }
+
+  onRemove(event: Event, selectedProcedure: Procedure) {
+    event.stopPropagation();
+
+    if (this.templateChild) {
+      this.removeProcedure.emit(selectedProcedure);
+      
+      this.dataSource.data = this.dataSource.data.filter(procedure => procedure.id !== selectedProcedure.id);
+      this.dataSource.filter = "";
+      this.resultsLength = this.dataSource.data.length;
+    }
   }
 
 }

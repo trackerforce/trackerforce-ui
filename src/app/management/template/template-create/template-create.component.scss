@@ -1,0 +1,19 @@
+.mat-expansion-panel-header-description {
+  text-align: end;
+  display: initial;
+}
+
+button {
+  float: inline-end;
+  margin-right: .5rem;
+}
+
+mat-icon {
+  margin-right: .2rem;
+}
+
+@media only screen and (max-width: 450px) {
+  .hide {
+    display: none;
+  }
+}

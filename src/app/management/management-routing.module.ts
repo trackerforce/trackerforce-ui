@@ -7,7 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { IndexHomeComponent } from './index/index';
 import { ProceduresComponent, ProcedureEditComponent } from './procedure';
 import { TasksComponent, TaskEditComponent } from './task';
-import { TemplatesComponent } from './template';
+import { TemplateEditComponent, TemplatesComponent } from './template';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], 
@@ -20,6 +20,7 @@ const routes: Routes = [
       { path: 'procedures', component: ProceduresComponent, data: { view: 'procedures' } },
       { path: 'procedure/:procedureid', component: ProcedureEditComponent, data: { view: 'procedures' } },
       { path: 'templates', component: TemplatesComponent, data: { view: 'templates' } },
+      { path: 'template/:templateid', component: TemplateEditComponent, data: { view: 'templates' } },
       { path: 'globals', component: GlobalsComponent, data: { view: 'globals' } },
     ]
   }

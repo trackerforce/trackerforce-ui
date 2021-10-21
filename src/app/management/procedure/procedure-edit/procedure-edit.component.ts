@@ -49,7 +49,7 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
           });
         }
       }, error => {
-        ConsoleLogger.printError('Failed to load Agent', error);
+        ConsoleLogger.printError('Failed to load Procedure', error);
         this.error = error;
       }, () => {
         this.loading = false;

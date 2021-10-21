@@ -1,0 +1,31 @@
+mat-lebel {
+  margin-left: 1rem;
+}
+
+mat-icon {
+  float: right;
+}
+
+mat-form-field {
+  margin: auto;
+}
+
+button {
+  float: inline-end;
+  margin-right: .5rem;
+}
+
+.element-editable {
+  width: 95%;
+}
+
+.element-description {
+  mat-form-field {
+    margin-left: 1rem;
+  }
+}
+
+.element-control {
+  float: right;
+  margin: 1rem;
+}

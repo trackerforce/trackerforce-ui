@@ -1,0 +1,42 @@
+<form *ngIf="!loading" class="form-container" [formGroup]="templateForm">
+    <section>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" id="name" maxlength="200" placeholder="Name" formControlName="name"
+                autocomplete="off" required>
+            <mat-error>
+                Please provide a valid Name
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput type="text" id="description" maxlength="200" placeholder="Description"
+                formControlName="description" autocomplete="off" required>
+            <mat-error>
+                Please provide a valid Description
+            </mat-error>
+        </mat-form-field>
+    </section>
+    <section>
+        <mat-divider class="col"></mat-divider>
+        <div class="row panel-checks-title">
+            <mat-icon>playlist_add_check</mat-icon>
+            <h3><strong>Procedures</strong></h3>
+        </div>
+        <div class="row panel-description">
+            <mat-label>
+                Add all necessary Procedures to be executed from this Template.
+            </mat-label>
+        </div>
+        <app-procedure-selection (selectedProcedure)="onSelectProcedure($event)"></app-procedure-selection>
+        <br />
+        <app-procedure-list 
+            [templateChild]="true" 
+            [templateProcedures]="templateProcedures" 
+            (removeProcedure)="onRemoveProcedure($event)">
+        </app-procedure-list>
+    </section>
+    <section>
+        <app-helper [form]="templateForm" (selectedHelper)="onHelperChanged($event)"></app-helper>
+    </section>
+</form>

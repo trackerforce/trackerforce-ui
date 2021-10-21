@@ -1,9 +1,11 @@
 <mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
-<table mat-table [dataSource]="data" matSort multiTemplateDataRows class="mat-elevation-z8">
-    <ng-container matColumnDef="action_edit">
+<table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows class="mat-elevation-z8">
+
+    <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-            <a routerLink="{{getTaskEdit(element.id)}}" matTooltip="Edit {{element.name}}"><i class="fas fa-tasks"></i></a>
+            <a *ngIf="!templateChild" routerLink="{{getProcedureEdit(element.id)}}" matTooltip="Edit {{element.name}}"><i class="fas fa-tasks"></i></a>
+            <a *ngIf="templateChild" (click)="onRemove($event, element);" matTooltip="Remove {{element.name}}"><i class="fas fa-trash-alt red"></i></a>
         </td>
     </ng-container>
 
@@ -25,6 +27,7 @@
         [class.expanded-row]="expandedElement === element"
         (click)="expandedElement = expandedElement === element ? null : element">
     </tr>
+    
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
 </table>
 
