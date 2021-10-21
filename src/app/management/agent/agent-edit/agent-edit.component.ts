@@ -19,7 +19,6 @@ export class AgentEditComponent implements OnInit, OnDestroy {
   private _agentid: string = '';
 
   loading = true;
-  action: string = 'cancel';
   agentForm!: FormGroup;
   error: string = '';
   agent?: Agent = undefined;

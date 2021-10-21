@@ -40,7 +40,7 @@ export class TaskSelectionComponent implements OnInit, OnDestroy {
   }
 
   private filter(value: string): Observable<Task[]> {
-    return this.taskService.listTasks({ description: value }, { size: 3 })
+    return this.taskService.listTasks({ description: value })
       .pipe(
         takeUntil(this.unsubscribe),
         map(response => response.data)

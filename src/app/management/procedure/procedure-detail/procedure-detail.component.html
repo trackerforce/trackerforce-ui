@@ -2,8 +2,8 @@
     <section>
         <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
-            <input matInput type="text" id="name" maxlength="200" placeholder="Name"
-                formControlName="name" autocomplete="off" required>
+            <input matInput type="text" id="name" maxlength="200" placeholder="Name" formControlName="name"
+                autocomplete="off" required>
             <mat-error>
                 Please provide a valid Name
             </mat-error>
@@ -25,12 +25,13 @@
         </div>
         <div class="row panel-description">
             <mat-label>
-                Add all necessary tasks to be used as input for your procedure.
+                Add all necessary Tasks to be used as input for your Procedure.
             </mat-label>
         </div>
-        <app-task-selection (selectedTask)="selectTask($event)"></app-task-selection>
+        <app-task-selection (selectedTask)="onSelectTask($event)"></app-task-selection>
         <br />
-        <app-task-list [procedureChild]="true" [procedureTasks]="procedureTasks" (removeTask)="onRemoveTask($event)"></app-task-list>
+        <app-task-list [procedureChild]="true" [procedureTasks]="procedureTasks" (removeTask)="onRemoveTask($event)">
+        </app-task-list>
     </section>
     <section>
         <app-helper [form]="procedureForm" (selectedHelper)="onHelperChanged($event)"></app-helper>

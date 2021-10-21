@@ -18,7 +18,6 @@ export class TaskEditComponent implements OnInit, OnDestroy {
   private _taskid: string = '';
 
   loading = true;
-  action: string = 'cancel';
   taskForm!: FormGroup;
   error: string = '';
   task?: Task = undefined;

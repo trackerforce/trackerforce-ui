@@ -19,7 +19,6 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
   private _procedureid: string = '';
 
   loading = true;
-  action: string = 'cancel';
   procedureForm!: FormGroup;
   error: string = '';
   procedure?: Procedure = undefined;
@@ -36,7 +35,6 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
-    
     this.procedureService.getProcedure(this._procedureid)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(procedure => {

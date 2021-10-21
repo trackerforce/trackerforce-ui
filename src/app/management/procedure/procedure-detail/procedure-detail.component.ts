@@ -30,7 +30,7 @@ export class ProcedureDetailComponent implements AfterViewInit {
     this.procedureForm.get('helper_renderType')?.setValue(event.renderType);
   }
 
-  selectTask(selectedTask: Task) {
+  onSelectTask(selectedTask: Task) {
     const tasks: Task[] = this.procedureForm.get('tasks')?.value
 
     if (!tasks.filter(task => task.id === selectedTask.id).length) {
