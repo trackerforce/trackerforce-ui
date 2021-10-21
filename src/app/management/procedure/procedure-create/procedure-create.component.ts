@@ -47,6 +47,12 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     this.procedureForm.get('tasks')?.setValue(tasks);
   }
 
+  onRemoveTask(task: Task) {
+    let tasks: Task[] = this.procedureForm.get('tasks')?.value
+    tasks = tasks.filter(t => t.id !== task.id);
+    this.procedureForm.get('tasks')?.setValue(tasks);
+  }
+
   onSubmit() {
     if (this.procedureForm?.invalid) {
       this.error = 'Procedure has missing parameters'

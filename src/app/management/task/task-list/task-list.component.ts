@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,8 +19,9 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() procedureChild!: boolean;
   @Input() procedureTasks!: Subject<Task[]>;
+  @Output() removeTask = new EventEmitter<Task>();
 
-  displayedColumns: string[] = ['action_edit', 'description'];
+  displayedColumns: string[] = ['action', 'description'];
   expandedElement: Task | undefined;
   dataSource!: MatTableDataSource<Task>;
 
@@ -90,6 +91,14 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getTaskEdit(taskid: string): string {
     return `/${this.authService.getManagementOrgPath()}/task/${taskid}`
+  }
+
+  onRemove(selectedTask: Task) {
+    if (this.procedureChild) {
+      this.dataSource = new MatTableDataSource(this.dataSource.data.filter(task => task.id !== selectedTask.id));
+      this.resultsLength = this.dataSource.data.length;
+      this.removeTask.emit(selectedTask);
+    }
   }
 
 }

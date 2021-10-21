@@ -4,7 +4,15 @@ mat-spinner {
   top: 20px;
 }
 
+a:hover {
+  cursor: pointer;
+}
+
 svg {
+  margin-right: .5rem;
+}
+
+.red {
   color: red;
 }
 

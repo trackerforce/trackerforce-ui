@@ -13,6 +13,7 @@ export class ProcedureDetailComponent {
   @Input() procedureForm!: FormGroup;
   @Input() loading: boolean = true;
   @Output() addTask = new EventEmitter<Task>();
+  @Output() removeTask = new EventEmitter<Task>();
 
   procedureTasks = new Subject<Task[]>();
 
@@ -28,5 +29,9 @@ export class ProcedureDetailComponent {
   onHelperChanged(event: Helper) {
     this.procedureForm.get('helper_content')?.setValue(event.content);
     this.procedureForm.get('helper_renderType')?.setValue(event.renderType);
+  }
+
+  onRemoveTask(event: Task) {
+    this.removeTask.emit(event);
   }
 }
