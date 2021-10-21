@@ -8,10 +8,12 @@
                 <span class="hide">Create a new Procedure to incorporate to Templates</span>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        
-        <app-procedure-detail (addTask)="onAddTask($event)" (removeTask)="onRemoveTask($event)" [procedureForm]="procedureForm" [loading]="false"></app-procedure-detail>
+
+        <app-procedure-detail (addTask)="onAddTask($event)" (removeTask)="onRemoveTask($event)"
+            [procedureForm]="procedureForm" [loading]="false"></app-procedure-detail>
         <div>
-            <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button color="primary">Create</button>
+            <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button
+                color="primary">Create</button>
             <button type="button" (click)="mep.expanded = false; error = '';" mat-raised-button>Cancel</button>
         </div>
     </mat-expansion-panel>

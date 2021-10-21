@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { merge, Subject } from 'rxjs';
-import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
@@ -55,10 +55,10 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadProcedureData() {
-    this.loading = false;
-    this.procedureTasks.pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      this.dataSource = new MatTableDataSource(data);
-      this.resultsLength = data.length;
+    this.procedureTasks.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
+        this.dataSource = new MatTableDataSource(data);
+        this.resultsLength = data.length;
+        this.loading = false;
     });
   }
 

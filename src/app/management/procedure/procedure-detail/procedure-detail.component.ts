@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
+import { Procedure } from 'src/app/models/procedure';
 import { Task } from 'src/app/models/task';
 
 @Component({
@@ -9,13 +10,25 @@ import { Task } from 'src/app/models/task';
   templateUrl: './procedure-detail.component.html',
   styleUrls: ['./procedure-detail.component.scss']
 })
-export class ProcedureDetailComponent {
+export class ProcedureDetailComponent implements AfterViewInit {
+  @Input() procedure!: Procedure;
   @Input() procedureForm!: FormGroup;
   @Input() loading: boolean = true;
   @Output() addTask = new EventEmitter<Task>();
   @Output() removeTask = new EventEmitter<Task>();
 
   procedureTasks = new Subject<Task[]>();
+
+  ngAfterViewInit(): void {
+    if (!this.loading) {
+      this.procedureTasks.next(this.procedureForm.get('tasks')?.value);
+    }
+  }
+
+  onHelperChanged(event: Helper) {
+    this.procedureForm.get('helper_content')?.setValue(event.content);
+    this.procedureForm.get('helper_renderType')?.setValue(event.renderType);
+  }
 
   selectTask(selectedTask: Task) {
     const tasks: Task[] = this.procedureForm.get('tasks')?.value
@@ -24,11 +37,6 @@ export class ProcedureDetailComponent {
       this.addTask.emit(selectedTask);
       this.procedureTasks.next(tasks);
     }
-  }
-
-  onHelperChanged(event: Helper) {
-    this.procedureForm.get('helper_content')?.setValue(event.content);
-    this.procedureForm.get('helper_renderType')?.setValue(event.renderType);
   }
 
   onRemoveTask(event: Task) {

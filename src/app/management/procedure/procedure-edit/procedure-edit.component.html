@@ -1,0 +1,20 @@
+<mat-spinner *ngIf="loading" [diameter]=30></mat-spinner>
+<h1><i class="fas fa-clipboard-check"></i>Procedure</h1>
+<mat-divider></mat-divider>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Edit</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <app-procedure-detail *ngIf="!loading" (addTask)="onAddTask($event)" (removeTask)="onRemoveTask($event)"
+            [procedureForm]="procedureForm" [loading]="loading"></app-procedure-detail>
+        <div class="form-container">
+            <div>
+                <button type="submit" (click)="onSubmit()" mat-raised-button color="primary"
+                    [disabled]="true">Update</button>
+                <button type="button" (click)="onCancel()" mat-raised-button>Cancel</button>
+            </div>
+        </div>
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    </mat-card-content>
+</mat-card>
