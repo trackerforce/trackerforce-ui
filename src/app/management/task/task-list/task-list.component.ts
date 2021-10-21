@@ -1,31 +1,28 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { detailsAnimation, rowsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  animations: [detailsAnimation, rowsAnimation ]
 })
-export class TaskListComponent implements AfterViewInit, OnDestroy {
+export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+  @Input() procedureChild!: boolean;
+  @Input() procedureTasks!: Subject<Task[]>;
 
   displayedColumns: string[] = ['action_edit', 'description'];
   expandedElement: Task | undefined;
-  data: Task[] = [];
+  dataSource!: MatTableDataSource<Task>;
 
   resultsLength = 0;
   loading = true;
@@ -38,16 +35,30 @@ export class TaskListComponent implements AfterViewInit, OnDestroy {
     private taskService: TaskService
   ) { }
 
-  ngAfterViewInit(): void {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.taskService.task.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task))
+  ngOnInit(): void {
+    if (this.procedureChild)
+      this.loadProcedureData();
+  }
 
-    this.loadData();
+  ngAfterViewInit(): void {
+    if (!this.procedureChild) {
+      this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+      this.taskService.task.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
+      this.loadData();
+    }
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private loadProcedureData() {
+    this.loading = false;
+    this.procedureTasks.pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      this.dataSource = new MatTableDataSource(data);
+      this.resultsLength = data.length;
+    });
   }
 
   private loadData(task?: Task) {
@@ -70,7 +81,7 @@ export class TaskListComponent implements AfterViewInit, OnDestroy {
           this.resultsLength = data.items;
           return data.data;
         })
-      ).subscribe(data => this.data = data);
+      ).subscribe(data => this.dataSource = new MatTableDataSource(data));
   }
 
   getColumns(): string[] {

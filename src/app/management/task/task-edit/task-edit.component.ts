@@ -35,26 +35,20 @@ export class TaskEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
-    this.taskForm = this.formBuilder.group({
-      description: ['', Validators.required],
-      type: ['', Validators.required],
-      options: [''],
-      learn: [''],
-      hidden: [''],
-      helper_content: [''],
-      helper_rendertype: ['']
-    });
 
+    this.taskForm = this.formBuilder.group({});
     this.taskService.getTask(this._taskid).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
       if (task) {
         this.task = task;
-        this.taskForm.get('description')?.setValue(this.task.description);
-        this.taskForm.get('type')?.setValue(this.task.type);
-        this.taskForm.get('options')?.setValue(this.task.options?.map(opt => opt.value));
-        this.taskForm.get('learn')?.setValue(this.task.learn);
-        this.taskForm.get('hidden')?.setValue(this.task.hidden);
-        this.taskForm.get('helper_content')?.setValue(this.task.helper?.content);
-        this.taskForm.get('helper_rendertype')?.setValue(this.task.helper?.renderType);
+        this.taskForm = this.formBuilder.group({
+          description: [this.task.description, Validators.required],
+          type: [this.task.type, Validators.required],
+          options: [this.task.options?.map(opt => opt.value)],
+          learn: [this.task.learn],
+          hidden: [this.task.hidden],
+          helper_content: [this.task.helper?.content],
+          helper_renderType: [this.task.helper?.renderType]
+        });
       }
     }, error => {
       ConsoleLogger.printError('Failed to load Agent', error);
@@ -69,10 +63,14 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onSubmit(action: string) {
+  onSubmit() {
     if (this.taskForm?.invalid)
       return;
+      
+    return this.router.navigate([`${this.authService.getManagementOrgPath()}/tasks`]);
+  }
 
+  onCancel() {
     return this.router.navigate([`${this.authService.getManagementOrgPath()}/tasks`]);
   }
 

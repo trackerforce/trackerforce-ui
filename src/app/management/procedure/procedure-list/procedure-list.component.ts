@@ -4,13 +4,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
-import { Global } from 'src/app/models/global';
-import { GlobalService } from 'src/app/services/global.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { Procedure } from 'src/app/models/procedure';
+import { ProcedureService } from 'src/app/services/procedure.service';
 
 @Component({
-  selector: 'app-global-list',
-  templateUrl: './global-list.component.html',
-  styleUrls: ['./global-list.component.scss'],
+  selector: 'app-procedure-list',
+  templateUrl: './procedure-list.component.html',
+  styleUrls: ['./procedure-list.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
@@ -19,12 +20,12 @@ import { GlobalService } from 'src/app/services/global.service';
     ]),
   ]
 })
-export class GlobalListComponent implements AfterViewInit, OnDestroy {
+export class ProcedureListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  displayedColumns: string[] = ['description'];
-  expandedElement: Global | undefined;
-  data: Global[] = [];
+  displayedColumns: string[] = ['action_edit', 'name'];
+  expandedElement: Procedure | undefined;
+  data: Procedure[] = [];
 
   resultsLength = 0;
   loading = true;
@@ -33,12 +34,13 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private globalService: GlobalService
+    private authService: AuthService,
+    private procedureService: ProcedureService
   ) { }
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.globalService.global.pipe(takeUntil(this.unsubscribe)).subscribe(global => this.loadData(global));
+    this.procedureService.procedure.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
 
     this.loadData();
   }
@@ -48,13 +50,13 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  private loadData(global?: Global) {
+  private loadData(procedure?: Procedure) {
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.loading = true;
-          return this.globalService.listGlobals(global, { 
+          return this.procedureService.listProcedures(procedure, { 
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex,
             sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
@@ -75,5 +77,8 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
     return this.displayedColumns.filter(col => !col.startsWith('action'));
   }
 
-}
+  getTaskEdit(taskid: string): string {
+    return `/${this.authService.getManagementOrgPath()}/procedure/${taskid}`
+  }
 
+}

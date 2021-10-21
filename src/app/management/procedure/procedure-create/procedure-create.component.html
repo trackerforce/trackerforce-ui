@@ -1,0 +1,19 @@
+<mat-accordion>
+    <mat-expansion-panel #mep="matExpansionPanel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>library_add</mat-icon>New
+            </mat-panel-title>
+            <mat-panel-description>
+                <span class="hide">Create a new Procedure to incorporate to Templates</span>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+        <app-procedure-detail (addTask)="onAddTask($event)" [procedureForm]="procedureForm" [loading]="false"></app-procedure-detail>
+        <div>
+            <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button color="primary">Create</button>
+            <button type="button" (click)="mep.expanded = false; error = '';" mat-raised-button>Cancel</button>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>
+<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>

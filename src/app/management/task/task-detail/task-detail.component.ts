@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Helper } from 'src/app/models/helper';
 import { Option } from 'src/app/models/task';
 
 @Component({
@@ -12,8 +12,7 @@ export class TaskDetailComponent implements OnChanges {
   @Input() taskForm!: FormGroup;
   @Input() showOptions: boolean = false;
   @Input() loading: boolean = true;
-
-  displayRenderTypes: string[] = ['PLAINTEXT', 'MARKDOWN', 'HTML'];
+  
   displayTaskTypes: any[] = TASK_TYPES;
 
   constructor(
@@ -38,6 +37,11 @@ export class TaskDetailComponent implements OnChanges {
       this.taskForm.get('learn')?.disable();
       this.taskForm.get('learn')?.setValue(false);
     }
+  }
+
+  onHelperChanged(event: Helper) {
+    this.taskForm.get('helper_content')?.setValue(event.content);
+    this.taskForm.get('helper_renderType')?.setValue(event.renderType);
   }
 
   onTypeChange() {

@@ -5,7 +5,7 @@ import { LoggedRoutingModule } from './management-routing.module';
 import { HomeComponent } from './home/home.component';
 import { AgentsComponent, AgentCreateComponent, AgentListComponent, AgentSearchComponent, AgentEditComponent } from './agent';
 import { TasksComponent, TaskCreateComponent, TaskListComponent, TaskEditComponent } from './task';
-import { ProceduresComponent } from './procedure';
+import { ProceduresComponent, ProcedureListComponent, ProcedureListDetailsComponent } from './procedure';
 import { TemplatesComponent } from './template';
 import { GlobalsComponent, GlobalCreateComponent, GlobalListComponent, GlobalListDetailsComponent, GlobalSearchComponent, GlobalSelectionComponent } from './global';
 import { AppMaterialModule } from '../shared/app-material.module';
@@ -14,6 +14,11 @@ import { TaskListDetailsComponent } from './task/task-list-details/task-list-det
 import { TaskDetailComponent } from './task/task-detail/task-detail.component';
 import { TaskSearchComponent } from './task/task-search/task-search.component';
 import { IndexHomeComponent, MyCasesComponent } from './index';
+import { HelperComponent } from './helper/helper.component';
+import { ProcedureSearchComponent } from './procedure/procedure-search/procedure-search.component';
+import { ProcedureDetailComponent } from './procedure/procedure-detail/procedure-detail.component';
+import { ProcedureCreateComponent } from './procedure/procedure-create/procedure-create.component';
+import { TaskSelectionComponent } from './task/task-selection/task-selection.component';
 
 
 @NgModule({
@@ -40,7 +45,14 @@ import { IndexHomeComponent, MyCasesComponent } from './index';
     GlobalCreateComponent,
     GlobalSearchComponent,
     GlobalListDetailsComponent,
-    GlobalSelectionComponent
+    GlobalSelectionComponent,
+    ProcedureListComponent,
+    ProcedureListDetailsComponent,
+    HelperComponent,
+    ProcedureSearchComponent,
+    ProcedureDetailComponent,
+    ProcedureCreateComponent,
+    TaskSelectionComponent
   ],
   imports: [
     ReactiveFormsModule,

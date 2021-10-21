@@ -34,8 +34,8 @@ export class TaskService extends ApiService {
 
   public createTask(task: Task, helper: Helper): Observable<Task> {
     return this.http.post<Task>(`${environment.managementServiceUrl}/management/task/v1/create`, {
-      task: task,
-      helper: helper
+      task,
+      helper
     }).pipe(catchError(super.handleError));
   }
 

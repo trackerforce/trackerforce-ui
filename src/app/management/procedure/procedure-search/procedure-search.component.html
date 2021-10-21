@@ -1,0 +1,31 @@
+<mat-accordion>
+    <mat-expansion-panel #mep="matExpansionPanel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>search</mat-icon>Search
+            </mat-panel-title>
+            <mat-panel-description>
+                <span class="hide">Find Procedures</span>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <form class="form-container" [formGroup]="procedureForm">
+            <section>
+                <mat-form-field>
+                    <input matInput type="text" id="name" maxlength="50" placeholder="Name" formControlName="name"
+                        autocomplete="off">
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="text" id="description" maxlength="50" placeholder="Description" formControlName="description"
+                        autocomplete="off">
+                </mat-form-field>
+            </section>
+            <div>
+                <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Find</button>
+                <button type="button" (click)="mep.expanded = false;" mat-raised-button>Cancel</button>
+                <button type="button" (click)="onClear()" mat-raised-button>Clear</button>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </form>
+    </mat-expansion-panel>
+</mat-accordion>

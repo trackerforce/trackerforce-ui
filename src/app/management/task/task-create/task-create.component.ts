@@ -16,8 +16,7 @@ import { toOptions } from '../task-detail/task-detail.component';
 })
 export class TaskCreateComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
-
-  taskCreateExpanded: boolean = false;
+  
   taskForm!: FormGroup;
   error: string = '';
 
@@ -35,7 +34,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       learn: [''],
       hidden: [''],
       helper_content: [''],
-      helper_rendertype: ['']
+      helper_renderType: ['']
     });
   }
 
@@ -46,7 +45,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.taskForm?.invalid) {
-      this.error = 'Task has missing paramters'
+      this.error = 'Task has missing parameters'
       return;
     }
 
@@ -60,7 +59,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
     const helper: Helper = {
       content: this.taskForm.get('helper_content')?.value,
-      renderType: this.taskForm.get('helper_rendertype')?.value
+      renderType: this.taskForm.get('helper_renderType')?.value
     }
 
     this.taskService.createTask(task, helper).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
@@ -74,41 +73,5 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       this.error = error;
     });
   }
-
-  onTypeChange() {
-    if (this.taskForm.get('type')?.value.learn)
-      this.taskForm.get('learn')?.enable();
-    else {
-      this.taskForm.get('learn')?.disable();
-      this.taskForm.get('learn')?.setValue(false);
-    }
-  }
+  
 }
-
-const taskTypes = [
-  {
-    name: 'Plain text',
-    value: 'TEXT',
-    learn: false
-  }, {
-    name: 'Plain multiline text',
-    value: 'MULTILINE_TEXT',
-    learn: false
-  }, {
-    name: 'Number',
-    value: 'NUMBER',
-    learn: true
-  }, {
-    name: 'Checkbox',
-    value: 'CHECK',
-    learn: true
-  }, {
-    name: 'Radio',
-    value: 'RADIO',
-    learn: true
-  }, {
-    name: 'Drilldown',
-    value: 'DRILLDOWN',
-    learn: true
-  }
-]

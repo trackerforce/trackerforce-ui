@@ -1,10 +1,9 @@
 <mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
-<table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows class="mat-elevation-z8">
-
+<table mat-table [dataSource]="data" matSort multiTemplateDataRows class="mat-elevation-z8">
     <ng-container matColumnDef="action_edit">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-            <a routerLink="{{getTaskEdit(element.id)}}" matTooltip="Edit {{element.description}}"><i class="fas fa-clipboard-check"></i></a>
+            <a routerLink="{{getTaskEdit(element.id)}}" matTooltip="Edit {{element.name}}"><i class="fas fa-tasks"></i></a>
         </td>
     </ng-container>
 
@@ -16,13 +15,13 @@
     <ng-container matColumnDef="expandedDetail">
         <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
             <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <app-task-list-details [task]="element"></app-task-list-details>
+                <app-procedure-list-details [procedure]="element"></app-procedure-list-details>
             </div>
         </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row [@rowsAnimation]="" *matRowDef="let element; columns: displayedColumns;" class="element-row"
+    <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="element-row"
         [class.expanded-row]="expandedElement === element"
         (click)="expandedElement = expandedElement === element ? null : element">
     </tr>
