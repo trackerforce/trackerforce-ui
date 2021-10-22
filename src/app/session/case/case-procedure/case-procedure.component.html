@@ -43,6 +43,25 @@
                 <button mat-stroked-button type="button" (click)="mep.expanded = false;">Close</button>
                 <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn" [disabled]="!canSubmit()">Submit</button>
                 <button *ngIf="!open" mat-stroked-button type="button" class="float-left" (click)="onNext()" color="warn">Next</button>
+                <br />
+                <mat-form-field *ngIf="!open">
+                    <mat-label>Next Procedure Selection</mat-label>
+                    <input type="text" placeholder="Select..." matInput formControlName="next_procedure"
+                        [matAutocomplete]="auto" autocomplete="off">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let procedure of filteredOptions | async" [value]="procedure">
+                            <span *ngIf="procedure.id === prediction_id">
+                                <strong>{{procedure.name}} - {{prediction_accuracy}}%</strong>
+                            </span>
+                            <span *ngIf="procedure.id != prediction_id">
+                                <label>{{procedure.name}}</label>
+                            </span>
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>
+                        Please select a valid Template
+                    </mat-error>
+                </mat-form-field>
             </div>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </form>

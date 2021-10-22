@@ -7,7 +7,6 @@ import { ApiService } from './api.service';
 import { PageSetup, Paginable, PaginablePredict } from '../models/paginable';
 import { Case } from '../models/case';
 import { Procedure } from '../models/procedure';
-import { Task } from '../models/task';
 
 @Injectable({
   providedIn: 'root'
