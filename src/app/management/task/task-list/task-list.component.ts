@@ -7,13 +7,13 @@ import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
-import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
+import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
-  animations: [detailsAnimation, fadeAnimation]
+  animations: [detailsAnimation]
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

@@ -7,13 +7,13 @@ import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
-import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
+import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-procedure-list',
   templateUrl: './procedure-list.component.html',
   styleUrls: ['./procedure-list.component.scss'],
-  animations: [detailsAnimation, fadeAnimation]
+  animations: [detailsAnimation]
 })
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

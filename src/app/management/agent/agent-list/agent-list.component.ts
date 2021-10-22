@@ -6,13 +6,13 @@ import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
 import { AgentService } from 'src/app/services/agent.service';
-import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
+import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-agent-list',
   templateUrl: './agent-list.component.html',
   styleUrls: ['./agent-list.component.scss'],
-  animations: [detailsAnimation, fadeAnimation],
+  animations: [detailsAnimation],
 })
 export class AgentListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

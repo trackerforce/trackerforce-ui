@@ -5,13 +5,13 @@ import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
-import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
+import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-global-list',
   templateUrl: './global-list.component.html',
   styleUrls: ['./global-list.component.scss'],
-  animations: [detailsAnimation, fadeAnimation]
+  animations: [detailsAnimation]
 })
 export class GlobalListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();

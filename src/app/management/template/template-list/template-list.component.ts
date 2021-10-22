@@ -7,13 +7,13 @@ import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
-import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
+import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-template-list',
   templateUrl: './template-list.component.html',
   styleUrls: ['./template-list.component.scss'],
-  animations: [detailsAnimation, fadeAnimation]
+  animations: [detailsAnimation]
 })
 export class TemplateListComponent implements AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
