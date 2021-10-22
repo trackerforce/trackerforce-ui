@@ -12,7 +12,7 @@
             <mat-label>Updated At</mat-label>
             <input matInput [value]="global?.updatedAt | date:'short'" [readonly]=true>
         </mat-form-field>
-        <mat-form-field class="element-editable" appearance="fill" *ngFor=" let attrib of getAttributes()">
+        <mat-form-field class="element-editable" appearance="fill" *ngFor="let attrib of getAttributes()">
             <mat-label>{{attrib}}</mat-label>
             <input matInput [value]="global?.attributes[attrib]" formControlName="{{attrib}}" autocomplete="off"
                 required>

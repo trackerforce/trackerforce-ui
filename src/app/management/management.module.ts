@@ -14,7 +14,8 @@ import {
   AgentSearchComponent, 
   AgentEditComponent 
 } from './agent';
-import { TasksComponent, 
+import { 
+  TasksComponent, 
   TaskCreateComponent, 
   TaskListComponent, 
   TaskEditComponent, 

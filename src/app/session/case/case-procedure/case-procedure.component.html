@@ -1,1 +1,41 @@
-<p>case-procedure works!</p>
+<mat-accordion>
+    <mat-expansion-panel #mep="matExpansionPanel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <mat-icon>label_important</mat-icon><span>{{procedure.name}}</span>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <form class="form-container" [formGroup]="procedureForm">
+            <section>
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name" [readonly]="true">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <input matInput type="text" formControlName="description" [readonly]="true">
+                </mat-form-field>
+            </section>
+            <section>
+                <mat-card>
+                    <mat-card-title-group>
+                        <mat-card-title><i class="fas fa-tasks"></i>Tasks</mat-card-title>
+                        <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
+                    </mat-card-title-group>
+                    <mat-card-content>
+                        <div *ngFor="let task of procedure?.tasks">
+                            <app-case-task></app-case-task>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </section>
+            <div>
+                <button mat-stroked-button type="button" (click)="onSave()" color="primary">Save</button>
+                <button mat-stroked-button type="button" (click)="mep.expanded = false;">Close</button>
+                <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn">Submit</button>
+            </div>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </form>
+    </mat-expansion-panel>
+</mat-accordion>

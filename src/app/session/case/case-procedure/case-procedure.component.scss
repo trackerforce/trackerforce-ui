@@ -1,0 +1,54 @@
+button {
+  float: inline-end;
+  margin-right: .5rem;
+}
+
+mat-icon {
+  margin-right: .2rem;
+  vertical-align: middle;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-divider {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+mat-card {
+  margin-bottom: 1rem;
+}
+
+mat-card-content {
+  margin-top: 2rem;
+}
+
+svg {
+  margin-right: .5rem;
+}
+
+span {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.mat-expansion-panel-header-description {
+  text-align: end;
+  display: initial;
+}
+
+.float-left {
+  float: left;
+}
+
+@media only screen and (max-width: 450px) {
+  .hide {
+    display: none;
+  }
+
+  .float-left {
+    float: none;
+  }
+}

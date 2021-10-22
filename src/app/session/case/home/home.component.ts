@@ -17,22 +17,22 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   
   loading = true;
   error: string = '';
-  case!: Case;
+  sessionCase!: Case;
 
   constructor(
     private route: ActivatedRoute,
-    private sessionCase: SessionService
+    private sessionService: SessionService
   ) { 
     this.route.params.subscribe(params => this.protocol = params.protocol);
   }
 
   ngOnInit(): void {
     this.loading = true;
-    this.sessionCase.getCase(this.protocol)
+    this.sessionService.getCase(this.protocol)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
         if (data) {
-          this.case = data;
+          this.sessionCase = data;
         }
     }, error => {
       ConsoleLogger.printError('Failed to load Case', error);
