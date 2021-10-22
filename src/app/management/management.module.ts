@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from '../shared/app-material.module';
 
 import { IndexHomeComponent, MyCasesComponent } from './index';
-import { LoggedRoutingModule } from './management-routing.module';
+import { ManagementRoutingModule } from './management-routing.module';
 import { HomeComponent } from './home/home.component';
 import { HelperComponent } from './helper/helper.component';
 import { 
@@ -30,7 +30,8 @@ import {
   ProcedureCreateComponent, 
   ProcedureDetailComponent, 
   ProcedureEditComponent, 
-  ProcedureSearchComponent 
+  ProcedureSearchComponent,
+  ProcedureSelectionComponent
 } from './procedure';
 import { 
   TemplatesComponent, 
@@ -49,7 +50,6 @@ import {
   GlobalSearchComponent, 
   GlobalSelectionComponent 
 } from './global';
-import { ProcedureSelectionComponent } from './procedure/procedure-selection/procedure-selection.component';
 
 
 @NgModule({
@@ -96,8 +96,8 @@ import { ProcedureSelectionComponent } from './procedure/procedure-selection/pro
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    LoggedRoutingModule,
+    ManagementRoutingModule,
     AppMaterialModule
   ]
 })
-export class LoggedModule { }
+export class ManagentModule { }

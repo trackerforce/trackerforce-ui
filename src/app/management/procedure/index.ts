@@ -5,3 +5,4 @@ export * from './procedure-create/procedure-create.component';
 export * from './procedure-detail/procedure-detail.component';
 export * from './procedure-edit/procedure-edit.component';
 export * from './procedure-search/procedure-search.component';
+export * from './procedure-selection/procedure-selection.component';

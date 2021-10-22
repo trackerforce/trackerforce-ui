@@ -10,8 +10,12 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   {
     path: 'management/:tenant',
-    loadChildren: () => import('./management/management.module').then(mod => mod.LoggedModule)
+    loadChildren: () => import('./management/management.module').then(mod => mod.ManagentModule)
   },
+  {
+    path: 'session/:tenant',
+    loadChildren: () => import('./session/session.module').then(mod => mod.SessionModule)
+  }
 ];
 
 @NgModule({
