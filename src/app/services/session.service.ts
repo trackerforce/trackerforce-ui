@@ -4,8 +4,10 @@ import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { PageSetup, Paginable } from '../models/paginable';
+import { PageSetup, Paginable, PaginablePredict } from '../models/paginable';
 import { Case } from '../models/case';
+import { Procedure } from '../models/procedure';
+import { Task } from '../models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +33,47 @@ export class SessionService extends ApiService {
     }).pipe(catchError(super.handleError));
   }
 
-  public getCase(protocol: string) {
+  public getCase(protocol: string): Observable<Case> {
     return this.http.get<Case>(`${environment.sessionServiceUrl}/session/case/v1/protocol/${protocol}`)
       .pipe(catchError(super.handleError));
+  }
+
+  public saveProcedure(caseId: string, procedure: Procedure): Observable<Case> {
+    return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1/handler`, {
+      case: caseId,
+      procedure: procedure.id,
+      event: 'SAVE',
+      tasks: procedure!.tasks!.map(task => {
+        return {
+          id: task.id,
+          response: task.response
+        }
+      })
+    }).pipe(catchError(super.handleError));
+  }
+
+  public submitProcedure(caseId: string, procedureId: string): Observable<Case> {
+    return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1/handler`, {
+      case: caseId,
+      procedure: procedureId,
+      event: 'SUBMIT'
+    }).pipe(catchError(super.handleError));
+  }
+
+  public acceptedNextProcedure(caseId: string, procedureId: string, selectedProcedureId: string): Observable<Case> {
+    return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1/handler`, {
+      case: caseId,
+      procedure: procedureId,
+      resolution: selectedProcedureId,
+      event: 'NEXT'
+    }).pipe(catchError(super.handleError));
+  }
+
+  public listAndPredict(caseId: string, procedureId: string): Observable<PaginablePredict<Procedure>> {
+    return this.http.post<PaginablePredict<Procedure>>(`${environment.sessionServiceUrl}/session/case/v1/next`, {
+      case: caseId,
+      procedure: procedureId,
+    }).pipe(catchError(super.handleError));
   }
 
 }

@@ -2,7 +2,7 @@
     <mat-expansion-panel #mep="matExpansionPanel">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-icon>label_important</mat-icon><span>{{procedure.name}}</span>
+                <mat-icon class="{{open ? '' : 'done'}}">label_important</mat-icon><span>{{procedure.name}}</span>
             </mat-panel-title>
         </mat-expansion-panel-header>
 
@@ -33,15 +33,16 @@
                     </mat-card-title-group>
                     <mat-card-content>
                         <div *ngFor="let task of procedure?.tasks">
-                            <app-case-task [task]="task"></app-case-task>
+                            <app-case-task [task]="task" [open]="open" (eventChange)="onTaskChange($event)"></app-case-task>
                         </div>
                     </mat-card-content>
                 </mat-card>
             </section>
             <div>
-                <button mat-stroked-button type="button" (click)="onSave()" color="primary">Save</button>
+                <button mat-stroked-button type="button" (click)="onSave()" color="primary" [disabled]="!open">Save</button>
                 <button mat-stroked-button type="button" (click)="mep.expanded = false;">Close</button>
-                <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn">Submit</button>
+                <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn" [disabled]="!canSubmit()">Submit</button>
+                <button *ngIf="!open" mat-stroked-button type="button" class="float-left" (click)="onNext()" color="warn">Next</button>
             </div>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </form>

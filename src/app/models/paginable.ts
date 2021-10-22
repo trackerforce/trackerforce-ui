@@ -5,9 +5,20 @@ export class Paginable<T> {
     data: T[] = [];
 }
 
+export class PaginablePredict<T> extends Paginable<T> {
+    predicted?: Prediction;
+    prediction_accuracy?: number;
+}
+
 export class PageSetup {
     sortBy?: string;
     output?: string;
     page?: number;
     size?: number;
+}
+
+export class Prediction {
+    id?: string;
+    description?: string;
+    name?: string;
 }

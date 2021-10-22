@@ -2,22 +2,22 @@
     <section>
         <mat-form-field *ngIf="type === 'TEXT'" appearance="outline">
             <mat-label>{{task?.description}}</mat-label>
-            <input matInput formControlName="response">
+            <input matInput formControlName="response" [readonly]="!open">
         </mat-form-field>
 
         <mat-form-field *ngIf="type === 'MULTILINE_TEXT'" appearance="outline">
             <mat-label>{{task?.description}}</mat-label>
-            <textarea matInput formControlName="response"></textarea>
+            <textarea matInput formControlName="response" [readonly]="!open"></textarea>
         </mat-form-field>
 
         <mat-form-field *ngIf="type === 'NUMBER'" appearance="outline">
             <mat-label>{{task?.description}}</mat-label>
-            <input matInput type="number" formControlName="response">
+            <input matInput type="number" formControlName="response" [readonly]="!open">
         </mat-form-field>
 
         <div *ngIf="type === 'RADIO'">
             <mat-label>{{task?.description}}</mat-label>
-            <mat-radio-group class="radio-group" formControlName="response">
+            <mat-radio-group class="radio-group" formControlName="response" [disabled]="!open">
                 <mat-radio-button class="radio-button" *ngFor="let opt of task?.options" [value]="opt.value">
                     {{opt.value}}
                 </mat-radio-button>
@@ -26,13 +26,13 @@
 
         <mat-form-field *ngIf="type === 'DRILLDOWN'" appearance="outline">
             <mat-label>{{task?.description}}</mat-label>
-            <mat-select formControlName="response">
+            <mat-select formControlName="response" [disabled]="!open">
                 <mat-option *ngFor="let opt of task?.options" [value]="opt.value">
                     {{opt.value}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <mat-checkbox *ngIf="type === 'CHECK'" formControlName="response">{{task?.description}}</mat-checkbox>
+        <mat-checkbox *ngIf="type === 'CHECK'" formControlName="response" [disabled]="!open">{{task?.description}}</mat-checkbox>
     </section>
 </form>

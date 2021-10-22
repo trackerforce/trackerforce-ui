@@ -10,6 +10,7 @@ export class Task {
     hidden?: boolean;
     options?: Option[] | null;
     helper?: Helper;
+    response?: any;
 }
 
 export class Option {

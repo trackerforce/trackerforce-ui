@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Case } from 'src/app/models/case';
+import { Procedure } from 'src/app/models/procedure';
 import { SessionService } from 'src/app/services/session.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
@@ -45,6 +46,15 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  onProcedureChanged(procedure: Procedure) {
+    for (let p of this.sessionCase.procedures!) {
+      if (p.id === procedure.id) {
+        p = procedure;
+        break;
+      }
+    }
   }
 
   getStatus() {

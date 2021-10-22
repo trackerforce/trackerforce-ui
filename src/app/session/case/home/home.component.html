@@ -22,6 +22,10 @@
         </mat-card>
     </section>
     <div *ngFor="let procedure of sessionCase?.procedures">
-        <app-case-procedure [procedure]="procedure"></app-case-procedure>
+        <app-case-procedure 
+            [procedure]="procedure" 
+            [caseid]="sessionCase?.id"
+            (eventChange)="onProcedureChanged($event)">
+        </app-case-procedure>
     </div>
 </div>
