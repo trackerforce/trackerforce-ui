@@ -52,4 +52,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  isAgent() {
+    return this.authService.hasRole('AGENT');
+  }
+
 }

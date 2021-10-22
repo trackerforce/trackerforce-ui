@@ -22,7 +22,7 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if (this.getRole() === 'Agent') {
+    if (this.isAgent()) {
       this.loadAgent();
     }
   }
@@ -45,8 +45,8 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
     return this.authService.getUserInfo(key);
   }
 
-  getRole() {
-    return this.getInfo('access') === 'root' ? 'Administrator' : 'Agent';
+  isAgent() {
+    return this.authService.hasRole('AGENT');
   }
 
 }

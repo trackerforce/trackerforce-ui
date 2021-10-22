@@ -86,5 +86,9 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
       .length ? 'In Progress' : 'Closed';
   }
 
+  getCaseLink(sessionCase: Case): string {
+    return `/${this.authService.getSessionOrgPath()}/case/${sessionCase.protocol}`
+  }
+
 }
 

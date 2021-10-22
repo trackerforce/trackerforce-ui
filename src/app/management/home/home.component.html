@@ -9,11 +9,31 @@
                 </div>
                 <mat-divider></mat-divider>
                 <ul class="components">
-                    <li><a #agents id="agents" routerLink="/management/{{tenant}}/agents" (click)="toggleMenu(agents)"><i class="fas fa-users"></i>Agents</a></li>
-                    <li><a #tasks id="tasks" routerLink="/management/{{tenant}}/tasks" (click)="toggleMenu(tasks)"><i class="fas fa-clipboard-check"></i>Tasks</a></li>
-                    <li><a #procedures id="procedures" routerLink="/management/{{tenant}}/procedures" (click)="toggleMenu(procedures)"><i class="fas fa-tasks"></i>Procedures</a></li>
-                    <li><a #templates id="templates" routerLink="/management/{{tenant}}/templates" (click)="toggleMenu(templates)"><i class="fas fa-book-open"></i>Templates</a></li>
-                    <li><a #globals id="globals" routerLink="/management/{{tenant}}/globals" (click)="toggleMenu(globals)"><i class="fas fa-globe"></i>Globals</a></li>
+                    <li><a #agents id="agents" 
+                        routerLink="/management/{{tenant}}/agents"
+                        (click)="toggleMenu(agents)">
+                        <i class="fas fa-users"></i>Agents</a>
+                    </li>
+                    <li><a #tasks id="tasks" 
+                        routerLink="/management/{{tenant}}/tasks" 
+                        (click)="toggleMenu(tasks)">
+                        <i class="fas fa-clipboard-check"></i>Tasks</a>
+                    </li>
+                    <li><a #procedures id="procedures" 
+                        routerLink="/management/{{tenant}}/procedures"
+                        (click)="toggleMenu(procedures)">
+                        <i class="fas fa-tasks"></i>Procedures</a>
+                    </li>
+                    <li><a #templates id="templates" 
+                        routerLink="/management/{{tenant}}/templates"
+                        (click)="toggleMenu(templates)">
+                        <i class="fas fa-book-open"></i>Templates</a>
+                    </li>
+                    <li  *ngIf="!isAgent()"><a #globals id="globals" 
+                        routerLink="/management/{{tenant}}/globals"
+                        (click)="toggleMenu(globals)">
+                        <i class="fas fa-globe"></i>Globals</a>
+                    </li>
                 </ul>
             </div>
         </nav>

@@ -1,10 +1,10 @@
 <mat-card>
     <mat-card-title-group>
         <mat-card-title>Welcome</mat-card-title>
-        <mat-card-subtitle>{{getInfo('name')}} - logged as {{getRole()}} for {{getInfo('tenant')}}</mat-card-subtitle>
+        <mat-card-subtitle>{{getInfo('name')}} - logged at {{getInfo('tenant')}}</mat-card-subtitle>
         <img mat-card-sm-image src="assets/tf_icon_white_trans.png">
     </mat-card-title-group>
     <mat-card-content>
     </mat-card-content>
 </mat-card>
-<app-my-cases *ngIf="getRole() == 'Agent'"></app-my-cases>
+<app-my-cases *ngIf="isAgent()"></app-my-cases>

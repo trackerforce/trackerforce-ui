@@ -1,3 +1,4 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
@@ -26,7 +27,7 @@ export class AuthService {
 
   loggedUser: String = "";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private jwtHelper :JwtHelperService) {
     this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(AuthService.JWT_TOKEN) || "");
     this.currentToken = this.currentTokenSubject.asObservable();
 
@@ -143,6 +144,11 @@ export class AuthService {
 
   getSessionOrgPath(): string {
     return `/session/${this.getUserInfo('tenant')}`;
+  }
+
+  hasRole(role: string) {
+    const decodedToken = this.jwtHelper.decodeToken(localStorage.getItem(AuthService.JWT_TOKEN)!);
+    return (decodedToken.roles as string[]).filter(r => r === role).length > 0;
   }
 
   private handleError(result: any) {
