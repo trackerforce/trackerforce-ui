@@ -5,11 +5,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppMaterialModule } from '../shared/app-material.module';
 import { HomeComponent } from './home/home.component';
 import { SessionRoutingModule } from './session-routing.module';
+import { CaseProcedureComponent, CaseListComponent } from './case';
 
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+    CaseProcedureComponent,
+    CaseListComponent
   ],
   imports: [
     ReactiveFormsModule,

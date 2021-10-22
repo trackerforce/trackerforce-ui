@@ -2,7 +2,7 @@
     <form>
         <mat-form-field appearance="fill">
             <mat-label>Procedure Name</mat-label>
-            <input type="text" placeholder="Select..." aria-label="Number" matInput [formControl]="procedureForm"
+            <input type="text" placeholder="Select..." matInput [formControl]="procedureForm"
                 [matAutocomplete]="auto" required>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                 <mat-option *ngFor="let procedure of filteredOptions | async" [value]="procedure">

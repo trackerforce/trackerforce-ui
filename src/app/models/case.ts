@@ -1,3 +1,4 @@
+import { Helper } from "./helper";
 import { Procedure } from "./procedure";
 
 export class Case {
@@ -6,6 +7,7 @@ export class Case {
     description?: string;
     protocol?: number;
     context?: string;
+    contextId?: string;
     procedures?: Procedure[];
-    
+    helper?: Helper;
 }

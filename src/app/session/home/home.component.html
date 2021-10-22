@@ -1,1 +1,36 @@
-<p>home works!</p>
+<div class="card-container">
+    <mat-card>
+        <img mat-card-image src="assets\trackerforce_1280_grey.png" alt="Trackerforce Logo">
+        <mat-card-content>
+            <form [formGroup]="sessionForm" (ngSubmit)="onSubmit()">
+                <mat-radio-group [color]="type ? 'primary' : 'warn'" formControlName="selectedOption" (change)="onChangeType()">
+                    <mat-radio-button value="new_case" [checked]="true">New Case</mat-radio-button>
+                    <mat-radio-button value="open_case">Open Case</mat-radio-button>
+                </mat-radio-group>
+                <mat-form-field *ngIf="type">
+                    <input matInput type="text" id="protocol" (keyup)="onKey($event)" maxlength="50"
+                        placeholder="Protocol" autocomplete="off" [readonly]="loading" formControlName="protocol" required>
+                    <mat-error>
+                        Please provide an existing valid protocol
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field *ngIf="!type">
+                    <mat-label>Template Name</mat-label>
+                    <input type="text" placeholder="Select..." matInput formControlName="template"
+                        [matAutocomplete]="auto" autocomplete="off" [readonly]="loading" required>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let template of filteredOptions | async" [value]="template">
+                            {{template.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>
+                        Please select a valid Template
+                    </mat-error>
+                </mat-form-field>
+                <button *ngIf="!loading" mat-raised-button [color]="type ? 'primary' : 'warn'">{{ type ? 'Find' : 'Start' }}</button>
+                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                <mat-spinner *ngIf="loading" [diameter]=40 [color]="'warn'"></mat-spinner>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
