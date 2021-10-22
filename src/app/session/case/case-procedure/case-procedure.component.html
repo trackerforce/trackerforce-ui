@@ -9,13 +9,21 @@
         <form class="form-container" [formGroup]="procedureForm">
             <section>
                 <mat-form-field appearance="outline">
-                    <mat-label>Name</mat-label>
-                    <input matInput type="text" formControlName="name" [readonly]="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
                     <input matInput type="text" formControlName="description" [readonly]="true">
                 </mat-form-field>
+                <mat-card *ngIf="procedure?.helper">
+                    <mat-card-title-group>
+                        <mat-card-title><i class="fas fa-question-circle"></i>Instructions</mat-card-title>
+                        <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
+                    </mat-card-title-group>
+                    <mat-card-content>
+                        <div *ngIf="procedure!.helper!.renderType === 'HTML'" [innerHTML]="procedure!.helper!.content"></div>
+                        <div *ngIf="procedure!.helper!.renderType === 'PLAINTEXT'">
+                            <mat-label>{{procedure!.helper!.content}}</mat-label>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
             </section>
             <section>
                 <mat-card>

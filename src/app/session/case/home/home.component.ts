@@ -47,4 +47,10 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
+  getStatus() {
+    return this.sessionCase.procedures
+      ?.filter(p => p.status != 'RESOLVED')
+      .length ? 'In Progress' : 'Closed';
+  }
+
 }
