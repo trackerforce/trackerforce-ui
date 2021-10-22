@@ -18,6 +18,7 @@ import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   @Input() templateChild!: boolean;
+  @Input() editable: boolean = false;
   @Input() templateProcedures!: Subject<Procedure[]>;
   @Output() removeProcedure = new EventEmitter<Procedure>();
 

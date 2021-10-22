@@ -1,10 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
+import { Task } from 'src/app/models/task';
 import { ProcedureService } from 'src/app/services/procedure.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
@@ -13,10 +14,13 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   templateUrl: './procedure-list-details.component.html',
   styleUrls: ['./procedure-list-details.component.scss']
 })
-export class ProcedureListDetailsComponent implements OnInit, OnDestroy {
+export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  @Input() procedure?: Procedure
+  @Input() procedure?: Procedure;
+  @Input() editable: boolean = false;
+
+  procedureTasks = new Subject<Task[]>();
   procedureForm!: FormGroup;
   error: string = '';
 
@@ -31,6 +35,10 @@ export class ProcedureListDetailsComponent implements OnInit, OnDestroy {
       name: [this.procedure?.name, Validators.required],
       description: [this.procedure?.description, Validators.required]
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.procedureTasks.next(this.procedure?.tasks);
   }
 
   ngOnDestroy() {
@@ -64,7 +72,6 @@ export class ProcedureListDetailsComponent implements OnInit, OnDestroy {
         ConsoleLogger.printError('Failed to update Procedure', error);
         this.error = error;
       });
-
   }
 
 }

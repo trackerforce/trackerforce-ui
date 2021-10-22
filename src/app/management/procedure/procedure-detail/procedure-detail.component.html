@@ -31,7 +31,8 @@
         <app-task-selection (selectedTask)="onSelectTask($event)"></app-task-selection>
         <br />
         <app-task-list 
-            [procedureChild]="true" 
+            [procedureChild]="true"
+            [editable]="true"
             [procedureTasks]="procedureTasks" 
             (removeTask)="onRemoveTask($event)">
         </app-task-list>

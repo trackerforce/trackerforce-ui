@@ -1,9 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Helper } from 'src/app/models/helper';
+import { Procedure } from 'src/app/models/procedure';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
@@ -13,10 +14,12 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   templateUrl: './template-list-details.component.html',
   styleUrls: ['./template-list-details.component.scss']
 })
-export class TemplateListDetailsComponent implements OnInit, OnDestroy {
+export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
   @Input() template?: Template
+
+  templateProcedures = new Subject<Procedure[]>();
   templateForm!: FormGroup;
   error: string = '';
 
@@ -31,6 +34,10 @@ export class TemplateListDetailsComponent implements OnInit, OnDestroy {
       name: [this.template?.name, Validators.required],
       description: [this.template?.description, Validators.required]
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.templateProcedures.next(this.template?.procedures);
   }
 
   ngOnDestroy() {

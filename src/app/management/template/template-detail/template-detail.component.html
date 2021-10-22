@@ -31,7 +31,8 @@
         <app-procedure-selection (selectedProcedure)="onSelectProcedure($event)"></app-procedure-selection>
         <br />
         <app-procedure-list 
-            [templateChild]="true" 
+            [templateChild]="true"
+            [editable]="true"
             [templateProcedures]="templateProcedures" 
             (removeProcedure)="onRemoveProcedure($event)">
         </app-procedure-list>

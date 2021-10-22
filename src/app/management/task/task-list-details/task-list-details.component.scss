@@ -3,11 +3,17 @@ mat-lebel {
 }
 
 mat-icon {
-  float: right;
+  vertical-align: middle;
+  margin-right: 1rem;
+  opacity: .5;
 }
 
 .helper-content {
   margin-bottom: 1rem;
+
+  & > .title {
+    font-weight: lighter;
+  }
 }
 
 .element-description {

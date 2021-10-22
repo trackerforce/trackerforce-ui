@@ -17,7 +17,8 @@ import { detailsAnimation, fadeAnimation } from 'src/app/_helpers/animations';
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
-  @Input() procedureChild!: boolean;
+  @Input() procedureChild: boolean = false;
+  @Input() editable: boolean = false;
   @Input() procedureTasks!: Subject<Task[]>;
   @Output() removeTask = new EventEmitter<Task>();
 
@@ -60,6 +61,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.loading = false;
         this.dataSource = new MatTableDataSource(data);
         this.resultsLength = data.length;
+        this.loading = false;
       }
     });
   }
