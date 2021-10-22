@@ -1,7 +1,7 @@
 <h1><i class="fas fa-users"></i>Agents</h1>
 <mat-divider></mat-divider>
 <div class="container">
-    <div class="row">
+    <div *ngIf="!isAgent()" class="row">
         <app-agent-create class="col"></app-agent-create>
     </div>
     <div class="row">

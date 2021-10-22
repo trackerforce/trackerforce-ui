@@ -26,4 +26,8 @@ export class AppComponent {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+  
+  isAgent() {
+    return this.authService.hasRole('AGENT');
+  }
 }

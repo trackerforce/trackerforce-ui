@@ -147,7 +147,12 @@ export class AuthService {
   }
 
   hasRole(role: string) {
-    const decodedToken = this.jwtHelper.decodeToken(localStorage.getItem(AuthService.JWT_TOKEN)!);
+    const token = localStorage.getItem(AuthService.JWT_TOKEN);
+
+    if (!token)
+      return true;
+
+    const decodedToken = this.jwtHelper.decodeToken(token);
     return (decodedToken.roles as string[]).filter(r => r === role).length > 0;
   }
 
