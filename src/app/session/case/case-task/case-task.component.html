@@ -1,1 +1,38 @@
-<p>case-task works!</p>
+<form class="form-container" [formGroup]="taskForm">
+    <section>
+        <mat-form-field *ngIf="type === 'TEXT'" appearance="outline">
+            <mat-label>{{task?.description}}</mat-label>
+            <input matInput formControlName="response">
+        </mat-form-field>
+
+        <mat-form-field *ngIf="type === 'MULTILINE_TEXT'" appearance="outline">
+            <mat-label>{{task?.description}}</mat-label>
+            <textarea matInput formControlName="response"></textarea>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="type === 'NUMBER'" appearance="outline">
+            <mat-label>{{task?.description}}</mat-label>
+            <input matInput type="number" formControlName="response">
+        </mat-form-field>
+
+        <div *ngIf="type === 'RADIO'">
+            <mat-label>{{task?.description}}</mat-label>
+            <mat-radio-group class="radio-group" formControlName="response">
+                <mat-radio-button class="radio-button" *ngFor="let opt of task?.options" [value]="opt.value">
+                    {{opt.value}}
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <mat-form-field *ngIf="type === 'DRILLDOWN'" appearance="outline">
+            <mat-label>{{task?.description}}</mat-label>
+            <mat-select formControlName="response">
+                <mat-option *ngFor="let opt of task?.options" [value]="opt.value">
+                    {{opt.value}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox *ngIf="type === 'CHECK'" formControlName="response">{{task?.description}}</mat-checkbox>
+    </section>
+</form>

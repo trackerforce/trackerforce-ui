@@ -25,7 +25,7 @@
                     </mat-card-title-group>
                     <mat-card-content>
                         <div *ngFor="let task of procedure?.tasks">
-                            <app-case-task></app-case-task>
+                            <app-case-task [task]="task"></app-case-task>
                         </div>
                     </mat-card-content>
                 </mat-card>

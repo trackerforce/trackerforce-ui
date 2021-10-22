@@ -10,7 +10,7 @@ import { ProcedureService } from 'src/app/services/procedure.service';
 })
 export class CaseProcedureComponent implements OnInit {
   @Input() procedure!: Procedure;
-  @Output() event = new EventEmitter<any>();
+  @Output() eventChange = new EventEmitter<Procedure>();
 
   procedureForm!: FormGroup;
   error: string = '';

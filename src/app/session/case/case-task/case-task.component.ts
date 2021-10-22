@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Task } from 'src/app/models/task';
 
 @Component({
   selector: 'app-case-task',
@@ -6,10 +8,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./case-task.component.scss']
 })
 export class CaseTaskComponent implements OnInit {
+  @Input() task!: Task;
+  @Output() eventChange = new EventEmitter<Task>();
 
-  constructor() { }
+  loading: boolean = true;
+  taskForm!: FormGroup;
+  type: string = "TEXT";
+  
+  constructor(
+    private formBuilder: FormBuilder
+  ) { 
+  }
 
   ngOnInit(): void {
+    this.type = this.task.type!;
+    this.taskForm = this.formBuilder.group({
+      response: ['', Validators.required]
+    });
+
+    this.loading = false;
   }
 
 }
