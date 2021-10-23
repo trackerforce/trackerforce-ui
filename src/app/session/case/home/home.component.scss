@@ -65,6 +65,9 @@ span {
   #component {
     padding-right: 0px;
     padding-left: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    border-radius: 0px;
   }
 }
 
@@ -76,9 +79,7 @@ span {
   .float-left {
     float: none;
   }
-}
 
-@media only screen and (max-width: 450px) {
   :host ::ng-deep .mat-expansion-panel-body {
     padding: 0px;
     padding-bottom: 1rem;

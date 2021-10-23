@@ -45,7 +45,8 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
             description: [this.procedure.description, Validators.required],
             tasks: [this.procedure.tasks],
             helper_content: [this.procedure.helper?.content],
-            helper_renderType: [this.procedure.helper?.renderType]
+            helper_renderType: [this.procedure.helper?.renderType],
+            hook: [this.procedure.hook?.resolverUri]
           });
         }
       }, error => {

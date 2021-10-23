@@ -9,8 +9,12 @@ mat-icon {
   margin-right: .2rem;
 }
 
+a:hover {
+  cursor: pointer;
+}
+
 svg {
-  color: red;
+  margin-left: 1rem;
 }
 
 table {
@@ -68,4 +72,24 @@ tr.element-row:not(.expanded-row):active {
 
 .element-description-attribution {
   opacity: 0.5;
+}
+
+.actions-col {
+  white-space: nowrap;
+  padding-left: 0px;
+  padding-right: 1rem;
+}
+
+.display-status {
+  display: none !important;
+}
+
+@media only screen and (max-width: 450px) {
+  .hide {
+    display: none;
+  }
+
+  .display-status {
+    display: block !important;
+  }
 }

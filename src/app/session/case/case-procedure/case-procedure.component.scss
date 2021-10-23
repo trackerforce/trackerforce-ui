@@ -3,6 +3,10 @@ button {
   margin-right: .5rem;
 }
 
+mat-spinner {
+  margin-right: .5rem;
+}
+
 mat-icon {
   margin-right: .2rem;
   vertical-align: middle;
@@ -77,5 +81,10 @@ span {
 
   .float-left {
     float: none;
+  }
+
+  .buttons-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

@@ -10,4 +10,9 @@ export class Procedure {
     createdAt?: Date;
     updatedAt?: Date;
     helper?: Helper;
+    hook?: Hook;
+}
+
+export class Hook {
+    resolverUri?: string;
 }

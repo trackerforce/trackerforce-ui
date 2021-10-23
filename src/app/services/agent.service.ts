@@ -41,4 +41,14 @@ export class AgentService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
+  public watchCase(sessionid: string, caseid: string): Observable<Agent> {
+    return this.http.post<Agent>(`${environment.managementServiceUrl}/management/agent/v1/watch/${sessionid}/${caseid}`, {})
+      .pipe(catchError(super.handleError));
+  }
+
+  public unWatchCase(sessionid: string, caseid: string): Observable<Agent> {
+    return this.http.post<Agent>(`${environment.managementServiceUrl}/management/agent/v1/unwatch/${sessionid}/${caseid}`, {})
+      .pipe(catchError(super.handleError));
+  }
+
 }

@@ -1,6 +1,7 @@
 <div id="component" class="container">
+    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     <section>
-        <mat-card *ngIf="sessionCase?.helper">
+        <mat-card>
             <mat-card-title-group>
                 <mat-card-title><i class="fas fa-info-circle"></i>Case Detail</mat-card-title>
                 <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>

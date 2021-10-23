@@ -1,3 +1,4 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -96,6 +97,12 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
         ConsoleLogger.printError('Failed to resolve Procedure', error);
         this.snackBar.open(`Something went wrong`, 'Close');
       });
+  }
+
+  getOption(procedure: Procedure) {
+    if (procedure.id === this.prediction_id)
+      return `[${this.prediction_accuracy}%]: ${procedure.name} - ${procedure.description}`;
+    return `${procedure.name} - ${procedure.description}`;
   }
 
 }

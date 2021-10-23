@@ -8,11 +8,12 @@
     <mat-card-content>
         <mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
         <br />
-        <table mat-table [dataSource]="data" matSort multiTemplateDataRows class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows class="mat-elevation-z8">
             <ng-container matColumnDef="custom_view">
                 <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let element">
+                <td class="actions-col" mat-cell *matCellDef="let element">
                     <a routerLink="{{getCaseLink(element)}}" matTooltip="Open {{element.protocol}}"><i class="fas fa-caret-square-right"></i></a>
+                    <a (click)="$event.stopPropagation(); onStopWatching(element);" matTooltip="Stop following {{element.protocol}}"><i class="fas fa-low-vision"></i></a>
                 </td>
             </ng-container>
         
@@ -22,8 +23,8 @@
             </ng-container>
 
             <ng-container matColumnDef="custom_status">
-                <th mat-header-cell *matHeaderCellDef>status</th>
-                <td mat-cell *matCellDef="let element">
+                <th class="hide" mat-header-cell *matHeaderCellDef>status</th>
+                <td class="hide" mat-cell *matCellDef="let element">
                     <mat-label>{{getStatus(element)}}</mat-label>
                 </td>
             </ng-container>
@@ -39,6 +40,10 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>Protocol</mat-label>
                                 <input matInput [value]="element.protocol" [readonly]=true>
+                            </mat-form-field>
+                            <mat-form-field class="display-status field-description" appearance="outline">
+                                <mat-label>Status</mat-label>
+                                <input matInput [value]="getStatus(element)" [readonly]=true>
                             </mat-form-field>
                             <mat-form-field class="field-description" appearance="outline">
                                 <mat-label>Description</mat-label>

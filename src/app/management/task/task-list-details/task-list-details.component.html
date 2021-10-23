@@ -1,5 +1,5 @@
 <div class="element-description">
-    <div class="helper-content">
+    <div *ngIf="task?.helper" class="helper-content">
         <mat-label class="title"><mat-icon>help</mat-icon>{{task?.helper?.content}}</mat-label>
     </div>
     <mat-form-field appearance="outline">

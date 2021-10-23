@@ -33,10 +33,13 @@ export class TemplateService extends ApiService {
   }
 
   public createTemplate(template: Template, helper: Helper): Observable<Template> {
-    return this.http.post<Template>(`${environment.managementServiceUrl}/management/template/v1/create`, {
-      template: template,
-      helper: helper
-    }).pipe(catchError(super.handleError));
+    let body: any = { template };
+
+    if (helper.content)
+      body.helper = helper;
+
+    return this.http.post<Template>(`${environment.managementServiceUrl}/management/template/v1/create`, body)
+      .pipe(catchError(super.handleError));
   }
 
   public updateTemplate(template: Template, helper: Helper): Observable<Template> {

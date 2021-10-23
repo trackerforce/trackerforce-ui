@@ -22,6 +22,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
 
   procedureForm!: FormGroup;
   error: string = '';
+  loading: boolean = false;
 
   open: boolean = true;
   submitted: boolean = false;
@@ -51,6 +52,11 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
     this.submitted = this.procedure.status === 'SUBMITTED';
     this.resolved = this.procedure.status === 'RESOLVED';
   }
+
+  private save(caseid: string) {
+    return this.sessionService.saveProcedure(caseid, this.procedure)
+      .pipe(takeUntil(this.unsubscribe));
+  }
   
   onTaskChange(task: Task) {
     for (let t of this.procedure.tasks!) {
@@ -64,36 +70,45 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   onSave() {
     if (!this.caseid)
       return;
-    
-    this.sessionService.saveProcedure(this.caseid, this.procedure)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.eventChange.emit(this.procedure);
-          this.snackBar.open(`Procedure saved`, 'Close', { duration: 3000 });
-        }
-      }, error => {
-        ConsoleLogger.printError('Failed to save Procedure', error);
-        this.snackBar.open(`Something went wrong`, 'Close');
-      });
+
+    this.loading = true;
+    this.save(this.caseid).subscribe(data => {
+      this.loading = false;
+      if (data) {
+        this.eventChange.emit(this.procedure);
+        this.snackBar.open(`Procedure saved`, 'Close', { duration: 3000 });
+      }
+    }, error => {
+      ConsoleLogger.printError('Failed to save Procedure', error);
+      this.snackBar.open(`Something went wrong`, 'Close');
+      this.loading = false;
+    });
   }
 
   onSubmit() {
-    this.eventChange.emit(this.procedure);
+    if (!this.caseid)
+      return;
 
-    this.open = false;
-    this.submitted = true;
-    this.sessionService.submitProcedure(this.caseid!, this.procedure.id!)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.eventChange.emit(this.procedure);
-          this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
-        }
-      }, error => {
-        ConsoleLogger.printError('Failed to save Procedure', error);
-        this.snackBar.open(`Something went wrong`, 'Close');
-      });
+    this.loading = true;
+    this.save(this.caseid).subscribe(data => {
+      if (data) {
+        this.sessionService.submitProcedure(this.caseid!, this.procedure.id!)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(data => {
+            if (data) {
+              this.procedure = data;
+              this.readProcedureStatuses();
+              this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
+              this.loading = false;
+              this.eventChange.emit(this.procedure);
+            }
+          }, error => {
+            ConsoleLogger.printError('Failed to save Procedure', error);
+            this.snackBar.open(`Something went wrong`, 'Close');
+            this.loading = false;
+          });
+      }
+    });
   }
 
   onResolved(procedure: Procedure) {

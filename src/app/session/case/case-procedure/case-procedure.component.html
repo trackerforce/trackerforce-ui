@@ -2,7 +2,8 @@
     <mat-expansion-panel #mep="matExpansionPanel">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-icon class="{{open ? '' : 'done'}}">label_important</mat-icon><span>{{procedure.name}}</span>
+                <mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
+                <mat-icon *ngIf="!loading" class="{{open ? '' : 'done'}}">label_important</mat-icon><span>{{procedure.name}}</span>
             </mat-panel-title>
         </mat-expansion-panel-header>
 
@@ -38,10 +39,10 @@
                     </mat-card-content>
                 </mat-card>
             </section>
-            <section>
-                <button mat-stroked-button type="button" (click)="onSave()" color="primary" [disabled]="!open">Save</button>
+            <section class="buttons-section">
+                <button mat-stroked-button type="button" (click)="onSave()" color="primary" [disabled]="!open || loading">Save</button>
                 <button mat-stroked-button type="button" (click)="mep.expanded = false;">Close</button>
-                <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn" [disabled]="!canSubmit()">Submit</button>
+                <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn" [disabled]="!canSubmit() || loading">Submit</button>
             </section>
             <section class="case-predict-section">
                 <app-case-predict-next *ngIf="!open && !resolved"

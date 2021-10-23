@@ -12,10 +12,10 @@
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                     <mat-option *ngFor="let procedure of filteredOptions | async" [value]="procedure">
                         <span *ngIf="procedure.id === prediction_id">
-                            <strong>{{procedure.name}} - {{prediction_accuracy}}%</strong>
+                            <strong>{{getOption(procedure)}}</strong>
                         </span>
                         <span *ngIf="procedure.id != prediction_id">
-                            <label>{{procedure.name}}</label>
+                            <label>{{getOption(procedure)}}</label>
                         </span>
                     </mat-option>
                 </mat-autocomplete>
@@ -24,6 +24,6 @@
                 </mat-error>
             </mat-form-field>
         </form>
-        <button mat-stroked-button type="button" (click)="onNext()" color="warn">Next</button>
+        <button mat-stroked-button type="button" (click)="onNext()" color="warn">Create</button>
     </mat-card-content>
 </mat-card>

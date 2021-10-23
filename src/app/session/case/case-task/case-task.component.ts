@@ -56,7 +56,9 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
     if (this.isTaskDone())
       this.iconClass = "task-done";
       
-    return this.task.type === 'CHECK' ? false : this.task.response;
+    return this.task.type === 'CHECK' ? 
+      this.task.response == undefined ? false : this.task.response 
+      : this.task.response;
   }
 
   isTaskDone() {

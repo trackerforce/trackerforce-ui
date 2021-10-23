@@ -27,18 +27,23 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.procedureForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      tasks: [[]],
-      helper_content: [''],
-      helper_renderType: ['']
-    });
+    this.loadForm();
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private loadForm() {
+    this.procedureForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      tasks: [[]],
+      helper_content: [],
+      helper_renderType: [],
+      hook: []
+    });
   }
 
   onAddTask(task: Task) {
@@ -62,7 +67,10 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
     const procedure: Procedure = {
       name: this.procedureForm.get('name')?.value,
       description: this.procedureForm.get('description')?.value,
-      tasks: this.procedureForm.get('tasks')?.value
+      tasks: this.procedureForm.get('tasks')?.value,
+      hook: {
+        resolverUri: this.procedureForm.get('hook')?.value
+      }
     }
 
     const helper: Helper = {
@@ -74,7 +82,9 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       if (task) {
         this.snackBar.open(`Procedure created`, 'Close', { duration: 2000 });
         this.procedureService.procedure.next(undefined);
+        
         this.procedureForm.reset();
+        this.loadForm();
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Procedure', error);

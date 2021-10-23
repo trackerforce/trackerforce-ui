@@ -31,8 +31,8 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
       name: ['', Validators.required],
       description: ['', Validators.required],
       procedures: [[]],
-      helper_content: [''],
-      helper_renderType: ['']
+      helper_content: [],
+      helper_renderType: []
     });
   }
 

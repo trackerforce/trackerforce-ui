@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { merge, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -9,6 +10,7 @@ import { Agent } from 'src/app/models/agent';
 import { Case } from 'src/app/models/case';
 import { AgentService } from 'src/app/services/agent.service';
 import { SessionService } from 'src/app/services/session.service';
+import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
 @Component({
   selector: 'app-my-cases',
@@ -27,7 +29,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['custom_view', 'context', 'custom_status'];
   expandedElement: Case | undefined;
-  data: Case[] = [];
+  dataSource!: MatTableDataSource<Case>;
 
   resultsLength = 0;
   loading = true;
@@ -73,7 +75,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
           this.resultsLength = data.items;
           return data.data;
         })
-      ).subscribe(data => this.data = data);
+      ).subscribe(data => this.dataSource = new MatTableDataSource(data));
   }
 
   getColumns(): string[] {
@@ -88,6 +90,15 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
 
   getCaseLink(sessionCase: Case): string {
     return `/${this.authService.getSessionOrgPath()}/case/${sessionCase.protocol}`
+  }
+
+  onStopWatching(sessionCase: Case) {
+    const sessionid = this.authService.getUserInfo('sessionid');
+    this.agentService.unWatchCase(sessionid, sessionCase.id!)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(agent => {
+        this.loadData(agent);
+      }, error => ConsoleLogger.printError('Failed to unWatch', error));
   }
 
 }

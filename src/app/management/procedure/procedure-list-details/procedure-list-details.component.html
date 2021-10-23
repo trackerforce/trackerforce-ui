@@ -31,8 +31,10 @@
     </div>
     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
 </form>
-<mat-label><h2>Tasks</h2></mat-label>
-<app-task-list *ngIf="procedure"
-    [procedureChild]="true"
-    [procedureTasks]="procedureTasks">
-</app-task-list>
+<div *ngIf="procedure?.tasks?.length">
+    <mat-label><h2>Tasks</h2></mat-label>
+    <app-task-list *ngIf="procedure"
+        [procedureChild]="true"
+        [procedureTasks]="procedureTasks">
+    </app-task-list>
+</div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
@@ -10,7 +10,7 @@ import { Task } from 'src/app/models/task';
   templateUrl: './procedure-detail.component.html',
   styleUrls: ['./procedure-detail.component.scss']
 })
-export class ProcedureDetailComponent implements AfterViewInit {
+export class ProcedureDetailComponent implements AfterViewInit, OnChanges {
   @Input() procedure!: Procedure;
   @Input() procedureForm!: FormGroup;
   @Input() loading: boolean = true;
@@ -20,6 +20,12 @@ export class ProcedureDetailComponent implements AfterViewInit {
   procedureTasks = new Subject<Task[]>();
 
   ngAfterViewInit(): void {
+    if (!this.loading) {
+      this.procedureTasks.next(this.procedureForm.get('tasks')?.value);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     if (!this.loading) {
       this.procedureTasks.next(this.procedureForm.get('tasks')?.value);
     }
