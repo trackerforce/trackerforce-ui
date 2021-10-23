@@ -2,7 +2,6 @@
   background: white;
   border: 2px solid #a8a8a8;
   padding: 30px;
-  min-height: 800px;
   margin-bottom: 1rem;
   margin-top: 1rem;
   border-radius: 1rem;
@@ -44,6 +43,27 @@ span {
   margin-bottom: auto;
 }
 
+.content-detail {
+  display: flex;
+
+  &>mat-form-field {
+    margin-top: 0px;
+    margin-right: .2rem;
+    margin-left: .2rem;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .content-detail {
+    display: block;
+  }
+
+  #component {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
+
 @media only screen and (max-width: 450px) {
   .hide {
     display: none;
@@ -56,9 +76,17 @@ span {
 
 
 @media only screen and (max-width: 450px) {
-    .container {
-      padding-right: .2rem;
-      padding-left: .2rem;
-    }
+  :host ::ng-deep .mat-expansion-panel-body {
+    padding: 0px;
+    padding-bottom: 1rem;
   }
-  
+
+  .mat-card {
+    box-shadow: none;
+  }
+
+  .container {
+    padding-right: .2rem;
+    padding-left: .2rem;
+  }
+}

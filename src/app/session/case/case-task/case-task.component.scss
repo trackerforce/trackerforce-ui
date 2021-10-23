@@ -1,5 +1,20 @@
 mat-form-field {
+  margin-top: 1rem;
   width: 100%;
+}
+
+mat-checkbox {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+mat-divider {
+  padding-bottom: 1rem;
+  position: inherit !important;
+}
+
+svg {
+  margin-right: .5rem;
 }
 
 .radio-group {

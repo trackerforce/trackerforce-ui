@@ -8,16 +8,18 @@
             <mat-card-content>
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
-                    <input matInput type="text" [value]="sessionCase?.description" [readonly]="true">
+                    <textarea matInput cdkTextareaAutosize type="text" [value]="sessionCase?.description" [readonly]="true"></textarea>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>Protocol</mat-label>
-                    <input matInput type="text" [value]="sessionCase?.protocol" [readonly]="true">
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                    <mat-label>Status</mat-label>
-                    <input matInput type="text" [value]="getStatus()" [readonly]="true">
-                </mat-form-field>
+                <div class="content-detail">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Protocol</mat-label>
+                        <input matInput type="text" [value]="sessionCase?.protocol" [readonly]="true">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <input matInput type="text" [value]="getStatus()" [readonly]="true">
+                    </mat-form-field>
+                </div>
             </mat-card-content>
         </mat-card>
     </section>

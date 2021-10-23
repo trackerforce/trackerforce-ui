@@ -48,6 +48,11 @@ span {
 }
 
 @media only screen and (max-width: 450px) {
+  .mat-expansion-panel-body {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
   .hide {
     display: none;
   }

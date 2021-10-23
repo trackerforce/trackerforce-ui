@@ -26,6 +26,8 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.type = this.task.type!;
+    this.task.response = this.defaultResponse();
+
     this.taskForm = this.formBuilder.group({
       response: [this.task.response, Validators.required]
     });
@@ -40,6 +42,10 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private defaultResponse() {
+    return this.task.type === 'CHECK' ? false : this.task.response;
   }
 
 }

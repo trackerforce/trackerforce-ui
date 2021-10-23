@@ -34,7 +34,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.open = this.procedure.tasks?.filter(task => task.response === undefined).length != 0;
+    this.updateProcedureStatus();
     this.procedureForm = this.formBuilder.group({
       name: [this.procedure.name],
       description: [this.procedure.description],
@@ -72,6 +72,10 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
           return response.data.filter(p => p.name?.toLowerCase().includes(value));
         })
       )
+  }
+
+  private updateProcedureStatus() {
+    this.open = this.procedure.tasks?.filter(task => task.response === undefined).length != 0;
   }
 
   displayFn(procedure: Procedure): string {
