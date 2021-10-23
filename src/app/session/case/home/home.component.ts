@@ -28,6 +28,15 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadCase();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  private loadCase() {
     this.loading = true;
     this.sessionService.getCase(this.protocol)
       .pipe(takeUntil(this.unsubscribe))
@@ -43,18 +52,18 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-  }
-
   onProcedureChanged(procedure: Procedure) {
+    var found = false;
     for (let p of this.sessionCase.procedures!) {
       if (p.id === procedure.id) {
         p = procedure;
+        found = true;
         break;
       }
     }
+
+    if (!found)
+      this.loadCase();
   }
 
   getStatus() {

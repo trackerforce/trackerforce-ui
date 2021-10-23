@@ -67,6 +67,20 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
       )
   }
 
+  private createProcedure(selectedProcedure: Procedure) {
+    this.sessionService.createProcedure(this.caseid!, selectedProcedure.id!)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.eventChange.emit(selectedProcedure);
+          this.snackBar.open(`Procedure created`, 'Close', { duration: 3000 });
+        }
+      }, error => {
+        ConsoleLogger.printError('Failed to create new Procedure', error);
+        this.snackBar.open(`Something went wrong`, 'Close');
+      });
+  }
+
   displayFn(procedure: Procedure): string {
     return procedure && procedure.name ? procedure.name : '';
   }
@@ -76,14 +90,9 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
       return;
     
     const selectedProcedure: Procedure = this.procedureForm.get('next_procedure')?.value;
-    this.sessionService.acceptedNextProcedure(this.caseid, this.procedure.id!, selectedProcedure.id!)
+    this.sessionService.resolveProcedure(this.caseid, this.procedure.id!, selectedProcedure.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.eventChange.emit(selectedProcedure);
-          this.snackBar.open(`Procedure resolved`, 'Close', { duration: 3000 });
-        }
-      }, error => {
+      .subscribe(data => this.createProcedure(selectedProcedure), error => {
         ConsoleLogger.printError('Failed to resolve Procedure', error);
         this.snackBar.open(`Something went wrong`, 'Close');
       });

@@ -83,27 +83,31 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
 
     this.open = false;
     this.submitted = true;
-    // this.sessionService.submitProcedure(this.caseid!, this.procedure.id!)
-    //   .pipe(takeUntil(this.unsubscribe))
-    //   .subscribe(data => {
-    //     if (data) {
-    //       this.eventChange.emit(this.procedure);
-    //       this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
-    //     }
-    //   }, error => {
-    //     ConsoleLogger.printError('Failed to save Procedure', error);
-    //     this.snackBar.open(`Something went wrong`, 'Close');
-    //   });
+    this.sessionService.submitProcedure(this.caseid!, this.procedure.id!)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(data => {
+        if (data) {
+          this.eventChange.emit(this.procedure);
+          this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
+        }
+      }, error => {
+        ConsoleLogger.printError('Failed to save Procedure', error);
+        this.snackBar.open(`Something went wrong`, 'Close');
+      });
   }
 
   onResolved(procedure: Procedure) {
     this.resolved = true;
-    console.log(procedure);
+    this.eventChange.emit(procedure);
   }
 
   canSubmit() {
     return this.open && 
       this.procedure.tasks?.filter(task => task.response === undefined).length == 0;;
+  }
+
+  hasTasks() {
+    return this.procedure.tasks != undefined && this.procedure.tasks?.length > 0;
   }
 
 }

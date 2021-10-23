@@ -59,12 +59,20 @@ export class SessionService extends ApiService {
     }).pipe(catchError(super.handleError));
   }
 
-  public acceptedNextProcedure(caseId: string, procedureId: string, selectedProcedureId: string): Observable<Case> {
+  public resolveProcedure(caseId: string, procedureId: string, selectedProcedureId: string): Observable<Case> {
     return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1/handler`, {
       case: caseId,
       procedure: procedureId,
       resolution: selectedProcedureId,
       event: 'NEXT'
+    }).pipe(catchError(super.handleError));
+  }
+
+  public createProcedure(caseId: string, procedureId: string): Observable<Case> {
+    return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1/handler`, {
+      case: caseId,
+      procedure: procedureId,
+      event: 'NEW'
     }).pipe(catchError(super.handleError));
   }
 

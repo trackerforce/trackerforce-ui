@@ -19,12 +19,16 @@
                         <mat-label>Status</mat-label>
                         <input matInput type="text" [value]="getStatus()" [readonly]="true">
                     </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Created At</mat-label>
+                        <input matInput type="text" [value]="sessionCase?.createdAt | date:'short'" [readonly]="true">
+                    </mat-form-field>
                 </div>
             </mat-card-content>
         </mat-card>
     </section>
-    <div *ngFor="let procedure of sessionCase?.procedures">
-        <app-case-procedure 
+    <div class="procedure-component" *ngFor="let procedure of sessionCase?.procedures">
+        <app-case-procedure
             [procedure]="procedure" 
             [caseid]="sessionCase?.id"
             (eventChange)="onProcedureChanged($event)">

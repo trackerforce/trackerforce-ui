@@ -25,7 +25,7 @@
                     </mat-card-content>
                 </mat-card>
             </section>
-            <section>
+            <section *ngIf="hasTasks()">
                 <mat-card>
                     <mat-card-title-group>
                         <mat-card-title><i class="fas fa-tasks"></i>Tasks</mat-card-title>
