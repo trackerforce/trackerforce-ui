@@ -1,40 +1,28 @@
 mat-form-field {
-  margin-top: 1rem;
   width: 100%;
-}
-
-mat-checkbox {
   margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 mat-divider {
-  padding-bottom: 1rem;
-  position: inherit !important;
+  margin-top: 1rem;
+}
+
+mat-card {
+  margin-bottom: 1rem;
 }
 
 svg {
   margin-right: .5rem;
 }
 
-.task-done {
-  color: green;
-}
-
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  margin: 15px 0;
-}
-
-.radio-button {
-  margin: 5px;
-}
-
 @media only screen and (max-width: 450px) {
   :host ::ng-deep .mat-expansion-panel-body {
     padding: 0px;
     padding-bottom: 1rem;
+  }
+
+  button {
+    width: 100%;
   }
 
   .mat-card {

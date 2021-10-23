@@ -47,7 +47,25 @@ span {
   float: left;
 }
 
+.case-predict-section {
+  margin-top: 1rem;
+}
+
 @media only screen and (max-width: 450px) {
+  mat-card {
+    margin-bottom: 0px;
+  }
+
+  :host ::ng-deep .mat-expansion-panel-body {
+    padding: 0px;
+    padding-bottom: 1rem;
+  }
+
+  .mat-card,
+  .mat-expansion-panel {
+    box-shadow: none;
+  }
+
   .mat-expansion-panel-body {
     padding-left: 0px;
     padding-right: 0px;

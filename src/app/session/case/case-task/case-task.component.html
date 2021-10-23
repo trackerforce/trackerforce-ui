@@ -1,6 +1,6 @@
 <form class="form-container" [formGroup]="taskForm">
     <section>
-        <i class="fas fa-check"></i>
+        <span [ngClass]="iconClass"><i class="fas fa-check"></i></span>
         <mat-label>{{task?.description}}</mat-label>
     </section>
     <section>
@@ -21,7 +21,7 @@
 
         <div *ngIf="type === 'RADIO'">
             <mat-radio-group class="radio-group" formControlName="response" [disabled]="!open">
-                <mat-radio-button class="radio-button" *ngFor="let opt of task?.options" [value]="opt.value">
+                <mat-radio-button class="radio-button" [color]="'primary'" *ngFor="let opt of task?.options" [value]="opt.value">
                     {{opt.value}}
                 </mat-radio-button>
             </mat-radio-group>
@@ -38,6 +38,7 @@
 
         <mat-checkbox *ngIf="type === 'CHECK'" 
             formControlName="response" 
+            [color]="'primary'"
             [checked]="false"
             [disabled]="!open">Response
         </mat-checkbox>

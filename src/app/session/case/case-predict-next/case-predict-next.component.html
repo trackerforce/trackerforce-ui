@@ -1,0 +1,29 @@
+<mat-card>
+    <mat-card-title-group>
+        <mat-card-title><i class="fas fa-arrow-circle-right"></i>Next Procedure</mat-card-title>
+        <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
+    </mat-card-title-group>
+    <mat-card-content>
+        <form class="form-container" [formGroup]="procedureForm">
+            <mat-form-field>
+                <mat-label>Procedure</mat-label>
+                <input type="text" placeholder="Select..." matInput formControlName="next_procedure"
+                    [matAutocomplete]="auto" autocomplete="off">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let procedure of filteredOptions | async" [value]="procedure">
+                        <span *ngIf="procedure.id === prediction_id">
+                            <strong>{{procedure.name}} - {{prediction_accuracy}}%</strong>
+                        </span>
+                        <span *ngIf="procedure.id != prediction_id">
+                            <label>{{procedure.name}}</label>
+                        </span>
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error>
+                    Please select a valid Procedure
+                </mat-error>
+            </mat-form-field>
+        </form>
+        <button mat-stroked-button type="button" (click)="onNext()" color="warn">Next</button>
+    </mat-card-content>
+</mat-card>

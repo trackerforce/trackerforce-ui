@@ -16,6 +16,7 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   @Input() open: boolean = true;
   @Output() eventChange = new EventEmitter<Task>();
 
+  iconClass: string = "";
   taskForm!: FormGroup;
   type: string = "TEXT";
   
@@ -34,8 +35,15 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
 
     this.taskForm.valueChanges.pipe(takeUntil(this.unsubscribe), debounceTime(500))
       .subscribe(data => {
-        this.task.response = data.response;
-        this.eventChange.emit(this.task);
+        if (data && data.response != undefined) {
+          this.task.response = data.response;
+          this.eventChange.emit(this.task);
+          this.iconClass = "task-done";
+        } else {
+          this.task.response = undefined;
+          this.eventChange.emit(this.task);
+          this.iconClass = "";
+        }
       });
   }
 
@@ -45,7 +53,14 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   }
 
   private defaultResponse() {
+    if (this.isTaskDone())
+      this.iconClass = "task-done";
+      
     return this.task.type === 'CHECK' ? false : this.task.response;
+  }
+
+  isTaskDone() {
+    return this.task.response != undefined;
   }
 
 }
