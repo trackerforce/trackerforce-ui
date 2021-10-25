@@ -33,8 +33,8 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       options: [''],
       learn: [''],
       hidden: [''],
-      helper_content: [],
-      helper_renderType: []
+      helper_content: [''],
+      helper_renderType: ['PLAINTEXT']
     });
   }
 
@@ -72,6 +72,10 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       ConsoleLogger.printError('Failed to create Task', error);
       this.error = error;
     });
+  }
+
+  onCancel() {
+    this.taskForm.reset();
   }
   
 }

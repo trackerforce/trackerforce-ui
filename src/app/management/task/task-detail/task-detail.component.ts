@@ -15,9 +15,6 @@ export class TaskDetailComponent implements OnChanges {
   
   displayTaskTypes: any[] = TASK_TYPES;
 
-  constructor(
-  ) { }
-
   ngOnChanges(changes: SimpleChanges): void {
     this.onTypeChange();
   }
@@ -28,6 +25,8 @@ export class TaskDetailComponent implements OnChanges {
       this.taskForm.get('options')?.setValidators([Validators.required]);
     else
       this.taskForm.get('options')?.setValidators([]);
+
+    this.taskForm.get('options')?.updateValueAndValidity();
   }
 
   private checkLearn(value: typeof TASK_TYPES) {

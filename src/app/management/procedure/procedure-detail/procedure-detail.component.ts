@@ -22,6 +22,7 @@ export class ProcedureDetailComponent implements AfterViewInit, OnChanges {
   ngAfterViewInit(): void {
     if (!this.loading) {
       this.procedureTasks.next(this.procedureForm.get('tasks')?.value);
+      this.procedureForm.get('tasks')?.valueChanges.subscribe(tasks => this.procedureTasks.next(tasks));
     }
   }
 

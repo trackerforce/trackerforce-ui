@@ -18,7 +18,7 @@
         <div>
             <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button
                 color="primary">Create</button>
-            <button type="button" (click)="mep.expanded = false; error = '';" mat-raised-button>Cancel</button>
+            <button type="button" (click)="mep.expanded = false; error = ''; onCancel();" mat-raised-button>Cancel</button>
         </div>
     </mat-expansion-panel>
 </mat-accordion>

@@ -27,18 +27,23 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.templateForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      procedures: [[]],
-      helper_content: [],
-      helper_renderType: []
-    });
+    this.loadForm();
   }
 
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  private loadForm() {
+    this.error = '';
+    this.templateForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      procedures: [[]],
+      helper_content: [''],
+      helper_renderType: ['PLAINTEXT']
+    });
   }
 
   onAddProcedure(procedure: Procedure) {
@@ -75,11 +80,16 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
         this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
         this.templateService.template.next(undefined);
         this.templateForm.reset();
+        this.loadForm();
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Template', error);
       this.error = error;
     });
+  }
+
+  onCancel() {
+    this.templateForm.get('procedures')?.setValue([]);
   }
   
 }

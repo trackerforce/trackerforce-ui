@@ -36,12 +36,13 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
   }
 
   private loadForm() {
+    this.error = '';
     this.procedureForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       tasks: [[]],
-      helper_content: [],
-      helper_renderType: [],
+      helper_content: [''],
+      helper_renderType: ['PLAINTEXT'],
       hook: []
     });
   }
@@ -90,6 +91,10 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       ConsoleLogger.printError('Failed to create Procedure', error);
       this.error = error;
     });
+  }
+
+  onCancel() {
+    this.procedureForm.get('tasks')?.setValue([]);
   }
   
 }
