@@ -1,53 +1,71 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
 import { Template } from 'src/app/models/template';
+import { TemplateService } from 'src/app/services/template.service';
 
 @Component({
   selector: 'app-template-detail',
   templateUrl: './template-detail.component.html',
   styleUrls: ['./template-detail.component.scss']
 })
-export class TemplateDetailComponent implements AfterViewInit, OnChanges {
+export class TemplateDetailComponent implements OnInit, AfterViewInit {
   @Input() template!: Template;
-  @Input() templateForm!: FormGroup;
-  @Input() loading: boolean = true;
-  @Output() addProcedure = new EventEmitter<Procedure>();
-  @Output() removeProcedure = new EventEmitter<Procedure>();
+  @Output() templateChanged = new EventEmitter<Template>();
 
-  templateProcedures = new Subject<Procedure[]>();
+  proceduresSubject = new Subject<Procedure[]>();
+  templateForm!: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private templateService: TemplateService
+  ) { }
+
+  ngOnInit(): void {
+    this.templateService.template.subscribe(template => {
+      this.template = template;
+      this.templateForm.reset();
+      this.proceduresSubject.next(this.template.procedures);
+    });
+
+    this.templateForm = this.formBuilder.group({
+      name: [this.template.name, Validators.required],
+      description: [this.template.description, Validators.required]
+    });
+
+    this.templateForm.valueChanges.subscribe(template => {
+      this.template.name = template.name;
+      this.template.description = template.description;
+      this.templateChanged.emit(this.template);
+    });
+  }
 
   ngAfterViewInit(): void {
-    if (!this.loading) {
-      this.templateProcedures.next(this.templateForm.get('procedures')?.value);
-      this.templateForm.get('procedures')?.valueChanges.subscribe(procedures => 
-        this.templateProcedures.next(procedures));
-    }
+    this.proceduresSubject.next(this.template.procedures);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!this.loading) {
-      this.templateProcedures.next(this.templateForm.get('procedures')?.value);
-    }
-  }
-
-  onHelperChanged(event: Helper) {
-    this.templateForm.get('helper_content')?.setValue(event.content);
-    this.templateForm.get('helper_renderType')?.setValue(event.renderType);
+  onHelperChanged(helper: Helper) {
+    this.template.helper = helper;
+    this.templateChanged.emit(this.template);
   }
 
   onSelectProcedure(selectedProcedure: Procedure) {
-    const procedures: Procedure[] = this.templateForm.get('procedures')?.value;
-    if (!procedures.filter(procedure => procedure.id === selectedProcedure.id).length) {
-      this.addProcedure.emit(selectedProcedure);
-      this.templateProcedures.next(procedures);
+    if (!this.template.procedures)
+      this.template.procedures = [];
+
+    if (!this.template.procedures!.filter(procedure => procedure.id === selectedProcedure.id).length || 
+      this.template.procedures.length === 0) {
+      this.template.procedures!.push(selectedProcedure);
+      this.proceduresSubject.next(this.template.procedures!);
+      this.templateChanged.emit(this.template);
     }
   }
 
-  onRemoveProcedure(event: Procedure) {
-    this.removeProcedure.emit(event);
+  onRemoveProcedure(procedure: Procedure) {
+    this.template.procedures = this.template?.procedures!.filter(p => p.id !== procedure.id);
+    this.templateChanged.emit(this.template);
   }
 
 }

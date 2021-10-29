@@ -19,7 +19,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
 
   @Input() template?: Template
 
-  templateProcedures = new Subject<Procedure[]>();
+  proceduresSubject = new Subject<Procedure[]>();
   templateForm!: FormGroup;
   error: string = '';
 
@@ -37,7 +37,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngAfterViewInit(): void {
-    this.templateProcedures.next(this.template?.procedures);
+    this.proceduresSubject.next(this.template?.procedures);
   }
 
   ngOnDestroy() {

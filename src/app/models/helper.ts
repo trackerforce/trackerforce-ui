@@ -1,4 +1,4 @@
 export class Helper {
     content?: string;
-    renderType?: string;
+    renderType?: string = 'PLAINTEXT';
 }

@@ -5,8 +5,8 @@ export class Template {
     id?: string;
     name?: string;
     description?: string;
-    procedures?: Procedure[];
+    procedures?: Procedure[] = [];
     createdAt?: Date;
     updatedAt?: Date;
-    helper?: Helper;
+    helper?: Helper = new Helper();
 }

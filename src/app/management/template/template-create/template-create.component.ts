@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Helper } from 'src/app/models/helper';
-import { Procedure } from 'src/app/models/procedure';
 import { Template } from 'src/app/models/template';
+import { HelperService } from 'src/app/services/helper.service';
 import { TemplateService } from 'src/app/services/template.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 
@@ -17,17 +16,18 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 export class TemplateCreateComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  templateForm!: FormGroup;
+  templateSubject: Subject<Template> = new Subject();
+  template!: Template;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private templateService: TemplateService
+    private templateService: TemplateService,
+    private helperService: HelperService
   ) { }
 
   ngOnInit(): void {
-    this.loadForm();
+    this.template = new Template();
   }
 
   ngOnDestroy() {
@@ -35,52 +35,23 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  private loadForm() {
-    this.error = '';
-    this.templateForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      procedures: [[]],
-      helper_content: [''],
-      helper_renderType: ['PLAINTEXT']
-    });
-  }
-
-  onAddProcedure(procedure: Procedure) {
-    const procedures: Procedure[] = this.templateForm.get('procedures')?.value
-    procedures.push(procedure);
-    this.templateForm.get('procedures')?.setValue(procedures);
-  }
-
-  onRemoveProcedure(procedure: Procedure) {
-    let procedures: Procedure[] = this.templateForm.get('procedures')?.value
-    procedures = procedures.filter(p => p.id !== procedure.id);
-    this.templateForm.get('procedures')?.setValue(procedures);
+  onTemplateChange(template: Template) {
+    this.template = template;
   }
 
   onSubmit() {
-    if (this.templateForm?.invalid) {
-      this.error = 'Template has missing parameters'
-      return;
-    }
-
+    const helper: Helper = this.template?.helper!;
     const template: Template = {
-      name: this.templateForm.get('name')?.value,
-      description: this.templateForm.get('description')?.value,
-      procedures: this.templateForm.get('procedures')?.value
-    }
-
-    const helper: Helper = {
-      content: this.templateForm.get('helper_content')?.value,
-      renderType: this.templateForm.get('helper_renderType')?.value
+      name: this.template.name,
+      description: this.template.description,
+      procedures: this.template.procedures
     }
 
     this.templateService.createTemplate(template, helper).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
       if (task) {
         this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
-        this.templateService.template.next(undefined);
-        this.templateForm.reset();
-        this.loadForm();
+        this.templateSubject.next(undefined);
+        this.onCancel();
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Template', error);
@@ -89,7 +60,8 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.templateForm.get('procedures')?.setValue([]);
+    this.helperService.helper.next(undefined);
+    this.templateService.template.next(new Template());
   }
   
 }

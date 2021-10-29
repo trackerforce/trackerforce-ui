@@ -7,10 +7,8 @@
     </mat-card-header>
     <mat-card-content>
         <app-procedure-detail *ngIf="!loading" 
-            (addTask)="onAddTask($event)" 
-            (removeTask)="onRemoveTask($event)"
-            [procedureForm]="procedureForm" 
-            [loading]="loading">
+            (procedureChanged)="onProcedureChange($event)"
+            [procedure]="procedure">
         </app-procedure-detail>
         <div class="form-container">
             <div>

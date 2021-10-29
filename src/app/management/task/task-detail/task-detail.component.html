@@ -1,4 +1,4 @@
-<form *ngIf="!loading" class="form-container" [formGroup]="taskForm">
+<form class="form-container" [formGroup]="taskForm">
     <section>
         <mat-form-field appearance="fill">
             <mat-label>Description</mat-label>
@@ -73,6 +73,6 @@
         </div>
     </section>
     <section>
-        <app-helper [form]="taskForm" (selectedHelper)="onHelperChanged($event)"></app-helper>
+    <app-helper [helper]="task.helper!" (selectedHelper)="onHelperChanged($event)"></app-helper>
     </section>
 </form>

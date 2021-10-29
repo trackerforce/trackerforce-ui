@@ -17,9 +17,10 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
 })
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
   @Input() templateChild!: boolean;
   @Input() editable: boolean = false;
-  @Input() templateProcedures!: Subject<Procedure[]>;
+  @Input() proceduresSubject!: Subject<Procedure[]>;
   @Output() removeProcedure = new EventEmitter<Procedure>();
 
   displayedColumns: string[] = ['action', 'name'];
@@ -56,7 +57,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private loadTemplateData() {
-    this.templateProcedures.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
+    this.proceduresSubject.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
       if (data) {
         this.loading = false;
         this.dataSource = new MatTableDataSource(data);

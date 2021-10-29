@@ -6,7 +6,11 @@
         <mat-card-title>Edit</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <app-task-detail [taskForm]="taskForm" [showOptions]="hasOptions()" [loading]="loading"></app-task-detail>
+        <app-task-detail *ngIf="!loading" 
+            (taskChanged)="onTaskChange($event)"
+            [task]="task" 
+            [showOptions]="hasOptions()">
+        </app-task-detail>
         <div class="form-container">
             <div>
                 <button type="submit" (click)="onSubmit()" mat-raised-button color="primary" [disabled]="true">Update</button>

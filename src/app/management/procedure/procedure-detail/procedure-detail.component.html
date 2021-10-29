@@ -1,4 +1,4 @@
-<form *ngIf="!loading" class="form-container" [formGroup]="procedureForm">
+<form class="form-container" [formGroup]="procedureForm">
     <section>
         <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
@@ -33,7 +33,7 @@
         <app-task-list 
             [procedureChild]="true"
             [editable]="true"
-            [procedureTasks]="procedureTasks" 
+            [tasksSubject]="tasksSubject" 
             (removeTask)="onRemoveTask($event)">
         </app-task-list>
     </section>
@@ -58,6 +58,6 @@
         </mat-form-field>
     </section>
     <section>
-        <app-helper [form]="procedureForm" (selectedHelper)="onHelperChanged($event)"></app-helper>
+        <app-helper [helper]="procedure.helper!" (selectedHelper)="onHelperChanged($event)"></app-helper>
     </section>
 </form>

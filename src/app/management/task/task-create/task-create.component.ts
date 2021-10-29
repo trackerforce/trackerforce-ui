@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Helper } from 'src/app/models/helper';
 import { Task } from 'src/app/models/task';
+import { HelperService } from 'src/app/services/helper.service';
 import { TaskService } from 'src/app/services/task.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
-import { toOptions } from '../task-detail/task-detail.component';
 
 @Component({
   selector: 'app-task-create',
@@ -17,25 +16,18 @@ import { toOptions } from '../task-detail/task-detail.component';
 export class TaskCreateComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
   
-  taskForm!: FormGroup;
+  taskSubject: Subject<Task> = new Subject();
+  task!: Task;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private helperService: HelperService
   ) { }
 
   ngOnInit(): void {
-    this.taskForm = this.formBuilder.group({
-      description: ['', Validators.required],
-      type: ['', Validators.required],
-      options: [''],
-      learn: [''],
-      hidden: [''],
-      helper_content: [''],
-      helper_renderType: ['PLAINTEXT']
-    });
+    this.task = new Task();
   }
 
   ngOnDestroy() {
@@ -43,31 +35,28 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
+  onTaskChange(task: Task) {
+    this.task = task;
+  }
+
   onSubmit() {
-    if (this.taskForm?.invalid) {
-      this.error = 'Task has missing parameters'
-      return;
-    }
-
+    const helper: Helper = this.task?.helper!;
     const task: Task = {
-      description: this.taskForm.get('description')?.value,
-      type: this.taskForm.get('type')?.value,
-      learn: this.taskForm.get('learn')?.value,
-      hidden: this.taskForm.get('hidden')?.value,
-      options: toOptions(this.taskForm.get('options')?.value)
+      description: this.task.description,
+      type: this.task.type,
+      learn: this.task.learn,
+      hidden: this.task.hidden,
+      options: this.task.options
     }
 
-    const helper: Helper = {
-      content: this.taskForm.get('helper_content')?.value,
-      renderType: this.taskForm.get('helper_renderType')?.value
-    }
-
-    this.taskService.createTask(task, helper).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
-      if (task) {
-        this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
-        this.taskService.task.next(undefined);
-        this.taskForm.reset();
-      }
+    this.taskService.createTask(task, helper)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(task => {
+        if (task) {
+          this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
+          this.taskSubject.next(undefined);
+          this.onCancel();
+        }
     }, error => {
       ConsoleLogger.printError('Failed to create Task', error);
       this.error = error;
@@ -75,7 +64,8 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.taskForm.reset();
+    this.helperService.helper.next(undefined);
+    this.taskService.task.next(new Task());
   }
   
 }

@@ -1,51 +1,91 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Helper } from 'src/app/models/helper';
-import { Option } from 'src/app/models/task';
+import { Option, Task, TASK_TYPES } from 'src/app/models/task';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnChanges {
-  @Input() taskForm!: FormGroup;
+export class TaskDetailComponent implements OnInit {
+  @Input() task!: Task;
   @Input() showOptions: boolean = false;
-  @Input() loading: boolean = true;
+  @Output() taskChanged = new EventEmitter<Task>();
   
+  taskForm!: FormGroup;
   displayTaskTypes: any[] = TASK_TYPES;
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.onTypeChange();
+  constructor(
+    private formBuilder: FormBuilder,
+    private taskService: TaskService
+  ) { }
+
+  ngOnInit(): void {
+    this.taskService.task.subscribe(task => {
+      this.task = task;
+      this.taskForm.reset();
+    });
+
+    this.taskForm = this.formBuilder.group({
+      description: [this.task.description, Validators.required],
+      type: [this.task.type, Validators.required],
+      options: [this.task.options?.map(opt => opt.value)],
+      learn: [this.task.learn],
+      hidden: [this.task.hidden]
+    });
+
+    this.taskForm.valueChanges.subscribe(task => {
+      this.task.description = task.description;
+      this.task.type = task.type;
+      this.task.options = this.toOptions(task.options);
+      this.task.learn = task.learn;
+      this.task.hidden = task.hidden;
+      this.taskChanged.emit(this.task);
+    });
   }
 
   private checkOptions(value: typeof TASK_TYPES) {
+    const formOptions = this.taskForm.get('options');
     this.showOptions = value[0].options;
-    if (this.showOptions)
-      this.taskForm.get('options')?.setValidators([Validators.required]);
-    else
-      this.taskForm.get('options')?.setValidators([]);
 
-    this.taskForm.get('options')?.updateValueAndValidity();
+    if (this.showOptions)
+      formOptions?.setValidators([Validators.required]);
+    else
+      formOptions?.setValidators([]);
+
+    formOptions?.updateValueAndValidity();
   }
 
   private checkLearn(value: typeof TASK_TYPES) {
+    const formLearn = this.taskForm.get('learn');
+
     if (value[0].learn) {
-      this.taskForm.get('learn')?.enable();
+      formLearn?.enable();
     } else {
-      this.taskForm.get('learn')?.disable();
-      this.taskForm.get('learn')?.setValue(false);
+      formLearn?.disable();
+      formLearn?.setValue(false);
     }
   }
 
-  onHelperChanged(event: Helper) {
-    this.taskForm.get('helper_content')?.setValue(event.content);
-    this.taskForm.get('helper_renderType')?.setValue(event.renderType);
+  private toOptions(options: string): Option[] {
+    if (options) {
+      const opts = options.split(',');
+      return options.split(',').map(opt => new Option(opt.trim()));
+    }
+    
+    return [];
+  };
+
+  onHelperChanged(helper: Helper) {
+    this.task.helper = helper;
+    this.taskChanged.emit(this.task);
   }
 
   onTypeChange() {
     const value = TASK_TYPES.filter(selection =>
-      this.taskForm.get('type')?.value === selection.value);
+      this.task.type === selection.value);
 
     if (value.length) {
       this.checkLearn(value);
@@ -54,45 +94,3 @@ export class TaskDetailComponent implements OnChanges {
   }
 
 }
-
-export const toOptions = (options: string): Option[] | null => {
-  if (options) {
-    const opts = options.split(',');
-    return options.split(',').map(opt => new Option(opt.trim()));
-  }
-  return null;
-};
-
-const TASK_TYPES = [
-  {
-    name: 'Plain text',
-    value: 'TEXT',
-    learn: false,
-    options: false
-  }, {
-    name: 'Plain multiline text',
-    value: 'MULTILINE_TEXT',
-    learn: false,
-    options: false
-  }, {
-    name: 'Number',
-    value: 'NUMBER',
-    learn: true,
-    options: false
-  }, {
-    name: 'Checkbox',
-    value: 'CHECK',
-    learn: true,
-    options: false
-  }, {
-    name: 'Radio',
-    value: 'RADIO',
-    learn: true,
-    options: true
-  }, {
-    name: 'Drilldown',
-    value: 'DRILLDOWN',
-    learn: true,
-    options: true
-  }
-];

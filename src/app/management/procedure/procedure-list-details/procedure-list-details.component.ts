@@ -20,7 +20,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   @Input() procedure?: Procedure;
   @Input() editable: boolean = false;
 
-  procedureTasks = new Subject<Task[]>();
+  tasksSubject = new Subject<Task[]>();
   procedureForm!: FormGroup;
   error: string = '';
 
@@ -38,7 +38,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   }
 
   ngAfterViewInit(): void {
-    this.procedureTasks.next(this.procedure?.tasks);
+    this.tasksSubject.next(this.procedure?.tasks);
   }
 
   ngOnDestroy() {

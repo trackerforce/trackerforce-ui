@@ -5,12 +5,12 @@ export class Procedure {
     id?: string;
     name?: string;
     description?: string;
-    tasks?: Task[];
+    tasks?: Task[] = [];
     status?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    helper?: Helper;
-    hook?: Hook;
+    helper?: Helper = new Helper();
+    hook?: Hook = new Hook();
 }
 
 export class Hook {

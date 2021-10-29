@@ -17,9 +17,10 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
+
   @Input() procedureChild: boolean = false;
   @Input() editable: boolean = false;
-  @Input() procedureTasks!: Subject<Task[]>;
+  @Input() tasksSubject!: Subject<Task[]>;
   @Output() removeTask = new EventEmitter<Task>();
 
   displayedColumns: string[] = ['action', 'description'];
@@ -56,9 +57,8 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadProcedureData() {
-    this.procedureTasks.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
+    this.tasksSubject.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
       if (data) {
-        this.loading = false;
         this.dataSource = new MatTableDataSource(data);
         this.resultsLength = data.length;
         this.loading = false;

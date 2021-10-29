@@ -8,12 +8,10 @@
                 <span class="hide">Create Templates to start new Session Cases</span>
             </mat-panel-description>
         </mat-expansion-panel-header>
-
-        <app-template-detail 
-            (addProcedure)="onAddProcedure($event)" 
-            (removeProcedure)="onRemoveProcedure($event)"
-            [templateForm]="templateForm"
-            [loading]="false">
+        
+        <app-template-detail
+            (templateChanged)="onTemplateChange($event)"
+            [template]="template">
         </app-template-detail>
         <div>
             <button type="submit" (click)="onSubmit(); mep.expanded = !error ? false : true;" mat-raised-button

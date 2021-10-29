@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -18,12 +17,10 @@ export class TaskEditComponent implements OnInit, OnDestroy {
   private _taskid: string = '';
 
   loading = true;
-  taskForm!: FormGroup;
   error: string = '';
-  task?: Task = undefined;
+  task = new Task();
 
   constructor(
-    private formBuilder: FormBuilder,
     private taskService: TaskService,
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -34,25 +31,17 @@ export class TaskEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+    this.taskService.getTask(this._taskid)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(task => {
+        if (task) {
+          this.task = task;
 
-    this.taskForm = this.formBuilder.group({});
-    this.taskService.getTask(this._taskid).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
-      if (task) {
-        this.task = task;
-        this.taskForm = this.formBuilder.group({
-          description: [this.task.description, Validators.required],
-          type: [this.task.type, Validators.required],
-          options: [this.task.options?.map(opt => opt.value)],
-          learn: [this.task.learn],
-          hidden: [this.task.hidden],
-          helper_content: [this.task.helper?.content],
-          helper_renderType: [this.task.helper?.renderType]
-        });
+        this.loading = false
       }
     }, error => {
       ConsoleLogger.printError('Failed to load Task', error);
       this.error = error;
-    }, () => {
       this.loading = false;
     });
   }
@@ -62,10 +51,11 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
+  onTaskChange(task: Task) {
+    this.task = task;
+  }
+
   onSubmit() {
-    if (this.taskForm?.invalid)
-      return;
-      
     return this.router.navigate([`${this.authService.getManagementOrgPath()}/tasks`]);
   }
 
@@ -74,7 +64,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
   }
 
   hasOptions(): boolean {
-    return this.taskForm.get('options')?.value;
+    return this.task.options ? this.task.options.length > 0 : false;
   }
 
 }

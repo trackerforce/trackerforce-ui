@@ -1,4 +1,4 @@
-<form class="form-container" [formGroup]="form">
+<form class="form-container" [formGroup]="formGroup">
     <mat-divider class="col"></mat-divider>
     <div class="row panel-checks-title">
         <mat-icon>help</mat-icon>
@@ -11,14 +11,14 @@
     </div>
     <mat-form-field appearance="fill">
         <mat-label>Content</mat-label>
-        <input matInput type="text" id="helper_content" maxlength="200" placeholder="Content"
-            formControlName="helper_content" autocomplete="off">
+        <input matInput type="text" id="content" maxlength="200" placeholder="Content"
+            formControlName="content" autocomplete="off">
     </mat-form-field>
     <div class="row">
         <div class="col">
             <mat-form-field appearance="fill">
                 <mat-label>Render Type</mat-label>
-                <mat-select id="helper_renderType" formControlName="helper_renderType">
+                <mat-select id="renderType" formControlName="renderType">
                     <mat-option *ngFor="let type of displayRenderTypes" [value]="type">
                         {{type}}
                     </mat-option>

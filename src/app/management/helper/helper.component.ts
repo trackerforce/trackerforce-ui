@@ -1,34 +1,41 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Helper } from 'src/app/models/helper';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-helper',
   templateUrl: './helper.component.html',
   styleUrls: ['./helper.component.scss']
 })
-export class HelperComponent implements AfterViewInit {
-  @Input() form!: FormGroup;
+export class HelperComponent implements OnInit {
+  @Input() helper!: Helper;
   @Output() selectedHelper = new EventEmitter<Helper>();
 
+  formGroup!: FormGroup;
   displayRenderTypes: string[] = ['PLAINTEXT', 'MARKDOWN', 'HTML'];
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private helperService: HelperService
   ) { }
 
-  ngAfterViewInit(): void {
-    this.form = this.formBuilder.group({
-      helper_content: [this.form.get('helper_content')?.value],
-      helper_renderType: [this.form.get('helper_renderType')?.value]
+  ngOnInit(): void {
+    this.formGroup = this.formBuilder.group({
+      content: [this.helper?.content],
+      renderType: [this.helper?.renderType]
     });
 
-    this.form.valueChanges.subscribe(helper => {
-      this.selectedHelper.emit({
-        content: helper.helper_content,
-        renderType: helper.helper_renderType
+    this.helperService.helper.subscribe(helper => {
+      this.helper = helper;
+      this.formGroup.patchValue({
+        content: this.helper?.content || '',
+        renderType: this.helper?.renderType || 'PLAINTEXT'
       });
     });
+    
+    this.formGroup.valueChanges.subscribe(helper => 
+      this.selectedHelper.emit(helper));
   }
 
 }
