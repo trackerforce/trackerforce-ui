@@ -69,5 +69,9 @@ export class ProcedureDetailComponent implements OnInit, AfterViewInit {
     this.procedure.tasks = this.procedure?.tasks!.filter(t => t.id !== task.id);
     this.procedureChanged.emit(this.procedure);
   }
+  
+  hasTasks(): boolean {
+    return this.procedure.tasks! && this.procedure.tasks.length > 0;
+  }
 
 }

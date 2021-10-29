@@ -68,4 +68,8 @@ export class TemplateDetailComponent implements OnInit, AfterViewInit {
     this.templateChanged.emit(this.template);
   }
 
+  hasProcedures(): boolean {
+    return this.template.procedures! && this.template.procedures.length > 0;
+  }
+
 }
