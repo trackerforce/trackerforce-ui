@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements AfterViewInit {
 
   tenant: string | undefined;
   currentView: string = 'home'
@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
     this.route.params.subscribe(params => this.tenant = params.tenant || this.authService.getUserInfo('tenant'));
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.route.url.subscribe(() =>  this.setMenuSelection(this.route.snapshot?.firstChild?.data.view));
   }
 
