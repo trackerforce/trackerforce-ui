@@ -71,7 +71,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError(error);
-      this.error = error;
+      this.error = 'Please, review your access code';
     });
   }
 

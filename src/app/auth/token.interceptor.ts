@@ -29,6 +29,8 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
     
     return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401 
+        && request.url !== `${environment.identityServiceUrl}/identity/agent/v1/activate`
+        && request.url !== `${environment.identityServiceUrl}/identity/v1/register`
         && request.url !== `${environment.identityServiceUrl}/identity/v1/authenticate`
         && request.url !== `${environment.identityServiceUrl}/identity/v1/refresh`) {
         return this.handle401Error(request, next);
