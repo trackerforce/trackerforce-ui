@@ -69,7 +69,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
         }
       }, error => {
         ConsoleLogger.printError('Failed to update Template', error);
-        this.error = error;
+        this.error = error.error;
       });
 
   }

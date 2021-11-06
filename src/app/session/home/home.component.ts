@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.loading = false;
       }, error => {
         ConsoleLogger.printError('Failed to create new Case', error);
-        this.error = error;
+        this.error = error.error;
         this.loading = false;
       });
   }

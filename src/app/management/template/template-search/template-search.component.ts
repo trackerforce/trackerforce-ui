@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TemplateService } from 'src/app/services/template.service';
+import { Template } from 'src/app/models/template';
 
 @Component({
   selector: 'app-template-search',
@@ -8,13 +8,13 @@ import { TemplateService } from 'src/app/services/template.service';
   styleUrls: ['./template-search.component.scss']
 })
 export class TemplateSearchComponent implements OnInit {
+  @Output() templateSearched = new EventEmitter<Template>();
 
   templateForm!: FormGroup;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private templateService: TemplateService
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -28,7 +28,7 @@ export class TemplateSearchComponent implements OnInit {
     if (this.templateForm?.invalid)
       return;
 
-    this.templateService.template.next({
+    this.templateSearched.emit({
       name: this.templateForm.get('name')?.value,
       description: this.templateForm.get('description')?.value
     });
@@ -37,7 +37,7 @@ export class TemplateSearchComponent implements OnInit {
   onClear() {
     this.templateForm.reset();
     this.templateForm.clearValidators();
-    this.templateService.template.next({});
+    this.templateSearched.emit({});
   }
 
 }

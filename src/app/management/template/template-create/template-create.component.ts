@@ -55,7 +55,7 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Template', error);
-      this.error = error;
+      this.error = error.error;
     });
   }
 

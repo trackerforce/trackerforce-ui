@@ -55,7 +55,7 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
         }
       }, error => {
         ConsoleLogger.printError('Failed to update feature', error);
-        this.error = error;
+        this.error = error.error;
       });
   }
 

@@ -5,9 +5,9 @@
         <app-template-create class="col"></app-template-create>
     </div>
     <div class="row">
-        <app-template-search class="col"></app-template-search>
+        <app-template-search (templateSearched)="onTemplateSearched($event)" class="col"></app-template-search>
     </div>
     <div class="row">
-        <app-template-list class="col"></app-template-list>
+        <app-template-list [filter]="templateFilter" class="col"></app-template-list>
     </div>
 </div>

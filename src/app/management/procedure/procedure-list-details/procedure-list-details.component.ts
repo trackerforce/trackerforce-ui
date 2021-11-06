@@ -70,7 +70,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
         }
       }, error => {
         ConsoleLogger.printError('Failed to update Procedure', error);
-        this.error = error;
+        this.error = error.error;
       });
   }
 

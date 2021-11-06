@@ -5,9 +5,9 @@
         <app-procedure-create class="col"></app-procedure-create>
     </div>
     <div class="row">
-        <app-procedure-search class="col"></app-procedure-search>
+        <app-procedure-search (procedureSearched)="onProcedureSearched($event)" class="col"></app-procedure-search>
     </div>
     <div class="row">
-        <app-procedure-list [editable]="true" class="col"></app-procedure-list>
+        <app-procedure-list [filter]="procedureFilter" [editable]="true" class="col"></app-procedure-list>
     </div>
 </div>

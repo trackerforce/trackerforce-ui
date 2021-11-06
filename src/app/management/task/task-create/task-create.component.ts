@@ -59,7 +59,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         }
     }, error => {
       ConsoleLogger.printError('Failed to create Task', error);
-      this.error = error;
+      this.error = error.error;
     });
   }
 

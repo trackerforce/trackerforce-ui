@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TaskService } from 'src/app/services/task.service';
+import { Task } from 'src/app/models/task';
 
 @Component({
   selector: 'app-task-search',
@@ -8,13 +8,13 @@ import { TaskService } from 'src/app/services/task.service';
   styleUrls: ['./task-search.component.scss']
 })
 export class TaskSearchComponent implements OnInit {
+  @Output() taskSearched = new EventEmitter<Task>();
 
   taskForm!: FormGroup;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private taskService: TaskService
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class TaskSearchComponent implements OnInit {
     if (this.taskForm?.invalid)
       return;
 
-    this.taskService.task.next({
+    this.taskSearched.emit({
       description: this.taskForm.get('description')?.value
     });
   }
@@ -35,7 +35,7 @@ export class TaskSearchComponent implements OnInit {
   onClear() {
     this.taskForm.reset();
     this.taskForm.clearValidators();
-    this.taskService.task.next({});
+    this.taskSearched.emit({});
   }
 
 }

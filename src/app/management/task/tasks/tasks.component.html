@@ -5,9 +5,9 @@
         <app-task-create class="col"></app-task-create>
     </div>
     <div class="row">
-        <app-task-search class="col"></app-task-search>
+        <app-task-search (taskSearched)="onTaskSearched($event)" class="col"></app-task-search>
     </div>
     <div class="row">
-        <app-task-list [editable]="true" class="col"></app-task-list>
+        <app-task-list [filter]="taskFilter" [editable]="true" class="col"></app-task-list>
     </div>
 </div>

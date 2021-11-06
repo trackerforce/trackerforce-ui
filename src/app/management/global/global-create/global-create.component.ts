@@ -58,7 +58,7 @@ export class GlobalCreateComponent implements OnInit, OnDestroy {
       this.globalService.global.next(undefined);
     }, error => {
       ConsoleLogger.printError('Failed to create Global', error);
-      this.error = error;
+      this.error = error.error;
     });
   }
 

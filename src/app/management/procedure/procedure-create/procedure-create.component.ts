@@ -56,7 +56,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Procedure', error);
-      this.error = error;
+      this.error = error.error;
     });
   }
 

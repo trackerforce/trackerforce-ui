@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ProcedureService } from 'src/app/services/procedure.service';
+import { Procedure } from 'src/app/models/procedure';
 
 @Component({
   selector: 'app-procedure-search',
@@ -8,13 +8,13 @@ import { ProcedureService } from 'src/app/services/procedure.service';
   styleUrls: ['./procedure-search.component.scss']
 })
 export class ProcedureSearchComponent implements OnInit {
+  @Output() procedureSearched = new EventEmitter<Procedure>();
 
   procedureForm!: FormGroup;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private procedureService: ProcedureService
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -28,7 +28,7 @@ export class ProcedureSearchComponent implements OnInit {
     if (this.procedureForm?.invalid)
       return;
 
-    this.procedureService.procedure.next({
+    this.procedureSearched.emit({
       name: this.procedureForm.get('name')?.value,
       description: this.procedureForm.get('description')?.value
     });
@@ -37,7 +37,7 @@ export class ProcedureSearchComponent implements OnInit {
   onClear() {
     this.procedureForm.reset();
     this.procedureForm.clearValidators();
-    this.procedureService.procedure.next({});
+    this.procedureSearched.emit({});
   }
 
 }

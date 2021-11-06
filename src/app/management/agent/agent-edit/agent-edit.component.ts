@@ -49,7 +49,7 @@ export class AgentEditComponent implements OnInit, OnDestroy {
         }
     }, error => {
       ConsoleLogger.printError('Failed to load Agent', error);
-      this.error = error;
+      this.error = error.error;
     }, () => {
       this.loading = false;
     });

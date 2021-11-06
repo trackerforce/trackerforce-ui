@@ -22,7 +22,7 @@
         <mat-label>Hidden</mat-label>
         <input matInput [value]="task?.hidden" [readonly]=true>
     </mat-form-field>
-    <mat-form-field *ngIf="task?.options" appearance="outline">
+    <mat-form-field *ngIf="task?.options?.length" appearance="outline">
         <mat-label>Options</mat-label>
         <mat-select>
             <mat-option *ngFor="let option of task?.options">

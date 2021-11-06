@@ -40,7 +40,7 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
         this.loading = false;
       }, error => {
         ConsoleLogger.printError('Failed to load Procedure', error);
-        this.error = error;
+        this.error = error.error;
         this.loading = false;
       });
   }

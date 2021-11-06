@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Procedure } from 'src/app/models/procedure';
 
 @Component({
   selector: 'app-procedures',
@@ -6,4 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./procedures.component.scss']
 })
 export class ProceduresComponent {
+
+  procedureFilter = new Subject<Procedure>();
+
+  onProcedureSearched(procedure: Procedure) {
+    this.procedureFilter.next(procedure);
+  }
 }

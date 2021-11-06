@@ -18,6 +18,7 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
+  @Input() filter?: Subject<Task>
   @Input() procedureChild: boolean = false;
   @Input() editable: boolean = false;
   @Input() tasksSubject!: Subject<Task[]>;
@@ -39,6 +40,8 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
+    
     if (this.procedureChild)
       this.loadProcedureData();
   }
@@ -46,7 +49,6 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     if (!this.procedureChild) {
       this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-      this.taskService.task.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
       this.loadData();
     }
   }

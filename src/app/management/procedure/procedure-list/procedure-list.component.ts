@@ -18,6 +18,7 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
+  @Input() filter?: Subject<Procedure>
   @Input() templateChild!: boolean;
   @Input() editable: boolean = false;
   @Input() proceduresSubject!: Subject<Procedure[]>;
@@ -39,6 +40,8 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   ) { }
 
   ngOnInit(): void {
+    this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
+    
     if (this.templateChild)
       this.loadTemplateData();
   }
@@ -46,7 +49,6 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit(): void {
     if (!this.templateChild) {
       this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-      this.procedureService.procedure.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
       this.loadData();
     }
   }

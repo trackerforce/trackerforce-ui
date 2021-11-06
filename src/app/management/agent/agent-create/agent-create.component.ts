@@ -49,7 +49,7 @@ export class AgentCreateComponent implements OnInit, OnDestroy {
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Agent', error);
-      this.error = error;
+      this.error = error.error;
     });
   }
 
