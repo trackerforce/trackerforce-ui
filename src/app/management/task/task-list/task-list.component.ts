@@ -41,6 +41,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
+    this.taskService.task.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
     
     if (this.procedureChild)
       this.loadProcedureData();

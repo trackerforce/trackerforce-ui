@@ -41,6 +41,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngOnInit(): void {
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
+    this.procedureService.procedure.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
     
     if (this.templateChild)
       this.loadTemplateData();

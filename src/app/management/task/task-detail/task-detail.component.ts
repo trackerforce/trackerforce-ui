@@ -69,13 +69,13 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-  private toOptions(options: string): Option[] {
+  private toOptions(options: string): Option[] | null {
     if (options) {
       const opts = options.split(',');
       return options.split(',').map(opt => new Option(opt.trim()));
     }
     
-    return [];
+    return null;
   };
 
   onHelperChanged(helper: Helper) {

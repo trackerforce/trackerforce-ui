@@ -36,6 +36,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(template => this.loadData(template));
+    this.templateService.template.pipe(takeUntil(this.unsubscribe)).subscribe(template => this.loadData(template));
   }
 
   ngAfterViewInit(): void {
