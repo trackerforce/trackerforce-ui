@@ -20,7 +20,11 @@
     <ng-container matColumnDef="expandedDetail">
         <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
             <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                <app-procedure-list-details [procedure]="element" [editable]="editable"></app-procedure-list-details>
+                <app-procedure-list-details 
+                    [procedure]="element" 
+                    [editable]="editable"
+                    (procedureChanged)="onProcedureChanged($event)">
+                </app-procedure-list-details>
             </div>
         </td>
     </ng-container>

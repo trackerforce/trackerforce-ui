@@ -112,4 +112,14 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+  onProcedureChanged(selectedProcedure: Procedure) {
+    for (const iterator of this.dataSource.data) {
+      if (iterator.id === selectedProcedure.id) {
+        iterator.name = selectedProcedure.name;
+        iterator.description = selectedProcedure.description;
+        break;
+      }
+    }
+  }
+
 }

@@ -42,7 +42,7 @@ export class TemplateService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
-  public updateTemplate(template: Template, helper: Helper): Observable<Template> {
+  public updateTemplate(template: Template, helper?: Helper): Observable<Template> {
     return this.http.patch<Template>(`${environment.managementServiceUrl}/management/template/v1/${template.id}`, { 
       template: {
         name: template.name,

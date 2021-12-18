@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
@@ -19,6 +19,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
 
   @Input() procedure?: Procedure;
   @Input() editable: boolean = false;
+  @Output() procedureChanged = new EventEmitter<Procedure>();
 
   tasksSubject = new Subject<Task[]>();
   procedureForm!: FormGroup;
@@ -56,16 +57,12 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
       description: this.procedureForm.get('description')?.value,
     }
 
-    const helper: Helper = {
-      content: this.procedureForm.get('helper_content')?.value,
-      renderType: this.procedureForm.get('helper_renderType')?.value
-    }
-
-    this.procedureService.updateProcedure(procedure, helper)
+    this.procedureService.updateProcedure(procedure)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(procedure => {
         if (procedure) {
           this.procedure = procedure;
+          this.procedureChanged.emit(procedure);
           this.snackBar.open(`Procedure updated`, 'Close', { duration: 2000 });
         }
       }, error => {

@@ -42,7 +42,7 @@ export class ProcedureService extends ApiService {
       .pipe(catchError(super.handleError));
   }
 
-  public updateProcedure(procedure: Procedure, helper: Helper): Observable<Procedure> {
+  public updateProcedure(procedure: Procedure, helper?: Helper): Observable<Procedure> {
     return this.http.patch<Procedure>(`${environment.managementServiceUrl}/management/procedure/v1/${procedure.id}`, { 
       procedure: {
         name: procedure.name,

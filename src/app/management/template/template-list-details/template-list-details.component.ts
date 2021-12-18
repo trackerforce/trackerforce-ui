@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
@@ -18,6 +18,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
   private unsubscribe: Subject<void> = new Subject();
 
   @Input() template?: Template
+  @Output() templateChanged = new EventEmitter<Template>();
 
   proceduresSubject = new Subject<Procedure[]>();
   templateForm!: FormGroup;
@@ -65,6 +66,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
       .subscribe(template => {
         if (template) {
           this.template = template;
+          this.templateChanged.emit(template);
           this.snackBar.open(`Template updated`, 'Close', { duration: 2000 });
         }
       }, error => {

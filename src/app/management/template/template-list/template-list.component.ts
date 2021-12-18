@@ -80,4 +80,14 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
     return `/${this.authService.getManagementOrgPath()}/template/${templateid}`
   }
 
+  onTemplateChanged(selectedTemplate: Template) {
+    for (const iterator of this.dataSource.data) {
+      if (iterator.id === selectedTemplate.id) {
+        iterator.name = selectedTemplate.name;
+        iterator.description = selectedTemplate.description;
+        break;
+      }
+    }
+  }
+
 }
