@@ -26,7 +26,7 @@ export class SessionService extends ApiService {
   }
 
   public createCase(templateId: string, sessionId: string): Observable<Case> {
-    return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1`, {
+    return this.http.post<Case>(`${environment.sessionServiceUrl}/session/case/v1/create`, {
       agent_id: sessionId,
       template: templateId
     }).pipe(catchError(super.handleError));
