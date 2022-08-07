@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.onSubmitNewCase();
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
   }
 

@@ -47,12 +47,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.authService.signup({
       email: this.f.email.value,
       password: this.f.password.value
-    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-      if (success) {
-        this.router.navigateByUrl('/login');
-        this.authService.releaseOldSessions.emit(true);
-      }
-    }, error => {
+    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => this.onSuccess(success)
+    , error => {
       ConsoleLogger.printError(error);
       this.error = error;
     });
@@ -63,15 +59,18 @@ export class SignupComponent implements OnInit, OnDestroy {
       email: this.f.email.value,
       password: this.f.password.value,
       access_code: this.f.temp_password.value
-    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-      if (success) {
-        this.router.navigateByUrl('/login');
-        this.authService.releaseOldSessions.emit(true);
-      }
-    }, error => {
+    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => this.onSuccess(success)
+    , error => {
       ConsoleLogger.printError(error);
       this.error = 'Please, review your access code';
     });
+  }
+
+  private onSuccess(success: boolean) {
+    if (success) {
+      this.router.navigateByUrl('/login');
+      this.authService.releaseOldSessions.emit(true);
+    }
   }
 
   ngOnDestroy() {
@@ -89,7 +88,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.onSubmitAdmin();
   }
 
-  onKey(event: any) {
+  onKey(_event: any) {
     this.error = '';
   }
 

@@ -61,15 +61,17 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
     const sessionid = this.authService.getUserInfo('sessionid');
     this.agentService.watchCase(sessionid, sessionCase.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(_ => {}, error => ConsoleLogger.printError('Failed to following case', error));
+      .subscribe(_agent => {
+        return;
+      }, error => ConsoleLogger.printError('Failed to following case', error));
   }
 
   onProcedureChanged(procedure: Procedure) {
-    var found = false;
-    for (let i = 0; i < this.sessionCase.procedures!.length; i++) {
-      if (this.sessionCase.procedures![i].id == procedure.id) {
-        this.sessionCase.procedures![i].status = procedure.status;
-        this.sessionCase.procedures![i].tasks = procedure.tasks;
+    let found = false;
+    for (const it of this.sessionCase.procedures!) {
+      if (it.id == procedure.id) {
+        it.status = procedure.status;
+        it.tasks = procedure.tasks;
         found = true;
         break;
       }
