@@ -41,7 +41,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const helper: Helper = this.task?.helper!;
-    const task: Task = {
+    const newTask: Task = {
       description: this.task.description,
       type: this.task.type,
       learn: this.task.learn,
@@ -49,12 +49,12 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       options: this.task.options
     }
 
-    this.taskService.createTask(task, helper)
+    this.taskService.createTask(newTask, helper)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(task => {
         if (task) {
           this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
-          this.taskSubject.next(undefined);
+          this.taskSubject.next();
           this.onCancel();
         }
     }, error => {
@@ -64,7 +64,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.helperService.helper.next(undefined);
+    this.helperService.helper.next();
     this.taskService.task.next(new Task());
   }
   

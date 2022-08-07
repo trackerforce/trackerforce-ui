@@ -46,12 +46,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authService.login({
             email: this.f?.email.value,
             password: this.f?.password.value
-        }).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-            if (success) {
-                this.router.navigateByUrl(this.returnUrl || this.authService.getManagementOrgPath());
-                this.authService.releaseOldSessions.emit(true);
-            }
-        }, error => {
+        })
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(success => this.onSuccess(success)
+        , error => {
             ConsoleLogger.printError(error);
             this.error = error;
         });
@@ -61,15 +59,19 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authService.loginAgent({
             email: this.f.email.value,
             password: this.f.password.value
-        }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => {
-            if (success) {
-                this.router.navigateByUrl(this.returnUrl || this.authService.getManagementOrgPath());
-                this.authService.releaseOldSessions.emit(true);
-            }
-        }, error => {
+        }, this.f.tenant.value)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(success => this.onSuccess(success)
+        , error => {
             ConsoleLogger.printError(error);
             this.error = error;
         });
+    }
+
+    private onSuccess(success: boolean) {
+        if (!success) return;
+        this.router.navigateByUrl(this.returnUrl || this.authService.getManagementOrgPath());
+        this.authService.releaseOldSessions.emit(true);
     }
 
     ngOnDestroy() {
@@ -87,7 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.onSubmitAdmin();
     }
 
-    onKey(event: any) {
+    onKey(_event: any) {
         this.error = '';
     }
 

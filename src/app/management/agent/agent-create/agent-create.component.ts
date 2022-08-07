@@ -45,7 +45,7 @@ export class AgentCreateComponent implements OnInit, OnDestroy {
     }).pipe(takeUntil(this.unsubscribe)).subscribe(agent => {
       if (agent) {
         this.snackBar.open(`Access code: ${agent.temp_access}`, 'Close');
-        this.agentService.agent.next(undefined);
+        this.agentService.agent.next();
       }
     }, error => {
       ConsoleLogger.printError('Failed to create Agent', error);

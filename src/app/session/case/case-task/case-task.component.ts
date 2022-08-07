@@ -55,10 +55,11 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   private defaultResponse() {
     if (this.isTaskDone())
       this.iconClass = "task-done";
-      
-    return this.task.type === 'CHECK' ? 
-      this.task.response == undefined ? false : this.task.response 
-      : this.task.response;
+
+    if (this.task.type === 'CHECK')
+      return this.task.response == undefined ? false : this.task.response;
+
+    return this.task.response;
   }
 
   isTaskDone() {

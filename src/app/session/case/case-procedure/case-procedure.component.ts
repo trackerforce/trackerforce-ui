@@ -57,11 +57,17 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
     return this.sessionService.saveProcedure(caseid, this.procedure)
       .pipe(takeUntil(this.unsubscribe));
   }
+
+  private onError(error: any) {
+    ConsoleLogger.printError('Failed to save Procedure', error);
+    this.snackBar.open(`Something went wrong`, 'Close');
+    this.loading = false;
+  }
   
   onTaskChange(task: Task) {
     for (let t of this.procedure.tasks!) {
       if (t.id === task.id) {
-        t = task;
+        // t = task; you meant copy?
         break;
       }
     }
@@ -78,11 +84,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
         this.eventChange.emit(this.procedure);
         this.snackBar.open(`Procedure saved`, 'Close', { duration: 3000 });
       }
-    }, error => {
-      ConsoleLogger.printError('Failed to save Procedure', error);
-      this.snackBar.open(`Something went wrong`, 'Close');
-      this.loading = false;
-    });
+    }, error => this.onError(error));
   }
 
   onSubmit() {
@@ -94,19 +96,15 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
       if (data) {
         this.sessionService.submitProcedure(this.caseid!, this.procedure.id!)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(data => {
-            if (data) {
-              this.procedure = data;
+          .subscribe(procedure => {
+            if (procedure) {
+              this.procedure = procedure;
               this.readProcedureStatuses();
               this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
               this.loading = false;
               this.eventChange.emit(this.procedure);
             }
-          }, error => {
-            ConsoleLogger.printError('Failed to save Procedure', error);
-            this.snackBar.open(`Something went wrong`, 'Close');
-            this.loading = false;
-          });
+          }, error => this.onError(error));
       }
     });
   }
@@ -118,7 +116,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
 
   canSubmit() {
     return this.open && 
-      this.procedure.tasks?.filter(task => task.response === undefined).length == 0;;
+      this.procedure.tasks?.filter(task => task.response === undefined).length == 0;
   }
 
   hasTasks() {

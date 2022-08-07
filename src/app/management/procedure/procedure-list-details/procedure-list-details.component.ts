@@ -51,13 +51,13 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
     if (this.procedureForm?.invalid)
       return;
 
-    const procedure: Procedure = {
+    const updatedProcedure: Procedure = {
       id: this.procedure?.id,
       name: this.procedureForm.get('name')?.value,
       description: this.procedureForm.get('description')?.value,
     }
 
-    this.procedureService.updateProcedure(procedure)
+    this.procedureService.updateProcedure(updatedProcedure)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(procedure => {
         if (procedure) {

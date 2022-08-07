@@ -50,7 +50,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
     if (this.templateForm?.invalid)
       return;
 
-    const template: Template = {
+    const updatedTemplate: Template = {
       id: this.template?.id,
       name: this.templateForm.get('name')?.value,
       description: this.templateForm.get('description')?.value,
@@ -61,7 +61,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
       renderType: this.templateForm.get('helper_renderType')?.value
     }
 
-    this.templateService.updateTemplate(template, helper)
+    this.templateService.updateTemplate(updatedTemplate, helper)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(template => {
         if (template) {

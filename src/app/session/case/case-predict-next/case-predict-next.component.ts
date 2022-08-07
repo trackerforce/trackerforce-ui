@@ -92,7 +92,7 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
     const selectedProcedure: Procedure = this.procedureForm.get('next_procedure')?.value;
     this.sessionService.resolveProcedure(this.caseid, this.procedure.id!, selectedProcedure.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => this.createProcedure(selectedProcedure), error => {
+      .subscribe(_data => this.createProcedure(selectedProcedure), error => {
         ConsoleLogger.printError('Failed to resolve Procedure', error);
         this.snackBar.open(`Something went wrong`, 'Close');
       });

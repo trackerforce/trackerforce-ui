@@ -41,16 +41,18 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const helper: Helper = this.template?.helper!;
-    const template: Template = {
+    const newTemplate: Template = {
       name: this.template.name,
       description: this.template.description,
       procedures: this.template.procedures
     }
 
-    this.templateService.createTemplate(template, helper).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
-      if (task) {
+    this.templateService.createTemplate(newTemplate, helper)
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(template => {
+      if (template) {
         this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
-        this.templateSubject.next(undefined);
+        this.templateSubject.next();
         this.onCancel();
       }
     }, error => {
@@ -60,7 +62,7 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.helperService.helper.next(undefined);
+    this.helperService.helper.next();
     this.templateService.template.next(new Template());
   }
   
