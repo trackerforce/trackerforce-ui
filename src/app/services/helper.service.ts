@@ -7,6 +7,6 @@ import { Helper } from "../models/helper";
 })
 export class HelperService {
     
-    public helper = new Subject<Helper>();
+    public helper = new Subject<Helper | undefined>();
 
 }

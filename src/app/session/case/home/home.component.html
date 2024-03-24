@@ -9,12 +9,12 @@
             <mat-card-content>
                 <mat-form-field appearance="outline">
                     <mat-label>Description</mat-label>
-                    <textarea matInput cdkTextareaAutosize type="text" [value]="sessionCase?.description" [readonly]="true"></textarea>
+                    <textarea matInput cdkTextareaAutosize type="text" [value]="sessionCase.description" [readonly]="true"></textarea>
                 </mat-form-field>
                 <div class="content-detail">
                     <mat-form-field appearance="outline">
                         <mat-label>Protocol</mat-label>
-                        <input matInput type="text" [value]="sessionCase?.protocol" [readonly]="true">
+                        <input matInput type="text" [value]="sessionCase.protocol" [readonly]="true">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Status</mat-label>
@@ -22,7 +22,7 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Created At</mat-label>
-                        <input matInput type="text" [value]="sessionCase?.createdAt | date:'short'" [readonly]="true">
+                        <input matInput type="text" [value]="sessionCase.createdAt | date:'short'" [readonly]="true">
                     </mat-form-field>
                 </div>
             </mat-card-content>
@@ -31,7 +31,7 @@
     <div class="procedure-component" *ngFor="let procedure of sessionCase?.procedures">
         <app-case-procedure
             [procedure]="procedure" 
-            [caseid]="sessionCase?.id"
+            [caseid]="sessionCase.id"
             (eventChange)="onProcedureChanged($event)">
         </app-case-procedure>
     </div>

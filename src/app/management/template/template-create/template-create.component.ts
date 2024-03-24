@@ -16,7 +16,7 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 export class TemplateCreateComponent implements OnInit, OnDestroy {
   private unsubscribe: Subject<void> = new Subject();
 
-  templateSubject: Subject<Template> = new Subject();
+  templateSubject: Subject<Template | undefined> = new Subject();
   template!: Template;
   error: string = '';
 
@@ -52,7 +52,7 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
     .subscribe(template => {
       if (template) {
         this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
-        this.templateSubject.next();
+        this.templateSubject.next(undefined);
         this.onCancel();
       }
     }, error => {
@@ -62,7 +62,7 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.helperService.helper.next();
+    this.helperService.helper.next(undefined);
     this.templateService.template.next(new Template());
   }
   

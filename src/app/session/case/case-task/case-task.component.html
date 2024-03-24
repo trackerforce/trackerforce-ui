@@ -1,7 +1,7 @@
 <form class="form-container" [formGroup]="taskForm">
     <section>
         <span [ngClass]="iconClass"><i class="fas fa-check"></i></span>
-        <mat-label>{{task?.description}}</mat-label>
+        <mat-label>{{task.description}}</mat-label>
     </section>
     <section>
         <mat-form-field *ngIf="type === 'TEXT'" appearance="outline">

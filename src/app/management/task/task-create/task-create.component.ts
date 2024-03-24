@@ -54,7 +54,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       .subscribe(task => {
         if (task) {
           this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
-          this.taskSubject.next();
+          this.taskSubject.next(task);
           this.onCancel();
         }
     }, error => {
@@ -64,7 +64,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.helperService.helper.next();
+    this.helperService.helper.next(undefined);
     this.taskService.task.next(new Task());
   }
   

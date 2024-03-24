@@ -15,7 +15,7 @@ export class TemplateDetailComponent implements OnInit, AfterViewInit {
   @Input() template!: Template;
   @Output() templateChanged = new EventEmitter<Template>();
 
-  proceduresSubject = new Subject<Procedure[]>();
+  proceduresSubject = new Subject<Procedure[] | undefined>();
   templateForm!: FormGroup;
 
   constructor(

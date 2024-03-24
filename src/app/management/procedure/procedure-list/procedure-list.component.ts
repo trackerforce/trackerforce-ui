@@ -21,7 +21,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   @Input() filter?: Subject<Procedure>
   @Input() templateChild!: boolean;
   @Input() editable: boolean = false;
-  @Input() proceduresSubject!: Subject<Procedure[]>;
+  @Input() proceduresSubject!: Subject<Procedure[] | undefined>;
   @Output() removeProcedure = new EventEmitter<Procedure>();
 
   displayedColumns: string[] = ['action', 'name'];

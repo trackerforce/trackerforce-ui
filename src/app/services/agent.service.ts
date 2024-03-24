@@ -12,7 +12,7 @@ import { Agent } from '../models/agent';
 })
 export class AgentService extends ApiService {
 
-  public agent = new Subject<Agent>();
+  public agent = new Subject<Agent | undefined>();
 
   constructor(private http: HttpClient) {
     super();

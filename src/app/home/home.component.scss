@@ -1,6 +1,6 @@
 .home-content {
   text-align: center;
-  height: 90vh;
+  height: 92vh;
   background: #24292e;
 }
 
@@ -93,10 +93,6 @@
 }
 
 @media only screen and (max-width: 1200px) {
-  #footer {
-    position: relative;
-  }
-
   .spacer {
     display: inherit;
     width: 80%;
@@ -113,6 +109,7 @@
 
   .home-section .home-container {
     display: inherit;
+    height: 92vh;
   }
 
   .home-content {

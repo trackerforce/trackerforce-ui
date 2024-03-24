@@ -9,7 +9,7 @@ import { HelperService } from 'src/app/services/helper.service';
   styleUrls: ['./helper.component.scss']
 })
 export class HelperComponent implements OnInit {
-  @Input() helper!: Helper;
+  @Input() helper!: Helper | undefined;
   @Output() selectedHelper = new EventEmitter<Helper>();
 
   formGroup!: FormGroup;

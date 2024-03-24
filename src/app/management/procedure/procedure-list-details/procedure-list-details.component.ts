@@ -21,7 +21,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   @Input() editable: boolean = false;
   @Output() procedureChanged = new EventEmitter<Procedure>();
 
-  tasksSubject = new Subject<Task[]>();
+  tasksSubject = new Subject<Task[] | undefined>();
   procedureForm!: FormGroup;
   error: string = '';
 

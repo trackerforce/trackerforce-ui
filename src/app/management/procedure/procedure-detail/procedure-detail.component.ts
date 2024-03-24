@@ -15,7 +15,7 @@ export class ProcedureDetailComponent implements OnInit, AfterViewInit {
   @Input() procedure!: Procedure;
   @Output() procedureChanged = new EventEmitter<Procedure>();
 
-  tasksSubject = new Subject<Task[]>();
+  tasksSubject = new Subject<Task[] | undefined>();
   procedureForm!: FormGroup;
 
   constructor(

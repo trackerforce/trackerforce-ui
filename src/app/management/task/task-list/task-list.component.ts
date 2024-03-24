@@ -21,7 +21,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() filter?: Subject<Task>
   @Input() procedureChild: boolean = false;
   @Input() editable: boolean = false;
-  @Input() tasksSubject!: Subject<Task[]>;
+  @Input() tasksSubject!: Subject<Task[] | undefined>;
   @Output() removeTask = new EventEmitter<Task>();
 
   displayedColumns: string[] = ['action', 'description'];

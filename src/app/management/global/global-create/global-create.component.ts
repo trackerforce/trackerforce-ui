@@ -55,7 +55,7 @@ export class GlobalCreateComponent implements OnInit, OnDestroy {
       attributes
     }).pipe(takeUntil(this.unsubscribe)).subscribe(_global => {
       this.snackBar.open(`New feature has succesfully added`, 'Close', { duration: 2000 });
-      this.globalService.global.next();
+      this.globalService.global.next(_global);
     }, error => {
       ConsoleLogger.printError('Failed to create Global', error);
       this.error = error.error;
