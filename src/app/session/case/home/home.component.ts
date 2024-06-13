@@ -20,7 +20,7 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   
   loading = true;
   error: string = '';
-  sessionCase!: Case;
+  sessionCase?: Case;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,7 +68,7 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
 
   onProcedureChanged(procedure: Procedure) {
     let found = false;
-    for (const it of this.sessionCase.procedures!) {
+    for (const it of this.sessionCase?.procedures!) {
       if (it.id == procedure.id) {
         it.status = procedure.status;
         it.tasks = procedure.tasks;
