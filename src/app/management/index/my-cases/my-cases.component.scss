@@ -63,6 +63,7 @@ tr.element-row:not(.expanded-row):active {
 
 .element-description {
   width: 100%;
+  margin-top: 1rem;
   display: inline-grid;
   
   mat-form-field {

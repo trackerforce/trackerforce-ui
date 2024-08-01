@@ -45,6 +45,8 @@ tr.element-row:not(.expanded-row):active {
 }
 
 .element-description {
+  margin-top: 1rem;
+  
   mat-form-field {
     margin-left: 1rem;
   }
