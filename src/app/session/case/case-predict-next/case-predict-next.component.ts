@@ -10,10 +10,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-case-predict-next',
   templateUrl: './case-predict-next.component.html',
-  styleUrls: ['./case-predict-next.component.scss']
+  styleUrls: ['./case-predict-next.component.scss'],
+  standalone: false
 })
 export class CasePredictNextComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   @Input() procedure!: Procedure;
   @Input() caseid?: string;
   @Output() eventChange = new EventEmitter<Procedure>();
@@ -25,9 +26,9 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
   procedureForm!: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private sessionService: SessionService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly sessionService: SessionService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -70,19 +71,22 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
   private createProcedure(selectedProcedure: Procedure) {
     this.sessionService.createProcedure(this.caseid!, selectedProcedure.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.eventChange.emit(selectedProcedure);
-          this.snackBar.open(`Procedure created`, 'Close', { duration: 3000 });
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.eventChange.emit(selectedProcedure);
+            this.snackBar.open(`Procedure created`, 'Close', { duration: 3000 });
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to create new Procedure', error);
+          this.snackBar.open(`Something went wrong`, 'Close');
         }
-      }, error => {
-        ConsoleLogger.printError('Failed to create new Procedure', error);
-        this.snackBar.open(`Something went wrong`, 'Close');
       });
   }
 
   displayFn(procedure: Procedure): string {
-    return procedure && procedure.name ? procedure.name : '';
+    return procedure?.name ?? '';
   }
 
   onNext() {
@@ -92,9 +96,12 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
     const selectedProcedure: Procedure = this.procedureForm.get('next_procedure')?.value;
     this.sessionService.resolveProcedure(this.caseid, this.procedure.id!, selectedProcedure.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(_data => this.createProcedure(selectedProcedure), error => {
-        ConsoleLogger.printError('Failed to resolve Procedure', error);
-        this.snackBar.open(`Something went wrong`, 'Close');
+      .subscribe({
+        next: _data => this.createProcedure(selectedProcedure),
+        error: error => {
+          ConsoleLogger.printError('Failed to resolve Procedure', error);
+          this.snackBar.open(`Something went wrong`, 'Close');
+        }
       });
   }
 

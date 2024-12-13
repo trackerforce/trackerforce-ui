@@ -11,19 +11,20 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-procedure-create',
   templateUrl: './procedure-create.component.html',
-  styleUrls: ['./procedure-create.component.scss']
+  styleUrls: ['./procedure-create.component.scss'],
+  standalone: false
 })
 export class ProcedureCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   procedureSubject: Subject<Procedure> = new Subject();
   procedure!: Procedure;
   error: string = '';
 
   constructor(
-    private snackBar: MatSnackBar,
-    private procedureService: ProcedureService,
-    private helperService: HelperService
+    private readonly snackBar: MatSnackBar,
+    private readonly procedureService: ProcedureService,
+    private readonly helperService: HelperService
   ) { }
 
   ngOnInit(): void {
@@ -48,16 +49,20 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       hook: this.procedure.hook
     }
     
-    this.procedureService.createProcedure(procedure, helper).pipe(takeUntil(this.unsubscribe)).subscribe(task => {
-      if (task) {
-        this.snackBar.open(`Procedure created`, 'Close', { duration: 2000 });
-        this.procedureSubject.next(task);
-        this.onCancel();
-      }
-    }, error => {
-      ConsoleLogger.printError('Failed to create Procedure', error);
-      this.error = error.error;
-    });
+    this.procedureService.createProcedure(procedure, helper).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: (task) => {
+          if (task) {
+            this.snackBar.open(`Procedure created`, 'Close', { duration: 2000 });
+            this.procedureSubject.next(task);
+            this.onCancel();
+          }
+        },
+        error: (error) => {
+          ConsoleLogger.printError('Failed to create Procedure', error);
+          this.error = error.error;
+        }
+      });
   }
 
   onCancel() {

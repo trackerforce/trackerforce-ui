@@ -13,9 +13,10 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   templateUrl: './agent-list.component.html',
   styleUrls: ['./agent-list.component.scss'],
   animations: [detailsAnimation],
+  standalone: false
 })
 export class AgentListComponent implements AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   displayedColumns: string[] = ['action_edit', 'name', 'email'];
   expandedElement: Agent | undefined;
@@ -28,8 +29,8 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private authService: AuthService,
-    private agentService: AgentService
+    private readonly authService: AuthService,
+    private readonly agentService: AgentService
   ) { }
 
   ngAfterViewInit(): void {

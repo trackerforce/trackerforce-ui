@@ -13,7 +13,7 @@ import { Procedure } from '../models/procedure';
 })
 export class SessionService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

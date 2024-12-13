@@ -13,10 +13,11 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
-  animations: [detailsAnimation]
+  animations: [detailsAnimation],
+  standalone: false
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() filter?: Subject<Task>
   @Input() procedureChild: boolean = false;
@@ -35,8 +36,8 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private authService: AuthService,
-    private taskService: TaskService
+    private readonly authService: AuthService,
+    private readonly taskService: TaskService
   ) { }
 
   ngOnInit(): void {

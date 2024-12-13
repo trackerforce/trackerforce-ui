@@ -11,10 +11,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-agent-edit',
   templateUrl: './agent-edit.component.html',
-  styleUrls: ['./agent-edit.component.scss']
+  styleUrls: ['./agent-edit.component.scss'],
+  standalone: false
 })
 export class AgentEditComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   private _agentid: string = '';
 
   loading = true;
@@ -23,11 +24,11 @@ export class AgentEditComponent implements OnInit, OnDestroy {
   agent?: Agent = undefined;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private agentService: AgentService
+    private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly agentService: AgentService
   ) { 
     this.route.params.subscribe(params => this._agentid = params.agentid);
   }
@@ -41,18 +42,20 @@ export class AgentEditComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.agentService.getAgent(this._agentid)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(agent => {
-        if (agent) {
+      .subscribe({
+        next: agent => {
           this.agent = agent;
           this.agentForm.get('name')?.setValue(this.agent.name);
           this.agentForm.get('email')?.setValue(this.agent.email);
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to load Agent', error);
+          this.error = error.error;
+        },
+        complete: () => {
+          this.loading = false;
         }
-    }, error => {
-      ConsoleLogger.printError('Failed to load Agent', error);
-      this.error = error.error;
-    }, () => {
-      this.loading = false;
-    });
+      });
   }
 
   ngOnDestroy() {

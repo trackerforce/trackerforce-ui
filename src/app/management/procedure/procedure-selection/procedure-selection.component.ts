@@ -1,19 +1,18 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Procedure } from 'src/app/models/procedure';
-import { Task } from 'src/app/models/task';
 import { ProcedureService } from 'src/app/services/procedure.service';
-import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-procedure-selection',
   templateUrl: './procedure-selection.component.html',
-  styleUrls: ['./procedure-selection.component.scss']
+  styleUrls: ['./procedure-selection.component.scss'],
+  standalone: false
 })
 export class ProcedureSelectionComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Output() selectedProcedure = new EventEmitter<Procedure>();
   procedures!: Procedure[];
@@ -23,7 +22,7 @@ export class ProcedureSelectionComponent implements OnInit, OnDestroy {
   filteredOptions!: Observable<Procedure[]>;
 
   constructor(
-    private procedureService: ProcedureService,
+    private readonly procedureService: ProcedureService,
   ) { }
 
   ngOnInit(): void {
@@ -57,7 +56,7 @@ export class ProcedureSelectionComponent implements OnInit, OnDestroy {
   }
 
   displayFn(procedure: Procedure): string {
-    return procedure && procedure.name ? procedure.name : '';
+    return procedure?.name ?? '';
   }
 
 }

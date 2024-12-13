@@ -13,10 +13,11 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   selector: 'app-procedure-list',
   templateUrl: './procedure-list.component.html',
   styleUrls: ['./procedure-list.component.scss'],
-  animations: [detailsAnimation]
+  animations: [detailsAnimation],
+  standalone: false
 })
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() filter?: Subject<Procedure>
   @Input() templateChild!: boolean;
@@ -35,8 +36,8 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private authService: AuthService,
-    private procedureService: ProcedureService
+    private readonly authService: AuthService,
+    private readonly procedureService: ProcedureService
   ) { }
 
   ngOnInit(): void {

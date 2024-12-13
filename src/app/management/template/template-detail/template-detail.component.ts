@@ -9,7 +9,8 @@ import { TemplateService } from 'src/app/services/template.service';
 @Component({
   selector: 'app-template-detail',
   templateUrl: './template-detail.component.html',
-  styleUrls: ['./template-detail.component.scss']
+  styleUrls: ['./template-detail.component.scss'],
+  standalone: false
 })
 export class TemplateDetailComponent implements OnInit, AfterViewInit {
   @Input() template!: Template;
@@ -19,8 +20,8 @@ export class TemplateDetailComponent implements OnInit, AfterViewInit {
   templateForm!: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private templateService: TemplateService
+    private readonly formBuilder: FormBuilder,
+    private readonly templateService: TemplateService
   ) { }
 
   ngOnInit(): void {

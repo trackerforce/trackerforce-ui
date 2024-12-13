@@ -14,7 +14,7 @@ export class AgentService extends ApiService {
 
   public agent = new Subject<Agent | undefined>();
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

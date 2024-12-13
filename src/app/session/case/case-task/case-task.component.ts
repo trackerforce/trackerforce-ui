@@ -7,10 +7,11 @@ import { Task } from 'src/app/models/task';
 @Component({
   selector: 'app-case-task',
   templateUrl: './case-task.component.html',
-  styleUrls: ['./case-task.component.scss']
+  styleUrls: ['./case-task.component.scss'],
+  standalone: false
 })
 export class CaseTaskComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() task!: Task;
   @Input() open: boolean = true;
@@ -21,7 +22,7 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   type: string = "TEXT";
   
   constructor(
-    private formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder
   ) { 
   }
 
@@ -35,7 +36,7 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
 
     this.taskForm.valueChanges.pipe(takeUntil(this.unsubscribe), debounceTime(500))
       .subscribe(data => {
-        if (data && data.response != undefined) {
+        if (data?.response != undefined) {
           this.task.response = data.response;
           this.eventChange.emit(this.task);
           this.iconClass = "task-done";
@@ -57,7 +58,7 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
       this.iconClass = "task-done";
 
     if (this.task.type === 'CHECK')
-      return this.task.response == undefined ? false : this.task.response;
+      return this.task.response ?? false;
 
     return this.task.response;
   }

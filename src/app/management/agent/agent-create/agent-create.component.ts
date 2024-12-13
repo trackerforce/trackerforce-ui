@@ -9,18 +9,19 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-agent-create',
   templateUrl: './agent-create.component.html',
-  styleUrls: ['./agent-create.component.scss']
+  styleUrls: ['./agent-create.component.scss'],
+  standalone: false
 })
 export class AgentCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   agentForm!: FormGroup;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private agentService: AgentService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly agentService: AgentService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -42,15 +43,17 @@ export class AgentCreateComponent implements OnInit, OnDestroy {
     this.agentService.createAgent({ 
       name: this.agentForm.get('name')?.value,
       email: this.agentForm.get('email')?.value  
-    }).pipe(takeUntil(this.unsubscribe)).subscribe(agent => {
-      if (agent) {
-        this.snackBar.open(`Access code: ${agent.temp_access}`, 'Close');
-        this.agentService.agent.next(undefined);
-      }
-    }, error => {
-      ConsoleLogger.printError('Failed to create Agent', error);
-      this.error = error.error;
-    });
+    }).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: agent => {
+          this.snackBar.open(`Access code: ${agent.temp_access}`, 'Close');
+          this.agentService.agent.next(undefined);
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to create Agent', error);
+          this.error = error.error;
+        }
+      });
   }
 
 }

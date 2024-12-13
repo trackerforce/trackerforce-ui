@@ -10,10 +10,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-task-edit',
   templateUrl: './task-edit.component.html',
-  styleUrls: ['./task-edit.component.scss']
+  styleUrls: ['./task-edit.component.scss'],
+  standalone: false
 })
 export class TaskEditComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   private _taskid: string = '';
 
   loading = true;
@@ -21,10 +22,10 @@ export class TaskEditComponent implements OnInit, OnDestroy {
   task = new Task();
 
   constructor(
-    private taskService: TaskService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly taskService: TaskService,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) { 
     this.route.params.subscribe(params => this._taskid = params.taskid);
   }
@@ -33,17 +34,19 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.taskService.getTask(this._taskid)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(task => {
-        if (task) {
-          this.task = task;
-
-        this.loading = false
-      }
-    }, error => {
-      ConsoleLogger.printError('Failed to load Task', error);
-      this.error = error.error;
-      this.loading = false;
-    });
+      .subscribe({
+        next: task => {
+          if (task) {
+            this.task = task;
+            this.loading = false;
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to load Task', error);
+          this.error = error.error;
+          this.loading = false;
+        }
+      });
   }
 
   ngOnDestroy() {

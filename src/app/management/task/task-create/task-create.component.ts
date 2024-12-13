@@ -11,19 +11,20 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-task-create',
   templateUrl: './task-create.component.html',
-  styleUrls: ['./task-create.component.scss']
+  styleUrls: ['./task-create.component.scss'],
+  standalone: false
 })
 export class TaskCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   
   taskSubject: Subject<Task> = new Subject();
   task!: Task;
   error: string = '';
 
   constructor(
-    private snackBar: MatSnackBar,
-    private taskService: TaskService,
-    private helperService: HelperService
+    private readonly snackBar: MatSnackBar,
+    private readonly taskService: TaskService,
+    private readonly helperService: HelperService
   ) { }
 
   ngOnInit(): void {
@@ -51,16 +52,19 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
 
     this.taskService.createTask(newTask, helper)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(task => {
-        if (task) {
-          this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
-          this.taskSubject.next(task);
-          this.onCancel();
+      .subscribe({
+        next: task => {
+          if (task) {
+            this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
+            this.taskSubject.next(task);
+            this.onCancel();
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to create Task', error);
+          this.error = error.error;
         }
-    }, error => {
-      ConsoleLogger.printError('Failed to create Task', error);
-      this.error = error.error;
-    });
+      });
   }
 
   onCancel() {

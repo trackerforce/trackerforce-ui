@@ -11,10 +11,11 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   selector: 'app-global-list',
   templateUrl: './global-list.component.html',
   styleUrls: ['./global-list.component.scss'],
-  animations: [detailsAnimation]
+  animations: [detailsAnimation],
+  standalone: false
 })
 export class GlobalListComponent implements AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   displayedColumns: string[] = ['description'];
   expandedElement: Global | undefined;
@@ -27,7 +28,7 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private globalService: GlobalService
+    private readonly globalService: GlobalService
   ) { }
 
   ngAfterViewInit(): void {

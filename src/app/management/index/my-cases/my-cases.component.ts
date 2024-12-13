@@ -23,9 +23,10 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  standalone: false
 })
 export class MyCasesComponent implements AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   displayedColumns: string[] = ['custom_view', 'context', 'custom_status'];
   expandedElement: Case | undefined;
@@ -38,9 +39,9 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private authService: AuthService,
-    private agentService: AgentService,
-    private sessionService: SessionService
+    private readonly authService: AuthService,
+    private readonly agentService: AgentService,
+    private readonly sessionService: SessionService
   ) { }
 
   ngAfterViewInit(): void {
@@ -96,9 +97,14 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
     const sessionid = this.authService.getUserInfo('sessionid');
     this.agentService.unWatchCase(sessionid, sessionCase.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(agent => {
-        this.loadData(agent);
-      }, error => ConsoleLogger.printError('Failed to unWatch', error));
+      .subscribe({
+        next: () => {
+          this.loadData();
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to unWatch', error);
+        }
+      });
   }
 
 }

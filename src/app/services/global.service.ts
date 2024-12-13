@@ -14,7 +14,7 @@ export class GlobalService extends ApiService {
 
   public global = new Subject<Global>();
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

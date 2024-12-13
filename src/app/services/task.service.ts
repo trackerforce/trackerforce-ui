@@ -15,7 +15,7 @@ export class TaskService extends ApiService {
 
   public task = new Subject<Task>();
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

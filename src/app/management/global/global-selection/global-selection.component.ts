@@ -8,10 +8,11 @@ import { GlobalService } from 'src/app/services/global.service';
 @Component({
   selector: 'app-global-selection',
   templateUrl: './global-selection.component.html',
-  styleUrls: ['./global-selection.component.scss']
+  styleUrls: ['./global-selection.component.scss'],
+  standalone: false
 })
 export class GlobalSelectionComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   
   @Output() selectedGlobal = new EventEmitter<Global>();
   globals!: Global[];
@@ -21,18 +22,19 @@ export class GlobalSelectionComponent implements OnInit, OnDestroy {
   filteredOptions!: Observable<Global[]>;
 
   constructor(
-    private globalService: GlobalService,
+    private readonly globalService: GlobalService,
   ) { }
 
   ngOnInit(): void {
-    this.globalService.listAvailableGlobals().pipe(takeUntil(this.unsubscribe))
-    .subscribe(
-      globals => {
-        this.globals = globals;
-        this.loadFilteredOptions();
-      }, 
-      error => this.error = error
-    );
+    this.globalService.listAvailableGlobals()
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: globals => {
+          this.globals = globals;
+          this.loadFilteredOptions();
+        },
+        error: error => this.error = error
+      });
   }
 
   ngOnDestroy() {
@@ -45,7 +47,7 @@ export class GlobalSelectionComponent implements OnInit, OnDestroy {
   }
 
   displayFn(global: Global): string {
-    return global && global.description ? global.description : '';
+    return global?.description ?? '';
   }
 
   private loadFilteredOptions() {

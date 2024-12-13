@@ -11,10 +11,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-case-procedure',
   templateUrl: './case-procedure.component.html',
-  styleUrls: ['./case-procedure.component.scss']
+  styleUrls: ['./case-procedure.component.scss'],
+  standalone: false
 })
 export class CaseProcedureComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() caseid?: string;
   @Input() procedure!: Procedure;
@@ -29,9 +30,9 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   resolved: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private sessionService: SessionService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly sessionService: SessionService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -78,13 +79,17 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
       return;
 
     this.loading = true;
-    this.save(this.caseid).subscribe(data => {
-      this.loading = false;
-      if (data) {
-        this.eventChange.emit(this.procedure);
-        this.snackBar.open(`Procedure saved`, 'Close', { duration: 3000 });
-      }
-    }, error => this.onError(error));
+    this.save(this.caseid)
+      .subscribe({
+        next: data => {
+          this.loading = false;
+          if (data) {
+            this.procedure = data;
+            this.snackBar.open(`Procedure saved`, 'Close', { duration: 3000 });
+          }
+        },
+        error: error => this.onError(error)
+      });
   }
 
   onSubmit() {
@@ -96,15 +101,18 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
       if (data) {
         this.sessionService.submitProcedure(this.caseid!, this.procedure.id!)
           .pipe(takeUntil(this.unsubscribe))
-          .subscribe(procedure => {
-            if (procedure) {
-              this.procedure = procedure;
-              this.readProcedureStatuses();
-              this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
-              this.loading = false;
-              this.eventChange.emit(this.procedure);
-            }
-          }, error => this.onError(error));
+          .subscribe({
+            next: procedure => {
+              if (procedure) {
+                this.procedure = procedure;
+                this.readProcedureStatuses();
+                this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
+                this.loading = false;
+                this.eventChange.emit(this.procedure);
+              }
+            },
+            error: error => this.onError(error)
+          });
       }
     });
   }

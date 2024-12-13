@@ -11,7 +11,7 @@ import { Admin } from '../models/admin';
 })
 export class AdminService extends ApiService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

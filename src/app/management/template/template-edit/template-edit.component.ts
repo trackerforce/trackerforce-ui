@@ -10,10 +10,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-template-edit',
   templateUrl: './template-edit.component.html',
-  styleUrls: ['./template-edit.component.scss']
+  styleUrls: ['./template-edit.component.scss'],
+  standalone: false
 })
 export class TemplateEditComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   private _templateid: string = '';
 
   loading = true;
@@ -21,10 +22,10 @@ export class TemplateEditComponent implements OnInit, OnDestroy {
   template = new Template();
 
   constructor(
-    private templateService: TemplateService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly templateService: TemplateService,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {
     this.route.params.subscribe(params => this._templateid = params.templateid);
   }
@@ -33,15 +34,16 @@ export class TemplateEditComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.templateService.getTemplate(this._templateid)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(template => {
-        if (template)
+      .subscribe({
+        next: template => {
           this.template = template;
-        
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError('Failed to load Template', error);
-        this.error = error.error;
-        this.loading = false;
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to load Template', error);
+          this.error = error.error;
+          this.loading = false;
+        }
       });
   }
 

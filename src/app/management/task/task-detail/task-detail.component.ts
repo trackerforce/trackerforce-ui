@@ -7,7 +7,8 @@ import { TaskService } from 'src/app/services/task.service';
 @Component({
   selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
-  styleUrls: ['./task-detail.component.scss']
+  styleUrls: ['./task-detail.component.scss'],
+  standalone: false
 })
 export class TaskDetailComponent implements OnInit {
   @Input() task!: Task;
@@ -18,8 +19,8 @@ export class TaskDetailComponent implements OnInit {
   displayTaskTypes: any[] = TASK_TYPES;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private taskService: TaskService
+    private readonly formBuilder: FormBuilder,
+    private readonly taskService: TaskService
   ) { }
 
   ngOnInit(): void {
@@ -71,7 +72,6 @@ export class TaskDetailComponent implements OnInit {
 
   private toOptions(options: string): Option[] | null {
     if (options) {
-      const opts = options.split(',');
       return options.split(',').map(opt => new Option(opt.trim()));
     }
     

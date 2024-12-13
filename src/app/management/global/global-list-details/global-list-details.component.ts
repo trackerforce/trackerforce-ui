@@ -10,19 +10,20 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-global-list-details',
   templateUrl: './global-list-details.component.html',
-  styleUrls: ['./global-list-details.component.scss']
+  styleUrls: ['./global-list-details.component.scss'],
+  standalone: false
 })
 export class GlobalListDetailsComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() global?: Global
   globalForm!: FormGroup;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private globalService: GlobalService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly globalService: GlobalService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -48,14 +49,15 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
 
     this.globalService.updateGlobal(this.global!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(global => {
-        if (global) {
+      .subscribe({
+        next: global => {
           this.global = global;
           this.snackBar.open(`Feature updated`, 'Close', { duration: 2000 });
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to update feature', error);
+          this.error = error.error;
         }
-      }, error => {
-        ConsoleLogger.printError('Failed to update feature', error);
-        this.error = error.error;
       });
   }
 

@@ -15,7 +15,7 @@ export class TemplateService extends ApiService {
 
   public template = new Subject<Template>();
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

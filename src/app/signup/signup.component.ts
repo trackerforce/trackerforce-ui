@@ -9,10 +9,11 @@ import { ConsoleLogger } from '../_helpers/console-logger';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  styleUrls: ['./signup.component.scss'],
+  standalone: false
 })
 export class SignupComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   signupForm!: FormGroup;
   returnUrl: string | undefined;
@@ -20,16 +21,16 @@ export class SignupComponent implements OnInit, OnDestroy {
   type: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) { }
+
+  ngOnInit() {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
     }
-  }
 
-  ngOnInit() {
     this.signupForm = this.formBuilder.group({
       tenant: ['', [Validators.required]],
       selectedLoginType: ['admin', [Validators.required]],
@@ -47,11 +48,15 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.authService.signup({
       email: this.f.email.value,
       password: this.f.password.value
-    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => this.onSuccess(success)
-    , error => {
-      ConsoleLogger.printError(error);
-      this.error = error;
-    });
+    }, 
+    this.f.tenant.value).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: success => this.onSuccess(success),
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error;
+        }
+      });
   }
 
   private onSubmitAgent() {
@@ -59,11 +64,15 @@ export class SignupComponent implements OnInit, OnDestroy {
       email: this.f.email.value,
       password: this.f.password.value,
       access_code: this.f.temp_password.value
-    }, this.f.tenant.value).pipe(takeUntil(this.unsubscribe)).subscribe(success => this.onSuccess(success)
-    , error => {
-      ConsoleLogger.printError(error);
-      this.error = 'Please, review your access code';
-    });
+    }, 
+    this.f.tenant.value).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: success => this.onSuccess(success),
+        error: error => {
+          ConsoleLogger.printError(error);
+          this.error = error;
+        }
+      });
   }
 
   private onSuccess(success: boolean) {

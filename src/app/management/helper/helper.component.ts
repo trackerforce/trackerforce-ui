@@ -6,7 +6,8 @@ import { HelperService } from 'src/app/services/helper.service';
 @Component({
   selector: 'app-helper',
   templateUrl: './helper.component.html',
-  styleUrls: ['./helper.component.scss']
+  styleUrls: ['./helper.component.scss'],
+  standalone: false
 })
 export class HelperComponent implements OnInit {
   @Input() helper!: Helper | undefined;
@@ -16,8 +17,8 @@ export class HelperComponent implements OnInit {
   displayRenderTypes: string[] = ['PLAINTEXT', 'MARKDOWN', 'HTML'];
 
   constructor(
-    private formBuilder: FormBuilder,
-    private helperService: HelperService
+    private readonly formBuilder: FormBuilder,
+    private readonly helperService: HelperService
   ) { }
 
   ngOnInit(): void {
@@ -29,8 +30,8 @@ export class HelperComponent implements OnInit {
     this.helperService.helper.subscribe(helper => {
       this.helper = helper;
       this.formGroup.patchValue({
-        content: this.helper?.content || '',
-        renderType: this.helper?.renderType || 'PLAINTEXT'
+        content: this.helper?.content ?? '',
+        renderType: this.helper?.renderType ?? 'PLAINTEXT'
       });
     });
     

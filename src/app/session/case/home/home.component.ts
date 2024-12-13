@@ -12,10 +12,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class IndexHomeComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   private protocol!: string;
   
   loading = true;
@@ -23,10 +24,10 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   sessionCase?: Case;
 
   constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private sessionService: SessionService,
-    private agentService: AgentService
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly sessionService: SessionService,
+    private readonly agentService: AgentService
   ) { 
     this.route.params.subscribe(params => this.protocol = params.protocol);
   }
@@ -44,31 +45,37 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.sessionService.getCase(this.protocol)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data) {
-          this.sessionCase = data;
-          this.watchCase(data);
+      .subscribe({
+        next: data => {
+          if (data) {
+            this.sessionCase = data;
+            this.watchCase(data);
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to load Case', error);
+          this.error = 'Case Not Found';
+        },
+        complete: () => {
+          this.loading = false;
         }
-    }, error => {
-      ConsoleLogger.printError('Failed to load Case', error);
-      this.error = 'Case Not Found';
-    }, () => {
-      this.loading = false;
-    });
+      });
   }
 
   watchCase(sessionCase: Case) {
     const sessionid = this.authService.getUserInfo('sessionid');
     this.agentService.watchCase(sessionid, sessionCase.id!)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(_agent => {
-        return;
-      }, error => ConsoleLogger.printError('Failed to following case', error));
+      .subscribe({
+        error: error => ConsoleLogger.printError('Failed to watch Case', error)
+      });
   }
 
   onProcedureChanged(procedure: Procedure) {
     let found = false;
-    for (const it of this.sessionCase?.procedures!) {
+    if (!this.sessionCase?.procedures) return;
+    
+    for (const it of this.sessionCase.procedures) {
       if (it.id == procedure.id) {
         it.status = procedure.status;
         it.tasks = procedure.tasks;

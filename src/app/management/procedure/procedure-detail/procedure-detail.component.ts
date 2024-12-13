@@ -9,7 +9,8 @@ import { ProcedureService } from 'src/app/services/procedure.service';
 @Component({
   selector: 'app-procedure-detail',
   templateUrl: './procedure-detail.component.html',
-  styleUrls: ['./procedure-detail.component.scss']
+  styleUrls: ['./procedure-detail.component.scss'],
+  standalone: false
 })
 export class ProcedureDetailComponent implements OnInit, AfterViewInit {
   @Input() procedure!: Procedure;
@@ -19,8 +20,8 @@ export class ProcedureDetailComponent implements OnInit, AfterViewInit {
   procedureForm!: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private procedureService: ProcedureService
+    private readonly formBuilder: FormBuilder,
+    private readonly procedureService: ProcedureService
   ) { }
 
   ngOnInit(): void {

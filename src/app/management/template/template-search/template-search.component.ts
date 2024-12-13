@@ -5,7 +5,8 @@ import { Template } from 'src/app/models/template';
 @Component({
   selector: 'app-template-search',
   templateUrl: './template-search.component.html',
-  styleUrls: ['./template-search.component.scss']
+  styleUrls: ['./template-search.component.scss'],
+  standalone: false
 })
 export class TemplateSearchComponent implements OnInit {
   @Output() templateSearched = new EventEmitter<Template>();
@@ -14,7 +15,7 @@ export class TemplateSearchComponent implements OnInit {
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {

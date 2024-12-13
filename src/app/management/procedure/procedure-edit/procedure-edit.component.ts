@@ -10,10 +10,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-procedure-edit',
   templateUrl: './procedure-edit.component.html',
-  styleUrls: ['./procedure-edit.component.scss']
+  styleUrls: ['./procedure-edit.component.scss'],
+  standalone: false
 })
 export class ProcedureEditComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   private _procedureid: string = '';
 
   loading = true;
@@ -21,10 +22,10 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
   procedure = new Procedure();
 
   constructor(
-    private procedureService: ProcedureService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly procedureService: ProcedureService,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {
     this.route.params.subscribe(params => this._procedureid = params.procedureid);
   }
@@ -33,15 +34,16 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.procedureService.getProcedure(this._procedureid)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(procedure => {
-        if (procedure)
+      .subscribe({
+        next: (procedure: Procedure) => {
           this.procedure = procedure;
-
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError('Failed to load Procedure', error);
-        this.error = error.error;
-        this.loading = false;
+          this.loading = false;
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to load Procedure', error);
+          this.error = error.error;
+          this.loading = false;
+        }
       });
   }
 

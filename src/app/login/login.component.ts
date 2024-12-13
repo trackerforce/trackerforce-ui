@@ -9,10 +9,11 @@ import { ConsoleLogger } from '../_helpers/console-logger';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements OnInit, OnDestroy {
-    private unsubscribe: Subject<void> = new Subject();
+    private readonly unsubscribe: Subject<void> = new Subject();
 
     loginForm!: FormGroup;
     returnUrl: string | undefined;
@@ -20,16 +21,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     type: boolean = false;
 
     constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private authService: AuthService
-    ) {
+        private readonly formBuilder: FormBuilder,
+        private readonly router: Router,
+        private readonly authService: AuthService
+    ) { }
+
+    ngOnInit() {
         if (this.authService.isLoggedIn()) {
             this.router.navigate(['/']);
         }
-    }
 
-    ngOnInit() {
         this.loginForm = this.formBuilder.group({
             selectedLoginType: ['admin', [Validators.required]],
             email: ['', [Validators.required]],
@@ -48,10 +49,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: this.f?.password.value
         })
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(success => this.onSuccess(success)
-        , error => {
-            ConsoleLogger.printError(error);
-            this.error = error;
+        .subscribe({
+            next: success => this.onSuccess(success),
+            error: error => {
+                ConsoleLogger.printError(error);
+                this.error = error;
+            }
         });
     }
 
@@ -61,16 +64,18 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: this.f.password.value
         }, this.f.tenant.value)
         .pipe(takeUntil(this.unsubscribe))
-        .subscribe(success => this.onSuccess(success)
-        , error => {
-            ConsoleLogger.printError(error);
-            this.error = error;
+        .subscribe({
+            next: success => this.onSuccess(success),
+            error: error => {
+                ConsoleLogger.printError(error);
+                this.error = error;
+            }
         });
     }
 
     private onSuccess(success: boolean) {
         if (!success) return;
-        this.router.navigateByUrl(this.returnUrl || this.authService.getManagementOrgPath());
+        this.router.navigateByUrl(this.returnUrl ?? this.authService.getManagementOrgPath());
         this.authService.releaseOldSessions.emit(true);
     }
 

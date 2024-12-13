@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
 import { Task } from 'src/app/models/task';
 import { ProcedureService } from 'src/app/services/procedure.service';
@@ -12,10 +11,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-procedure-list-details',
   templateUrl: './procedure-list-details.component.html',
-  styleUrls: ['./procedure-list-details.component.scss']
+  styleUrls: ['./procedure-list-details.component.scss'],
+  standalone: false
 })
 export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() procedure?: Procedure;
   @Input() editable: boolean = false;
@@ -26,9 +26,9 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private procedureService: ProcedureService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly procedureService: ProcedureService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -59,15 +59,16 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
 
     this.procedureService.updateProcedure(updatedProcedure)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(procedure => {
-        if (procedure) {
+      .subscribe({
+        next: (procedure: Procedure) => {
           this.procedure = procedure;
           this.procedureChanged.emit(procedure);
           this.snackBar.open(`Procedure updated`, 'Close', { duration: 2000 });
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to update Procedure', error);
+          this.error = error.error;
         }
-      }, error => {
-        ConsoleLogger.printError('Failed to update Procedure', error);
-        this.error = error.error;
       });
   }
 

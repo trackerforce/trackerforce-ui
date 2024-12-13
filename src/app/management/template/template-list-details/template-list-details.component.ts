@@ -12,10 +12,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-template-list-details',
   templateUrl: './template-list-details.component.html',
-  styleUrls: ['./template-list-details.component.scss']
+  styleUrls: ['./template-list-details.component.scss'],
+  standalone: false
 })
 export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Input() template?: Template
   @Output() templateChanged = new EventEmitter<Template>();
@@ -25,9 +26,9 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private templateService: TemplateService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly templateService: TemplateService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -63,15 +64,18 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
 
     this.templateService.updateTemplate(updatedTemplate, helper)
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(template => {
-        if (template) {
-          this.template = template;
-          this.templateChanged.emit(template);
-          this.snackBar.open(`Template updated`, 'Close', { duration: 2000 });
+      .subscribe({
+        next: template => {
+          if (template) {
+            this.template = template;
+            this.templateChanged.emit(template);
+            this.snackBar.open(`Template updated`, 'Close', { duration: 2000 });
+          }
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to update Template', error);
+          this.error = error.error;
         }
-      }, error => {
-        ConsoleLogger.printError('Failed to update Template', error);
-        this.error = error.error;
       });
 
   }

@@ -15,7 +15,7 @@ export class ProcedureService extends ApiService {
 
   public procedure = new Subject<Procedure>();
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     super();
   }
 

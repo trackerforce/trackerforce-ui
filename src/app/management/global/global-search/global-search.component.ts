@@ -5,7 +5,8 @@ import { GlobalService } from 'src/app/services/global.service';
 @Component({
   selector: 'app-global-search',
   templateUrl: './global-search.component.html',
-  styleUrls: ['./global-search.component.scss']
+  styleUrls: ['./global-search.component.scss'],
+  standalone: false
 })
 export class GlobalSearchComponent implements OnInit {
 
@@ -13,8 +14,8 @@ export class GlobalSearchComponent implements OnInit {
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private globalService: GlobalService
+    private readonly formBuilder: FormBuilder,
+    private readonly globalService: GlobalService
   ) { }
 
   ngOnInit(): void {

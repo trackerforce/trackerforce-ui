@@ -13,10 +13,11 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   selector: 'app-template-list',
   templateUrl: './template-list.component.html',
   styleUrls: ['./template-list.component.scss'],
-  animations: [detailsAnimation]
+  animations: [detailsAnimation],
+  standalone: false
 })
 export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   @Input() filter?: Subject<Template>
 
   displayedColumns: string[] = ['action', 'name'];
@@ -30,8 +31,8 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private authService: AuthService,
-    private templateService: TemplateService
+    private readonly authService: AuthService,
+    private readonly templateService: TemplateService
   ) { }
 
   ngOnInit(): void {

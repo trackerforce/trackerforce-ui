@@ -5,7 +5,8 @@ import { AgentService } from 'src/app/services/agent.service';
 @Component({
   selector: 'app-agent-search',
   templateUrl: './agent-search.component.html',
-  styleUrls: ['./agent-search.component.scss']
+  styleUrls: ['./agent-search.component.scss'],
+  standalone: false
 })
 export class AgentSearchComponent implements OnInit {
 
@@ -13,8 +14,8 @@ export class AgentSearchComponent implements OnInit {
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private agentService: AgentService
+    private readonly formBuilder: FormBuilder,
+    private readonly agentService: AgentService
   ) { }
 
   ngOnInit(): void {

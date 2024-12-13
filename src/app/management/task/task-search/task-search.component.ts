@@ -5,7 +5,8 @@ import { Task } from 'src/app/models/task';
 @Component({
   selector: 'app-task-search',
   templateUrl: './task-search.component.html',
-  styleUrls: ['./task-search.component.scss']
+  styleUrls: ['./task-search.component.scss'],
+  standalone: false
 })
 export class TaskSearchComponent implements OnInit {
   @Output() taskSearched = new EventEmitter<Task>();
@@ -14,7 +15,7 @@ export class TaskSearchComponent implements OnInit {
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {

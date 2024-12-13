@@ -8,10 +8,11 @@ import { TaskService } from 'src/app/services/task.service';
 @Component({
   selector: 'app-task-selection',
   templateUrl: './task-selection.component.html',
-  styleUrls: ['./task-selection.component.scss']
+  styleUrls: ['./task-selection.component.scss'],
+  standalone: false
 })
 export class TaskSelectionComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   @Output() selectedTask = new EventEmitter<Task>();
   tasks!: Task[];
@@ -21,7 +22,7 @@ export class TaskSelectionComponent implements OnInit, OnDestroy {
   filteredOptions!: Observable<Task[]>;
 
   constructor(
-    private taskService: TaskService,
+    private readonly taskService: TaskService,
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +56,7 @@ export class TaskSelectionComponent implements OnInit, OnDestroy {
   }
 
   displayFn(task: Task): string {
-    return task && task.description ? task.description : '';
+    return task?.description ?? '';
   }
 
 }

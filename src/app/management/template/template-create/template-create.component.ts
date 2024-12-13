@@ -11,19 +11,20 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-template-create',
   templateUrl: './template-create.component.html',
-  styleUrls: ['./template-create.component.scss']
+  styleUrls: ['./template-create.component.scss'],
+  standalone: false
 })
 export class TemplateCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   templateSubject: Subject<Template | undefined> = new Subject();
   template!: Template;
   error: string = '';
 
   constructor(
-    private snackBar: MatSnackBar,
-    private templateService: TemplateService,
-    private helperService: HelperService
+    private readonly snackBar: MatSnackBar,
+    private readonly templateService: TemplateService,
+    private readonly helperService: HelperService
   ) { }
 
   ngOnInit(): void {
@@ -49,15 +50,18 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
 
     this.templateService.createTemplate(newTemplate, helper)
     .pipe(takeUntil(this.unsubscribe))
-    .subscribe(template => {
-      if (template) {
-        this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
-        this.templateSubject.next(undefined);
-        this.onCancel();
+    .subscribe({
+      next: template => {
+        if (template) {
+          this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
+          this.templateSubject.next(undefined);
+          this.onCancel();
+        }
+      },
+      error: error => {
+        ConsoleLogger.printError('Failed to create Template', error);
+        this.error = error.error;
       }
-    }, error => {
-      ConsoleLogger.printError('Failed to create Template', error);
-      this.error = error.error;
     });
   }
 

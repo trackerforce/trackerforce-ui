@@ -5,7 +5,8 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent implements AfterViewInit {
 
@@ -13,8 +14,8 @@ export class HomeComponent implements AfterViewInit {
   currentView: string = 'home'
 
   constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService
   ) {
     this.route.params.subscribe(params => this.tenant = params.tenant || this.authService.getUserInfo('tenant'));
   }

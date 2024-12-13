@@ -9,16 +9,17 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-index-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class IndexHomeComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   agent?: Agent;
 
   constructor(
-    private authService: AuthService,
-    private agentServie: AgentService
+    private readonly authService: AuthService,
+    private readonly agentServie: AgentService
   ) { }
 
   ngOnInit(): void {
@@ -33,12 +34,15 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   }
 
   private loadAgent() {
-    this.agentServie.getMe().pipe(takeUntil(this.unsubscribe)).subscribe(agent => {
-      if (agent)
-        this.agent = agent;
-    }, error => {
-      ConsoleLogger.printError('Failed to fetch Agent', error);
-    });
+    this.agentServie.getMe().pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: agent => {
+          this.agent = agent;
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to fetch Agent', error);
+        }
+      });
   }
 
   getInfo(key: string) {

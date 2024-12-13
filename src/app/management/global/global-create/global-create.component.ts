@@ -10,19 +10,20 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-global-create',
   templateUrl: './global-create.component.html',
-  styleUrls: ['./global-create.component.scss']
+  styleUrls: ['./global-create.component.scss'],
+  standalone: false
 })
 export class GlobalCreateComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
   
   selectedGlobal!: Global;
   globalForm!: FormGroup;
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private globalService: GlobalService,
-    private snackBar: MatSnackBar
+    private readonly formBuilder: FormBuilder,
+    private readonly globalService: GlobalService,
+    private readonly snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -53,13 +54,17 @@ export class GlobalCreateComponent implements OnInit, OnDestroy {
     this.globalService.createGlobal({
       key: this.selectedGlobal.key,
       attributes
-    }).pipe(takeUntil(this.unsubscribe)).subscribe(_global => {
-      this.snackBar.open(`New feature has succesfully added`, 'Close', { duration: 2000 });
-      this.globalService.global.next(_global);
-    }, error => {
-      ConsoleLogger.printError('Failed to create Global', error);
-      this.error = error.error;
-    });
+    }).pipe(takeUntil(this.unsubscribe))
+      .subscribe({
+        next: _global => {
+          this.snackBar.open(`New feature has succesfully added`, 'Close', { duration: 2000 });
+          this.globalService.global.next(_global);
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to create Global', error);
+          this.error = error.error;
+        }
+      });
   }
 
   getAttributes(): string[] {

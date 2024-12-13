@@ -12,10 +12,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private unsubscribe: Subject<void> = new Subject();
+  private readonly unsubscribe: Subject<void> = new Subject();
 
   sessionForm!: FormGroup;
   error: string = '';
@@ -26,11 +27,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   filteredOptions!: Observable<Template[]>;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private templateService: TemplateService,
-    private sessionService: SessionService,
-    private router: Router,
-    private authService: AuthService
+    private readonly formBuilder: FormBuilder,
+    private readonly templateService: TemplateService,
+    private readonly sessionService: SessionService,
+    private readonly router: Router,
+    private readonly authService: AuthService
   ) {
   }
 
@@ -69,15 +70,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.sessionService.createCase(template.id!, this.authService.getUserInfo('sessionid'))
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(data => {
-        if (data)
-          this.router.navigate([`${this.authService.getSessionOrgPath()}/case/${data.protocol}`]);
-
-        this.loading = false;
-      }, error => {
-        ConsoleLogger.printError('Failed to create new Case', error);
-        this.error = error.error;
-        this.loading = false;
+      .subscribe({
+        next: data => {
+          if (data)
+            this.router.navigate([`${this.authService.getSessionOrgPath()}/case/${data.protocol}`]);
+        },
+        error: error => {
+          ConsoleLogger.printError('Failed to create new Case', error);
+          this.error = error.error;
+          this.loading = false;
+        }
       });
   }
 
@@ -87,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   displayFn(template: Template): string {
-    return template && template.name ? template.name : '';
+    return template?.name ?? '';
   }
 
   onSubmit() {

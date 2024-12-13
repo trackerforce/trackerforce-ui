@@ -2,7 +2,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError, mapTo, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from './../../../environments/environment';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
 import { AuthAccess } from '../models/auth-access';
@@ -12,23 +12,23 @@ import { AuthAccess } from '../models/auth-access';
 })
 export class AuthService {
 
-  @Output() logoff: EventEmitter<String> = new EventEmitter();
+  @Output() logoff: EventEmitter<string> = new EventEmitter();
   @Output() releaseOldSessions: EventEmitter<any> = new EventEmitter();
 
   public static readonly USER_INFO = 'USER_INFO';
   public static readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
 
-  private currentTokenSubject: BehaviorSubject<String>;
-  public currentToken: Observable<String>;
+  private readonly currentTokenSubject: BehaviorSubject<string>;
+  public readonly currentToken: Observable<string>;
 
-  private userInfoSubject: BehaviorSubject<any>;
+  private readonly userInfoSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  loggedUser: String = "";
+  loggedUser = "";
 
-  constructor(private http: HttpClient, private jwtHelper :JwtHelperService) {
-    this.currentTokenSubject = new BehaviorSubject<String>(localStorage.getItem(AuthService.JWT_TOKEN) || "");
+  constructor(private readonly http: HttpClient, private readonly jwtHelper :JwtHelperService) {
+    this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN) ?? "");
     this.currentToken = this.currentTokenSubject.asObservable();
 
     this.userInfoSubject = new BehaviorSubject<any>(localStorage.getItem(AuthService.USER_INFO));
@@ -43,7 +43,7 @@ export class AuthService {
           this.currentTokenSubject.next(auth.token);
           this.setUserInfo('access', 'root');
         }),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -60,7 +60,7 @@ export class AuthService {
           this.setUserInfo('tenant', tenant);
           this.setUserInfo('access', 'agent');
         }),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -74,7 +74,7 @@ export class AuthService {
     })
       .pipe(
         tap(signup => signup != undefined),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -86,7 +86,7 @@ export class AuthService {
     }, { headers: {  'X-Tenant': organization } })
       .pipe(
         tap(signup => signup != undefined),
-        mapTo(true),
+        map(() => true),
         catchError(this.handleError));
   }
 
@@ -110,8 +110,14 @@ export class AuthService {
     return this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/refresh`, {
       'refreshToken': this.getRefreshToken()
     }).pipe(
-      tap((auth: AuthAccess) => this.storeTokens(auth),
-        () => this.cleanSession()));
+      tap({
+        next: (auth: AuthAccess) => {
+          this.storeTokens(auth);
+          this.currentTokenSubject.next(auth.token);
+        },
+        error: () => this.cleanSession()
+      })
+    );
   }
 
   isAlive(): Observable<any> {
@@ -124,7 +130,7 @@ export class AuthService {
 
   setUserInfo(key: string, value: string): void {
     if (localStorage.getItem(AuthService.USER_INFO)) {
-      const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO) || "");
+      const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO) ?? "");
       userData[key] = value;
 
       localStorage.setItem(AuthService.USER_INFO, JSON.stringify(userData));
@@ -134,7 +140,7 @@ export class AuthService {
 
   getUserInfo(key: string): string {
     if (localStorage.getItem(AuthService.USER_INFO))
-      return JSON.parse(localStorage.getItem(AuthService.USER_INFO) || "")[`${key}`];
+      return JSON.parse(localStorage.getItem(AuthService.USER_INFO) ?? "")[`${key}`];
     return "";
   }
 
@@ -160,23 +166,21 @@ export class AuthService {
     let errorMessage = '';
     if (result.error instanceof ErrorEvent) {
       errorMessage = `Error: ${result.error.message}`;
+    } else if (result.status === 401 || result.status === 422) {
+      errorMessage = 'Invalid username/password';
+    } else if (result.status === 400) {
+      errorMessage = result.error.error;
     } else {
-      if (result.status === 401 || result.status === 422) {
-        errorMessage = 'Invalid username/password';
-      } else if (result.status === 400) {
-        errorMessage = result.error.error;
-      } else {
-        ConsoleLogger.printError(result);
-        errorMessage = `Trackerforce is offline`;
-      }
+      ConsoleLogger.printError(result);
+      errorMessage = `Trackerforce is offline`;
     }
-    return throwError(errorMessage);
+    return throwError(() => errorMessage);
   }
 
   private doLoginUser(auth: AuthAccess, tenant?: string) {
     const userData = JSON.stringify({
       name: auth.access.email,
-      tenant: tenant ? tenant : auth.access.organization.name,
+      tenant: tenant ?? auth.access.organization.name,
       sessionid: auth.access.id
     });
 

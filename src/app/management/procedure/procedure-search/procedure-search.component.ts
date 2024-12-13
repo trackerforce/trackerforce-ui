@@ -5,7 +5,8 @@ import { Procedure } from 'src/app/models/procedure';
 @Component({
   selector: 'app-procedure-search',
   templateUrl: './procedure-search.component.html',
-  styleUrls: ['./procedure-search.component.scss']
+  styleUrls: ['./procedure-search.component.scss'],
+  standalone: false
 })
 export class ProcedureSearchComponent implements OnInit {
   @Output() procedureSearched = new EventEmitter<Procedure>();
@@ -14,7 +15,7 @@ export class ProcedureSearchComponent implements OnInit {
   error: string = '';
 
   constructor(
-    private formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
