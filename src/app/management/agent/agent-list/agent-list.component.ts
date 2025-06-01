@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { merge, Subject } from 'rxjs';
+import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
@@ -20,7 +20,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['action_edit', 'name', 'email'];
   expandedElement: Agent | undefined;
-  data: Agent[] = [];
+  data$!: Observable<Agent[]>;
 
   resultsLength = 0;
   loading = true;
@@ -46,16 +46,21 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   }
 
   private loadData(agent?: Agent) {
-    merge(this.sort.sortChange, this.paginator.page)
+    this.data$ = merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           this.loading = true;
+          let sortBy = '';
+          if (this.sort.active) {
+            sortBy = `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`;
+          }
+
           return this.agentService.listAgents(agent, { 
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex,
-            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
-          }).pipe(takeUntil(this.unsubscribe))
+            sortBy
+          }).pipe(takeUntil(this.unsubscribe));
         }),
         map(data => {
           this.loading = false;
@@ -65,7 +70,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
           this.resultsLength = data.items;
           return data.data;
         })
-      ).subscribe(data => this.data = data);
+      );
   }
 
   getColumns(): string[] {

@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { merge, Subject } from 'rxjs';
+import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Template } from 'src/app/models/template';
@@ -22,7 +21,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['action', 'name'];
   expandedElement: Template | undefined;
-  dataSource!: MatTableDataSource<Template>;
+  dataSource$!: Observable<Template[]>;
 
   resultsLength = 0;
   loading = true;
@@ -51,15 +50,19 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadData(template?: Template) {
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
+    this.dataSource$ = merge(this.sort.sortChange, this.paginator.page).pipe(
         startWith({}),
         switchMap(() => {
           this.loading = true;
+          let sortBy = '';
+          if (this.sort.active) {
+            sortBy = `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`;
+          }
+
           return this.templateService.listTemplates(template, { 
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex,
-            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
+            sortBy
           }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
@@ -70,7 +73,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.resultsLength = data.items;
           return data.data;
         })
-      ).subscribe(data => this.dataSource = new MatTableDataSource(data));
+      );
   }
 
   getColumns(): string[] {
@@ -82,13 +85,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTemplateChanged(selectedTemplate: Template) {
-    for (const iterator of this.dataSource.data) {
-      if (iterator.id === selectedTemplate.id) {
-        iterator.name = selectedTemplate.name;
-        iterator.description = selectedTemplate.description;
-        break;
-      }
-    }
+    this.loadData();
   }
 
 }

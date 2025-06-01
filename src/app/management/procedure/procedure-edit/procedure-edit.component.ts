@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
@@ -19,7 +19,7 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
 
   loading = true;
   error: string = '';
-  procedure = new Procedure();
+  procedure$ = new BehaviorSubject<Procedure | null>(null);
 
   constructor(
     private readonly procedureService: ProcedureService,
@@ -36,7 +36,7 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (procedure: Procedure) => {
-          this.procedure = procedure;
+          this.procedure$.next(procedure);
           this.loading = false;
         },
         error: error => {
@@ -53,7 +53,7 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
   }
 
   onProcedureChange(procedure: Procedure) {
-    this.procedure = procedure;
+    this.procedure$.next(procedure);
   }
 
   onSubmit() {

@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { merge, Subject } from 'rxjs';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
@@ -22,12 +21,12 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() filter?: Subject<Task>
   @Input() procedureChild: boolean = false;
   @Input() editable: boolean = false;
-  @Input() tasksSubject!: Subject<Task[] | undefined>;
+  @Input() tasksSubject!: BehaviorSubject<Task[] | undefined>;
   @Output() removeTask = new EventEmitter<Task>();
 
   displayedColumns: string[] = ['action', 'description'];
   expandedElement: Task | undefined;
-  dataSource!: MatTableDataSource<Task>;
+  dataSource$!: Observable<Task[]>;
 
   resultsLength = 0;
   loading = true;
@@ -61,36 +60,40 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadProcedureData() {
-    this.tasksSubject.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
-      if (data) {
-        this.dataSource = new MatTableDataSource(data);
-        this.resultsLength = data.length;
+    this.dataSource$ = this.tasksSubject.pipe(
+      takeUntil(this.unsubscribe),
+      delay(0),
+      map(data => {
+        this.resultsLength = data?.length ?? 0;
         this.loading = false;
-      }
-    });
+        return data ?? [];
+      })
+    );
   }
 
   private loadData(task?: Task) {
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.loading = true;
-          return this.taskService.listTasks(task, {
-            size: this.paginator.pageSize,
-            page: this.paginator.pageIndex,
-            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
-          }).pipe(takeUntil(this.unsubscribe))
-        }),
-        map(data => {
-          this.loading = false;
-          if (data === null)
-            return [];
-
-          this.resultsLength = data.items;
-          return data.data;
-        })
-      ).subscribe(data => this.dataSource = new MatTableDataSource(data));
+    this.dataSource$ = merge(this.sort.sortChange, this.paginator.page).pipe(
+      startWith({}),
+      switchMap(() => {
+        this.loading = true;
+        let sortBy = '';
+        if (this.sort.active) {
+          sortBy = `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`;
+        }
+        
+        return this.taskService.listTasks(task, {
+          size: this.paginator.pageSize,
+          page: this.paginator.pageIndex,
+          sortBy,
+        }).pipe(takeUntil(this.unsubscribe));
+      }),
+      map(data => {
+        this.loading = false;
+        if (data === null) return [];
+        this.resultsLength = data.items;
+        return data.data;
+      })
+    );
   }
 
   getColumns(): string[] {
@@ -107,9 +110,9 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.procedureChild) {
       this.removeTask.emit(selectedTask);
       
-      this.dataSource.data = this.dataSource.data.filter(task => task.id !== selectedTask.id);
-      this.dataSource.filter = "";
-      this.resultsLength = this.dataSource.data.length;
+      const current = this.tasksSubject.value ?? [];
+      this.tasksSubject.next(current.filter(task => task.id !== selectedTask.id));
+      this.resultsLength--;
     }
   }
 

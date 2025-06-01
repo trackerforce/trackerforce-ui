@@ -24,7 +24,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.authService.getJwtToken()) {
-      request = this.setHeader(request, this.authService.getJwtToken() || "");
+      request = this.setHeader(request, this.authService.getJwtToken() ?? "");
     }
     
     return next.handle(request).pipe(catchError(error => {
@@ -36,7 +36,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
         && request.url !== `${environment.identityServiceUrl}/identity/v1/refresh`) {
         return this.handle401Error(request, next);
       } else {
-        return throwError(error);
+        return throwError(() => error);
       }
     }));
   }
@@ -63,7 +63,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
         }),
         catchError((error) => {
           this.router.navigate(['/login']);
-          return throwError(error);
+          return throwError(() => error);
         }));
 
     } else {

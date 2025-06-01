@@ -6,7 +6,7 @@
         <mat-card-title>Edit</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <app-template-detail *ngIf="!loading" 
+        <app-template-detail *ngIf="(template$ | async) as template"
             (templateChanged)="onTemplateChange($event)"
             [template]="template">
         </app-template-detail>

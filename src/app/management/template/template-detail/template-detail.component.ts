@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
 import { Template } from 'src/app/models/template';
@@ -16,7 +16,7 @@ export class TemplateDetailComponent implements OnInit, AfterViewInit {
   @Input() template!: Template;
   @Output() templateChanged = new EventEmitter<Template>();
 
-  proceduresSubject = new Subject<Procedure[] | undefined>();
+  proceduresSubject = new BehaviorSubject<Procedure[] | undefined>(undefined);
   templateForm!: FormGroup;
 
   constructor(
@@ -53,13 +53,12 @@ export class TemplateDetailComponent implements OnInit, AfterViewInit {
   }
 
   onSelectProcedure(selectedProcedure: Procedure) {
-    if (!this.template.procedures)
-      this.template.procedures = [];
+    this.template.procedures ??= [];
 
-    if (!this.template.procedures!.filter(procedure => procedure.id === selectedProcedure.id).length || 
+    if (!this.template.procedures.filter(procedure => procedure.id === selectedProcedure.id).length || 
       this.template.procedures.length === 0) {
-      this.template.procedures!.push(selectedProcedure);
-      this.proceduresSubject.next(this.template.procedures!);
+      this.template.procedures = [...this.template.procedures, selectedProcedure];
+      this.proceduresSubject.next(this.template.procedures);
       this.templateChanged.emit(this.template);
     }
   }

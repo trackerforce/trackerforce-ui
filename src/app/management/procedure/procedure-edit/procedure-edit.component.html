@@ -6,7 +6,7 @@
         <mat-card-title>Edit</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <app-procedure-detail *ngIf="!loading" 
+        <app-procedure-detail *ngIf="(procedure$ | async) as procedure"
             (procedureChanged)="onProcedureChange($event)"
             [procedure]="procedure">
         </app-procedure-detail>

@@ -6,10 +6,10 @@
         <mat-card-title>Edit</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <app-task-detail *ngIf="!loading" 
+        <app-task-detail *ngIf="(task$ | async) as task"
             (taskChanged)="onTaskChange($event)"
-            [task]="task" 
-            [showOptions]="hasOptions()">
+            [task]="task"
+            [showOptions]="hasOptions(task)">
         </app-task-detail>
         <div class="form-container">
             <div>

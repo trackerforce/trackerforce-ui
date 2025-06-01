@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
     private readonly authService: AuthService, 
     private readonly router: Router) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.authService.isLoggedIn()) {
       return true;
     }

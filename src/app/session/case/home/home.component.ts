@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Case } from 'src/app/models/case';
 import { Procedure } from 'src/app/models/procedure';
@@ -21,7 +21,7 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   
   loading = true;
   error: string = '';
-  sessionCase?: Case;
+  sessionCase$!: Observable<Case | undefined>; 
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -43,23 +43,21 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
 
   private loadCase() {
     this.loading = true;
-    this.sessionService.getCase(this.protocol)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe({
-        next: data => {
-          if (data) {
-            this.sessionCase = data;
-            this.watchCase(data);
-          }
-        },
-        error: error => {
-          ConsoleLogger.printError('Failed to load Case', error);
-          this.error = 'Case Not Found';
-        },
-        complete: () => {
-          this.loading = false;
+    this.sessionCase$ = this.sessionService.getCase(this.protocol).pipe(
+      tap(data => {
+        if (data) {
+          this.watchCase(data);
         }
-      });
+        this.loading = false;
+      }),
+      catchError(error => {
+        ConsoleLogger.printError('Failed to load Case', error);
+        this.error = 'Case Not Found';
+        this.loading = false;
+        return of(undefined);
+      }),
+      takeUntil(this.unsubscribe)
+    );
   }
 
   watchCase(sessionCase: Case) {
@@ -72,24 +70,11 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   }
 
   onProcedureChanged(procedure: Procedure) {
-    let found = false;
-    if (!this.sessionCase?.procedures) return;
-    
-    for (const it of this.sessionCase.procedures) {
-      if (it.id == procedure.id) {
-        it.status = procedure.status;
-        it.tasks = procedure.tasks;
-        found = true;
-        break;
-      }
-    }
-
-    if (!found)
-      this.loadCase();
+    this.loadCase();
   }
 
-  getStatus() {
-    return this.sessionCase?.procedures
+  getStatus(sessionCase: Case | undefined) {
+    return sessionCase?.procedures
       ?.filter(p => p.status != 'RESOLVED')
       .length ? 'In Progress' : 'Closed';
   }

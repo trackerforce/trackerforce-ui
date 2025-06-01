@@ -17,7 +17,7 @@ export class HomeComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService
   ) {
-    this.route.params.subscribe(params => this.tenant = params.tenant || this.authService.getUserInfo('tenant'));
+    this.route.params.subscribe(params => this.tenant = params.tenant ?? this.authService.getUserInfo('tenant'));
   }
 
   ngAfterViewInit(): void {

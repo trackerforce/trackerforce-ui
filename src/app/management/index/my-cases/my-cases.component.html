@@ -6,9 +6,8 @@
         </mat-card-title>
     </mat-card-title-group>
     <mat-card-content>
-        <mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
         <br />
-        <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows class="mat-elevation-z8">
+        <table mat-table [dataSource]="(dataSource$ | async) || []" matSort multiTemplateDataRows class="mat-elevation-z8">
             <ng-container matColumnDef="custom_view">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td class="actions-col" mat-cell *matCellDef="let element">

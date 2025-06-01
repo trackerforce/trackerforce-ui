@@ -1,6 +1,4 @@
-<mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
-<table mat-table [dataSource]="data" matSort multiTemplateDataRows class="mat-elevation-z8">
-
+<table mat-table [dataSource]="(data$ | async) || []" matSort multiTemplateDataRows class="mat-elevation-z8">
     <ng-container matColumnDef="action_edit">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">

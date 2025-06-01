@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
@@ -21,7 +21,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
   @Input() template?: Template
   @Output() templateChanged = new EventEmitter<Template>();
 
-  proceduresSubject = new Subject<Procedure[] | undefined>();
+  proceduresSubject = new BehaviorSubject<Procedure[] | undefined>(undefined);
   templateForm!: FormGroup;
   error: string = '';
 

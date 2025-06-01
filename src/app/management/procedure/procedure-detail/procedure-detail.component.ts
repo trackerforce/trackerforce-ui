@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
 import { Task } from 'src/app/models/task';
@@ -16,7 +16,7 @@ export class ProcedureDetailComponent implements OnInit, AfterViewInit {
   @Input() procedure!: Procedure;
   @Output() procedureChanged = new EventEmitter<Procedure>();
 
-  tasksSubject = new Subject<Task[] | undefined>();
+  tasksSubject = new BehaviorSubject<Task[] | undefined>(undefined);
   procedureForm!: FormGroup;
 
   constructor(
@@ -55,13 +55,12 @@ export class ProcedureDetailComponent implements OnInit, AfterViewInit {
   }
 
   onSelectTask(selectedTask: Task) {
-    if (!this.procedure.tasks)
-      this.procedure.tasks = [];
+    this.procedure.tasks ??= [];
 
-    if (!this.procedure.tasks!.filter(task => task.id === selectedTask.id).length || 
+    if (!this.procedure.tasks.filter(task => task.id === selectedTask.id).length || 
       this.procedure.tasks.length === 0) {
-      this.procedure.tasks!.push(selectedTask);
-      this.tasksSubject.next(this.procedure.tasks!);
+      this.procedure.tasks = [...this.procedure.tasks, selectedTask];
+      this.tasksSubject.next(this.procedure.tasks);
       this.procedureChanged.emit(this.procedure);
     }
   }

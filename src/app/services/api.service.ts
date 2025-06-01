@@ -4,7 +4,7 @@ import { throwError } from "rxjs";
 export class ApiService {
 
     protected paramFromObject(obj: any, concat?: HttpParams) {
-        let params = concat ? concat : new HttpParams();
+        let params = concat ?? new HttpParams();
         if (obj) {
             Object.keys(obj).forEach(item => {
                 const value = JSON.parse(JSON.stringify(obj))[item];

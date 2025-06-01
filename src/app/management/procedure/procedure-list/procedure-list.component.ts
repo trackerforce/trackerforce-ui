@@ -1,8 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { merge, Subject } from 'rxjs';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
@@ -22,12 +21,12 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   @Input() filter?: Subject<Procedure>
   @Input() templateChild!: boolean;
   @Input() editable: boolean = false;
-  @Input() proceduresSubject!: Subject<Procedure[] | undefined>;
+  @Input() proceduresSubject!: BehaviorSubject<Procedure[] | undefined>;
   @Output() removeProcedure = new EventEmitter<Procedure>();
 
   displayedColumns: string[] = ['action', 'name'];
   expandedElement: Procedure | undefined;
-  dataSource!: MatTableDataSource<Procedure>;
+  dataSource$!: Observable<Procedure[]>;
 
   resultsLength = 0;
   loading = true;
@@ -61,36 +60,40 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private loadTemplateData() {
-    this.proceduresSubject.pipe(takeUntil(this.unsubscribe), delay(0)).subscribe(data => {
-      if (data) {
+    this.dataSource$ = this.proceduresSubject.pipe(
+      takeUntil(this.unsubscribe),
+      delay(0),
+      map(data => {
+        this.resultsLength = data?.length ?? 0;
         this.loading = false;
-        this.dataSource = new MatTableDataSource(data);
-        this.resultsLength = data.length;
-      }
-    });
+        return data ?? [];
+      })
+    );
   }
 
   private loadData(procedure?: Procedure) {
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
+    this.dataSource$ = merge(this.sort.sortChange, this.paginator.page).pipe(
         startWith({}),
         switchMap(() => {
           this.loading = true;
+          let sortBy = '';
+          if (this.sort.active) {
+            sortBy = `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`;
+          }
+
           return this.procedureService.listProcedures(procedure, { 
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex,
-            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
+            sortBy
           }).pipe(takeUntil(this.unsubscribe))
         }),
         map(data => {
           this.loading = false;
-          if (data === null)
-            return [];
-
+          if (data === null) return [];
           this.resultsLength = data.items;
           return data.data;
         })
-        ).subscribe(data => this.dataSource = new MatTableDataSource(data));
+    );
   }
 
   getColumns(): string[] {
@@ -107,19 +110,21 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.templateChild) {
       this.removeProcedure.emit(selectedProcedure);
       
-      this.dataSource.data = this.dataSource.data.filter(procedure => procedure.id !== selectedProcedure.id);
-      this.dataSource.filter = "";
-      this.resultsLength = this.dataSource.data.length;
+      const current = this.proceduresSubject.value ?? [];
+      this.proceduresSubject.next(current.filter(task => task.id !== selectedProcedure.id));
+      this.resultsLength--;
     }
   }
 
   onProcedureChanged(selectedProcedure: Procedure) {
-    for (const iterator of this.dataSource.data) {
-      if (iterator.id === selectedProcedure.id) {
-        iterator.name = selectedProcedure.name;
-        iterator.description = selectedProcedure.description;
-        break;
-      }
+    if (this.templateChild) {
+      const current = this.proceduresSubject.value ?? [];
+      const updated = current.map(proc =>
+        proc.id === selectedProcedure.id ? { ...proc, ...selectedProcedure } : proc
+      );
+      this.proceduresSubject.next(updated);
+    } else {
+      this.loadData();
     }
   }
 

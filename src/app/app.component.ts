@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 
@@ -8,18 +8,24 @@ import { AuthService } from './auth/services/auth.service';
   styleUrls: ['./app.component.scss'],
   standalone: false
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   
-  currentToken: String = "";
-  tenant: String = "";
+  currentToken = ""
+  tenant = "";
+  isAgent = false;
 
   constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly cdr: ChangeDetectorRef
+  ) { }
+
+  ngOnInit() {
     this.authService.currentToken.subscribe(token => {
       this.tenant = this.authService.getUserInfo('tenant');
+      this.isAgent = this.authService.hasRole('AGENT');
       this.currentToken = token;
+      this.cdr.detectChanges();
     });
   }
 
@@ -27,8 +33,5 @@ export class AppComponent {
     this.authService.logout();
     this.router.navigate(['/']);
   }
-  
-  isAgent() {
-    return this.authService.hasRole('AGENT');
-  }
+
 }

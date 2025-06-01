@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Template } from 'src/app/models/template';
@@ -19,7 +19,7 @@ export class TemplateEditComponent implements OnInit, OnDestroy {
 
   loading = true;
   error: string = '';
-  template = new Template();
+  template$ = new BehaviorSubject<Template | null>(null);
 
   constructor(
     private readonly templateService: TemplateService,
@@ -36,7 +36,7 @@ export class TemplateEditComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: template => {
-          this.template = template;
+          this.template$.next(template);
           this.loading = false;
         },
         error: error => {
@@ -53,7 +53,7 @@ export class TemplateEditComponent implements OnInit, OnDestroy {
   }
 
   onTemplateChange(template: Template) {
-    this.template = template;
+    this.template$.next(template);
   }
 
   onSubmit() {

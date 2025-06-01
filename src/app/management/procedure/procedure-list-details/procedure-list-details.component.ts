@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Procedure } from 'src/app/models/procedure';
 import { Task } from 'src/app/models/task';
@@ -21,7 +21,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   @Input() editable: boolean = false;
   @Output() procedureChanged = new EventEmitter<Procedure>();
 
-  tasksSubject = new Subject<Task[] | undefined>();
+  tasksSubject = new BehaviorSubject<Task[] | undefined>(undefined);
   procedureForm!: FormGroup;
   error: string = '';
 

@@ -31,7 +31,7 @@ export class GlobalSelectionComponent implements OnInit, OnDestroy {
       .subscribe({
         next: globals => {
           this.globals = globals;
-          this.loadFilteredOptions();
+          setTimeout(() => this.loadFilteredOptions(), 100);
         },
         error: error => this.error = error
       });
@@ -52,11 +52,11 @@ export class GlobalSelectionComponent implements OnInit, OnDestroy {
 
   private loadFilteredOptions() {
     this.filteredOptions = this.globalForm.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this.filter(name) : this.globals.slice())
-    );
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this.filter(name) : this.globals.slice())
+      );
   }
 
   private filter(value: string): Global[] {

@@ -1,38 +1,40 @@
 <div id="component" class="container">
     <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-    <section>
-        <mat-card>
-            <mat-card-title-group>
-                <mat-card-title><i class="fas fa-info-circle"></i>Case Detail</mat-card-title>
-                <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
-            </mat-card-title-group>
-            <mat-card-content>
-                <mat-form-field appearance="outline">
-                    <mat-label>Description</mat-label>
-                    <textarea matInput cdkTextareaAutosize type="text" [value]="sessionCase?.description" [readonly]="true"></textarea>
-                </mat-form-field>
-                <div class="content-detail">
+    <ng-container *ngIf="sessionCase$ | async as sessionCase">
+        <section>
+            <mat-card>
+                <mat-card-title-group>
+                    <mat-card-title><i class="fas fa-info-circle"></i>Case Detail</mat-card-title>
+                    <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
+                </mat-card-title-group>
+                <mat-card-content>
                     <mat-form-field appearance="outline">
-                        <mat-label>Protocol</mat-label>
-                        <input matInput type="text" [value]="sessionCase?.protocol" [readonly]="true">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput cdkTextareaAutosize type="text" [value]="sessionCase?.description" [readonly]="true"></textarea>
                     </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Status</mat-label>
-                        <input matInput type="text" [value]="getStatus()" [readonly]="true">
-                    </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Created At</mat-label>
-                        <input matInput type="text" [value]="sessionCase?.createdAt | date:'short'" [readonly]="true">
-                    </mat-form-field>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </section>
-    <div class="procedure-component" *ngFor="let procedure of sessionCase?.procedures">
-        <app-case-procedure
-            [procedure]="procedure" 
-            [caseid]="sessionCase?.id"
-            (eventChange)="onProcedureChanged($event)">
-        </app-case-procedure>
-    </div>
+                    <div class="content-detail">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Protocol</mat-label>
+                            <input matInput type="text" [value]="sessionCase?.protocol" [readonly]="true">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <input matInput type="text" [value]="getStatus(sessionCase)" [readonly]="true">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Created At</mat-label>
+                            <input matInput type="text" [value]="sessionCase?.createdAt | date:'short'" [readonly]="true">
+                        </mat-form-field>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </section>
+        <div class="procedure-component" *ngFor="let procedure of sessionCase?.procedures">
+            <app-case-procedure
+                [procedure]="procedure" 
+                [caseid]="sessionCase?.id"
+                (eventChange)="onProcedureChanged($event)">
+            </app-case-procedure>
+        </div>
+    </ng-container>
 </div>

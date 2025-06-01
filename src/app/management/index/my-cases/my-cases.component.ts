@@ -1,9 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { merge, Subject } from 'rxjs';
+import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
@@ -30,10 +29,9 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['custom_view', 'context', 'custom_status'];
   expandedElement: Case | undefined;
-  dataSource!: MatTableDataSource<Case>;
+  dataSource$!: Observable<Case[]>
 
   resultsLength = 0;
-  loading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -41,7 +39,8 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
   constructor(
     private readonly authService: AuthService,
     private readonly agentService: AgentService,
-    private readonly sessionService: SessionService
+    private readonly sessionService: SessionService,
+    private readonly cdk: ChangeDetectorRef
   ) { }
 
   ngAfterViewInit(): void {
@@ -56,27 +55,22 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
     this.unsubscribe.complete();
   }
 
-  private loadData(agent?: Agent) {
+  private loadData(_?: Agent) {
     const sessionid = this.authService.getUserInfo('sessionid');
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.loading = true;
-          return this.sessionService.listAgentCases(sessionid, { 
-            size: this.paginator.pageSize, 
-            page: this.paginator.pageIndex 
-          }).pipe(takeUntil(this.unsubscribe))
-        }),
-        map(data => {
-          this.loading = false;
-          if (data === null)
-            return [];
-
-          this.resultsLength = data.items;
-          return data.data;
-        })
-      ).subscribe(data => this.dataSource = new MatTableDataSource(data));
+    this.dataSource$ = merge(this.sort.sortChange, this.paginator.page).pipe(
+      startWith({}),
+      switchMap(() => {
+        return this.sessionService.listAgentCases(sessionid, { 
+          size: this.paginator.pageSize, 
+          page: this.paginator.pageIndex 
+        }).pipe(takeUntil(this.unsubscribe))
+      }),
+      map(data => {
+        if (data === null) return [];
+        this.resultsLength = data.items;
+        return data.data;
+      })
+    );
   }
 
   getColumns(): string[] {
@@ -100,6 +94,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
       .subscribe({
         next: () => {
           this.loadData();
+          this.cdk.detectChanges();
         },
         error: error => {
           ConsoleLogger.printError('Failed to unWatch', error);

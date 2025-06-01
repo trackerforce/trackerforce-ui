@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { merge, Subject } from 'rxjs';
+import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
@@ -19,7 +19,7 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['description'];
   expandedElement: Global | undefined;
-  data: Global[] = [];
+  dataSource$!: Observable<Global[]>;
 
   resultsLength = 0;
   loading = true;
@@ -44,26 +44,28 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   }
 
   private loadData(global?: Global) {
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.loading = true;
-          return this.globalService.listGlobals(global, { 
-            size: this.paginator.pageSize, 
-            page: this.paginator.pageIndex,
-            sortBy: `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`
-          }).pipe(takeUntil(this.unsubscribe))
-        }),
-        map(data => {
-          this.loading = false;
-          if (data === null)
-            return [];
-
-          this.resultsLength = data.items;
-          return data.data;
-        })
-      ).subscribe(data => this.data = data);
+    this.dataSource$ = merge(this.sort.sortChange, this.paginator.page).pipe(
+      startWith({}),
+      switchMap(() => {
+        this.loading = true;
+        let sortBy = '';
+        if (this.sort.active) {
+          sortBy = `${this.sort.direction === 'asc' ? '+' : '-'}${this.sort.active}`;
+        }
+        
+        return this.globalService.listGlobals(global, { 
+          size: this.paginator.pageSize, 
+          page: this.paginator.pageIndex,
+          sortBy
+        }).pipe(takeUntil(this.unsubscribe))
+      }),
+      map(data => {
+        this.loading = false;
+        if (data === null) return [];
+        this.resultsLength = data.items;
+        return data.data;
+      })
+    );
   }
 
   getColumns(): string[] {

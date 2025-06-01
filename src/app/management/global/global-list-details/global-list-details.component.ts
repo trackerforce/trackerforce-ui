@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
@@ -23,7 +23,8 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly globalService: GlobalService,
-    private readonly snackBar: MatSnackBar
+    private readonly snackBar: MatSnackBar,
+    private readonly cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +53,7 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: global => {
           this.global = global;
+          this.cd.detectChanges();
           this.snackBar.open(`Feature updated`, 'Close', { duration: 2000 });
         },
         error: error => {

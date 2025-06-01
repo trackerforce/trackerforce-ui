@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
@@ -19,7 +19,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
 
   loading = true;
   error: string = '';
-  task = new Task();
+  task$ = new BehaviorSubject<Task | null>(null);
 
   constructor(
     private readonly taskService: TaskService,
@@ -37,7 +37,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
       .subscribe({
         next: task => {
           if (task) {
-            this.task = task;
+            this.task$.next(task);
             this.loading = false;
           }
         },
@@ -55,7 +55,7 @@ export class TaskEditComponent implements OnInit, OnDestroy {
   }
 
   onTaskChange(task: Task) {
-    this.task = task;
+    this.task$.next(task);
   }
 
   onSubmit() {
@@ -66,8 +66,8 @@ export class TaskEditComponent implements OnInit, OnDestroy {
     return this.router.navigate([`${this.authService.getManagementOrgPath()}/tasks`]);
   }
 
-  hasOptions(): boolean {
-    return this.task.options ? this.task.options.length > 0 : false;
+  hasOptions(task: Task | null): boolean {
+    return !!task?.options?.length;
   }
 
 }

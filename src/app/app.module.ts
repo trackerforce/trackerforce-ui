@@ -1,6 +1,6 @@
 import { CommonModule, LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, provideZonelessChangeDetection, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,20 +28,18 @@ import { SignupComponent } from './signup/signup.component';
     CommonModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    AppMaterialModule,
-    HttpClientModule
+    AppMaterialModule
   ],
   providers: [
+    provideZonelessChangeDetection(),
+    provideBrowserGlobalErrorListeners(),
     AuthGuard,
     AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    },
+    JwtHelperService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, 
-    JwtHelperService
+    provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

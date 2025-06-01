@@ -31,7 +31,7 @@ export class ProcedureSelectionComponent implements OnInit, OnDestroy {
         startWith(''),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(value => this.filter(value || ''))
+        switchMap(value => this.filter(value ?? ''))
       );
   }
 
