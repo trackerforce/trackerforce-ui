@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,24 +15,22 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class TemplateCreateComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly templateService = inject(TemplateService);
+  private readonly helperService = inject(HelperService);
 
-  templateSubject: Subject<Template | undefined> = new Subject();
+  private readonly unsubscribe = new Subject();
+
+  templateSubject = new Subject();
   template!: Template;
-  error: string = '';
-
-  constructor(
-    private readonly snackBar: MatSnackBar,
-    private readonly templateService: TemplateService,
-    private readonly helperService: HelperService
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.template = new Template();
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 
@@ -41,7 +39,7 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const helper: Helper = this.template?.helper!;
+    const helper: Helper = this.template.helper!;
     const newTemplate: Template = {
       name: this.template.name,
       description: this.template.description,

@@ -1,7 +1,7 @@
 export class Paginable<T> {
-    pages: number = 0;
-    page: number = 0;
-    items: number = 0;
+    pages = 0;
+    page = 0;
+    items = 0;
     data: T[] = [];
 }
 

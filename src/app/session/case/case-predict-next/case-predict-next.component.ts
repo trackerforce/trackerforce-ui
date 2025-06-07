@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Observable } from 'rxjs';
@@ -14,7 +14,11 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class CasePredictNextComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly sessionService = inject(SessionService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private readonly unsubscribe = new Subject();
   @Input() procedure!: Procedure;
   @Input() caseid?: string;
   @Output() eventChange = new EventEmitter<Procedure>();
@@ -24,12 +28,6 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
 
   filteredOptions!: Observable<Procedure[]>;
   procedureForm!: FormGroup;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly sessionService: SessionService,
-    private readonly snackBar: MatSnackBar
-  ) { }
 
   ngOnInit(): void {
     this.procedureForm = this.formBuilder.group({
@@ -41,12 +39,12 @@ export class CasePredictNextComponent implements OnInit, OnDestroy {
         startWith(''),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(value => this.filter(value || ''))
+        switchMap(value => this.filter(value ?? ''))
       );
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -10,10 +10,7 @@ import { Admin } from '../models/admin';
   providedIn: 'root'
 })
 export class AdminService extends ApiService {
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
+  private readonly http = inject(HttpClient);
 
   public getAdmin(): Observable<Admin> {
     return this.http.get<Admin>(`${environment.identityServiceUrl}/admin/me`).pipe(catchError(super.handleError));

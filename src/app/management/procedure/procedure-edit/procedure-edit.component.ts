@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -14,19 +14,19 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class ProcedureEditComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
-  private _procedureid: string = '';
+  private readonly procedureService = inject(ProcedureService);
+  private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
+  private readonly unsubscribe = new Subject();
+  private _procedureid = '';
 
   loading = true;
-  error: string = '';
+  error = '';
   procedure$ = new BehaviorSubject<Procedure | null>(null);
 
-  constructor(
-    private readonly procedureService: ProcedureService,
-    private readonly authService: AuthService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
+  constructor() {
     this.route.params.subscribe(params => this._procedureid = params.procedureid);
   }
 
@@ -48,7 +48,7 @@ export class ProcedureEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

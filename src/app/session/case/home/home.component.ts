@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, takeUntil, tap } from 'rxjs/operators';
@@ -16,19 +16,19 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class IndexHomeComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly sessionService = inject(SessionService);
+  private readonly agentService = inject(AgentService);
+
+  private readonly unsubscribe = new Subject();
   private protocol!: string;
   
   loading = true;
-  error: string = '';
+  error = '';
   sessionCase$!: Observable<Case | undefined>; 
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly sessionService: SessionService,
-    private readonly agentService: AgentService
-  ) { 
+  constructor() { 
     this.route.params.subscribe(params => this.protocol = params.protocol);
   }
 
@@ -37,7 +37,7 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

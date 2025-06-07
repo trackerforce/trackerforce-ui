@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
@@ -11,12 +11,9 @@ import { Agent } from '../models/agent';
   providedIn: 'root'
 })
 export class AgentService extends ApiService {
+  private readonly http = inject(HttpClient);
 
   public agent = new Subject<Agent | undefined>();
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
 
   public listAgents(agent?: Agent, pageSetup?: PageSetup): Observable<Paginable<Agent>> {
     let params = this.paramFromObject(agent);

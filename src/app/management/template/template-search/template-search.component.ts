@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Template } from 'src/app/models/template';
 
@@ -9,14 +9,12 @@ import { Template } from 'src/app/models/template';
   standalone: false
 })
 export class TemplateSearchComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+
   @Output() templateSearched = new EventEmitter<Template>();
 
   templateForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.templateForm = this.formBuilder.group({

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
@@ -15,25 +15,23 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class CaseProcedureComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly sessionService = inject(SessionService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private readonly unsubscribe = new Subject();
 
   @Input() caseid?: string;
   @Input() procedure!: Procedure;
   @Output() eventChange = new EventEmitter<Procedure>();
 
   procedureForm!: FormGroup;
-  error: string = '';
-  loading: boolean = false;
+  error = '';
+  loading = false;
 
-  open: boolean = true;
-  submitted: boolean = false;
-  resolved: boolean = false;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly sessionService: SessionService,
-    private readonly snackBar: MatSnackBar
-  ) { }
+  open = true;
+  submitted = false;
+  resolved = false;
 
   ngOnInit(): void {
     this.readProcedureStatuses();
@@ -44,7 +42,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 
@@ -66,7 +64,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   }
   
   onTaskChange(task: Task) {
-    for (let t of this.procedure.tasks!) {
+    for (const t of this.procedure.tasks!) {
       if (t.id === task.id) {
         // t = task; you meant copy?
         break;

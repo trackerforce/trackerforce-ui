@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Task } from 'src/app/models/task';
 
@@ -9,14 +9,12 @@ import { Task } from 'src/app/models/task';
   standalone: false
 })
 export class TaskSearchComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+
   @Output() taskSearched = new EventEmitter<Task>();
 
   taskForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.taskForm = this.formBuilder.group({

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -16,7 +16,10 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   standalone: false
 })
 export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly authService = inject(AuthService);
+  private readonly templateService = inject(TemplateService);
+
+  private readonly unsubscribe = new Subject();
   @Input() filter?: Subject<Template>
 
   displayedColumns: string[] = ['action', 'name'];
@@ -29,11 +32,6 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly templateService: TemplateService
-  ) { }
-
   ngOnInit(): void {
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(template => this.loadData(template));
     this.templateService.template.pipe(takeUntil(this.unsubscribe)).subscribe(template => this.loadData(template));
@@ -45,7 +43,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

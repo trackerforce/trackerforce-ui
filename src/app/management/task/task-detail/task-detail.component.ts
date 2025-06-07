@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Helper } from 'src/app/models/helper';
 import { Option, Task, TASK_TYPES } from 'src/app/models/task';
@@ -11,17 +11,15 @@ import { TaskService } from 'src/app/services/task.service';
   standalone: false
 })
 export class TaskDetailComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly taskService = inject(TaskService);
+
   @Input() task!: Task;
-  @Input() showOptions: boolean = false;
+  @Input() showOptions = false;
   @Output() taskChanged = new EventEmitter<Task>();
   
   taskForm!: FormGroup;
   displayTaskTypes: any[] = TASK_TYPES;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly taskService: TaskService
-  ) { }
 
   ngOnInit(): void {
     this.taskService.task.subscribe(task => {

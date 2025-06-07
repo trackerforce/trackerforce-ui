@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -16,7 +16,10 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   standalone: false
 })
 export class AgentListComponent implements AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly authService = inject(AuthService);
+  private readonly agentService = inject(AgentService);
+
+  private readonly unsubscribe = new Subject();
 
   displayedColumns: string[] = ['action_edit', 'name', 'email'];
   expandedElement: Agent | undefined;
@@ -28,11 +31,6 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly agentService: AgentService
-  ) { }
-
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent))
@@ -41,7 +39,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

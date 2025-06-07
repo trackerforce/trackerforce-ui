@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
@@ -12,12 +12,9 @@ import { Procedure } from '../models/procedure';
   providedIn: 'root'
 })
 export class ProcedureService extends ApiService {
+  private readonly http = inject(HttpClient);
 
   public procedure = new Subject<Procedure>();
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
 
   public listProcedures(procedure?: Procedure, pageSetup?: PageSetup): Observable<Paginable<Procedure>> {
     let params = this.paramFromObject(procedure);
@@ -33,7 +30,7 @@ export class ProcedureService extends ApiService {
   }
 
   public createProcedure(procedure: Procedure, helper: Helper): Observable<Procedure> {
-    let body: any = { procedure };
+    const body: any = { procedure };
 
     if (helper.content)
       body.helper = helper;

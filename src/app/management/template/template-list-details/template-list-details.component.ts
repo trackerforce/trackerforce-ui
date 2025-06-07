@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -16,20 +16,18 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly templateService = inject(TemplateService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private readonly unsubscribe = new Subject();
 
   @Input() template?: Template
   @Output() templateChanged = new EventEmitter<Template>();
 
   proceduresSubject = new BehaviorSubject<Procedure[] | undefined>(undefined);
   templateForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly templateService: TemplateService,
-    private readonly snackBar: MatSnackBar
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.templateForm = this.formBuilder.group({
@@ -43,7 +41,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

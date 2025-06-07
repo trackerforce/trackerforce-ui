@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -13,14 +13,12 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class IndexHomeComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly authService = inject(AuthService);
+  private readonly agentServie = inject(AgentService);
+
+  private readonly unsubscribe = new Subject();
 
   agent?: Agent;
-
-  constructor(
-    private readonly authService: AuthService,
-    private readonly agentServie: AgentService
-  ) { }
 
   ngOnInit(): void {
     if (this.isAgent()) {
@@ -29,7 +27,7 @@ export class IndexHomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

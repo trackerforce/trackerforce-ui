@@ -14,7 +14,7 @@
                         <span *ngIf="procedure.id === prediction_id">
                             <strong>{{getOption(procedure)}}</strong>
                         </span>
-                        <span *ngIf="procedure.id != prediction_id">
+                        <span *ngIf="procedure.id !== prediction_id">
                             <span>{{getOption(procedure)}}</span>
                         </span>
                     </mat-option>

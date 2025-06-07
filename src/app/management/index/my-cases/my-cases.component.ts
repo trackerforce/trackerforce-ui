@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -25,7 +25,12 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class MyCasesComponent implements AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly authService = inject(AuthService);
+  private readonly agentService = inject(AgentService);
+  private readonly sessionService = inject(SessionService);
+  private readonly cdk = inject(ChangeDetectorRef);
+
+  private readonly unsubscribe = new Subject();
 
   displayedColumns: string[] = ['custom_view', 'context', 'custom_status'];
   expandedElement: Case | undefined;
@@ -36,13 +41,6 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly agentService: AgentService,
-    private readonly sessionService: SessionService,
-    private readonly cdk: ChangeDetectorRef
-  ) { }
-
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent))
@@ -51,7 +49,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

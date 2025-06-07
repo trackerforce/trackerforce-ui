@@ -1,5 +1,5 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -11,9 +11,11 @@ import { AuthAccess } from '../models/auth-access';
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly http = inject(HttpClient);
+  private readonly jwtHelper = inject(JwtHelperService);
 
-  @Output() logoff: EventEmitter<string> = new EventEmitter();
-  @Output() releaseOldSessions: EventEmitter<any> = new EventEmitter();
+  @Output() logoff = new EventEmitter();
+  @Output() releaseOldSessions = new EventEmitter();
 
   public static readonly USER_INFO = 'USER_INFO';
   public static readonly JWT_TOKEN = 'JWT_TOKEN';
@@ -27,7 +29,7 @@ export class AuthService {
 
   loggedUser = "";
 
-  constructor(private readonly http: HttpClient, private readonly jwtHelper :JwtHelperService) {
+  constructor() {
     this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN) ?? "");
     this.currentToken = this.currentTokenSubject.asObservable();
 

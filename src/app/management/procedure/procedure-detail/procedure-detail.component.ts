@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
@@ -13,16 +13,14 @@ import { ProcedureService } from 'src/app/services/procedure.service';
   standalone: false
 })
 export class ProcedureDetailComponent implements OnInit, AfterViewInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly procedureService = inject(ProcedureService);
+
   @Input() procedure!: Procedure;
   @Output() procedureChanged = new EventEmitter<Procedure>();
 
   tasksSubject = new BehaviorSubject<Task[] | undefined>(undefined);
   procedureForm!: FormGroup;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly procedureService: ProcedureService
-  ) { }
 
   ngOnInit(): void {
     this.procedureService.procedure.subscribe(procedure => {

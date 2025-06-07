@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Helper } from 'src/app/models/helper';
 import { HelperService } from 'src/app/services/helper.service';
@@ -10,16 +10,14 @@ import { HelperService } from 'src/app/services/helper.service';
   standalone: false
 })
 export class HelperComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly helperService = inject(HelperService);
+
   @Input() helper!: Helper | undefined;
   @Output() selectedHelper = new EventEmitter<Helper>();
 
   formGroup!: FormGroup;
   displayRenderTypes: string[] = ['PLAINTEXT', 'MARKDOWN', 'HTML'];
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly helperService: HelperService
-  ) { }
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({

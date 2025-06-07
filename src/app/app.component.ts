@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 
@@ -9,16 +9,13 @@ import { AuthService } from './auth/services/auth.service';
   standalone: false
 })
 export class AppComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly cdr = inject(ChangeDetectorRef);
   
   currentToken = ""
   tenant = "";
   isAgent = false;
-
-  constructor(
-    private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly cdr: ChangeDetectorRef
-  ) { }
 
   ngOnInit() {
     this.authService.currentToken.subscribe(token => {

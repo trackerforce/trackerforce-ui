@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,24 +15,22 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class TaskCreateComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
-  
-  taskSubject: Subject<Task> = new Subject();
-  task!: Task;
-  error: string = '';
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly taskService = inject(TaskService);
+  private readonly helperService = inject(HelperService);
 
-  constructor(
-    private readonly snackBar: MatSnackBar,
-    private readonly taskService: TaskService,
-    private readonly helperService: HelperService
-  ) { }
+  private readonly unsubscribe = new Subject();
+  
+  taskSubject = new Subject();
+  task!: Task;
+  error = '';
 
   ngOnInit(): void {
     this.task = new Task();
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 
@@ -41,7 +39,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const helper: Helper = this.task?.helper!;
+    const helper: Helper = this.task.helper!;
     const newTask: Task = {
       description: this.task.description,
       type: this.task.type,

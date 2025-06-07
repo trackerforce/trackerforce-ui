@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
@@ -8,11 +8,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   standalone: false
 })
 export class AgentsComponent {
-
-  constructor(
-    private readonly authService: AuthService
-  ) {
-  }
+  private readonly authService = inject(AuthService);
 
   isAgent() {
     return this.authService.hasRole('AGENT');

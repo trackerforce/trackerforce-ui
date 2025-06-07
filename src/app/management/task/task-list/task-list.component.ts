@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
@@ -16,11 +16,14 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   standalone: false
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly authService = inject(AuthService);
+  private readonly taskService = inject(TaskService);
+
+  private readonly unsubscribe = new Subject();
 
   @Input() filter?: Subject<Task>
-  @Input() procedureChild: boolean = false;
-  @Input() editable: boolean = false;
+  @Input() procedureChild = false;
+  @Input() editable = false;
   @Input() tasksSubject!: BehaviorSubject<Task[] | undefined>;
   @Output() removeTask = new EventEmitter<Task>();
 
@@ -33,11 +36,6 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-  constructor(
-    private readonly authService: AuthService,
-    private readonly taskService: TaskService
-  ) { }
 
   ngOnInit(): void {
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
@@ -55,7 +53,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
@@ -12,14 +12,11 @@ import { Procedure } from '../models/procedure';
   providedIn: 'root'
 })
 export class SessionService extends ApiService {
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
+  private readonly http = inject(HttpClient);
 
   public listAgentCases(sessionid: string, pageSetup: PageSetup): Observable<Paginable<Case>> {
     pageSetup.output = 'id,createdAt,protocol,description,context,procedures.status,procedures.description';
-    let params = this.paramFromObject(pageSetup);
+    const params = this.paramFromObject(pageSetup);
     
     return this.http.get<Paginable<Case>>(`${environment.sessionServiceUrl}/session/case/v1/agent/${sessionid}`, { params })
       .pipe(catchError(super.handleError));
@@ -42,7 +39,7 @@ export class SessionService extends ApiService {
       case: caseId,
       procedure: procedure.id,
       event: 'SAVE',
-      tasks: procedure!.tasks!.map(task => {
+      tasks: procedure.tasks!.map(task => {
         return {
           id: task.id,
           response: task.response

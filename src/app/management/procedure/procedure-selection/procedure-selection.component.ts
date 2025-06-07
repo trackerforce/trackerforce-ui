@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
@@ -12,18 +12,16 @@ import { ProcedureService } from 'src/app/services/procedure.service';
   standalone: false
 })
 export class ProcedureSelectionComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly procedureService = inject(ProcedureService);
+
+  private readonly unsubscribe = new Subject();
 
   @Output() selectedProcedure = new EventEmitter<Procedure>();
   procedures!: Procedure[];
 
-  error: string = '';
+  error = '';
   procedureForm = new FormControl();
   filteredOptions!: Observable<Procedure[]>;
-
-  constructor(
-    private readonly procedureService: ProcedureService,
-  ) { }
 
   ngOnInit(): void {
     this.filteredOptions = this.procedureForm.valueChanges
@@ -36,7 +34,7 @@ export class ProcedureSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

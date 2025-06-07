@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -15,21 +15,21 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class AgentEditComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
-  private _agentid: string = '';
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly agentService = inject(AgentService);
+
+  private readonly unsubscribe = new Subject();
+  private _agentid = '';
 
   loading = true;
   agentForm!: FormGroup;
-  error: string = '';
+  error = '';
   agent?: Agent = undefined;
 
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly agentService: AgentService
-  ) { 
+  constructor() { 
     this.route.params.subscribe(params => this._agentid = params.agentid);
   }
 
@@ -59,7 +59,7 @@ export class AgentEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

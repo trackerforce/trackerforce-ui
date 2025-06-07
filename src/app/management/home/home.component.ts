@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
@@ -9,14 +9,13 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   standalone: false
 })
 export class HomeComponent implements AfterViewInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
 
   tenant: string | undefined;
-  currentView: string = 'home'
+  currentView = 'home'
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService
-  ) {
+  constructor() {
     this.route.params.subscribe(params => this.tenant = params.tenant ?? this.authService.getUserInfo('tenant'));
   }
 

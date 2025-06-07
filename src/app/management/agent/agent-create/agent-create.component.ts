@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
@@ -13,16 +13,14 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class AgentCreateComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly agentService = inject(AgentService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private readonly unsubscribe = new Subject();
 
   agentForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly agentService: AgentService,
-    private readonly snackBar: MatSnackBar
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.agentForm = this.formBuilder.group({
@@ -32,7 +30,7 @@ export class AgentCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

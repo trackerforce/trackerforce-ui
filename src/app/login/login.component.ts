@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -13,18 +13,16 @@ import { ConsoleLogger } from '../_helpers/console-logger';
     standalone: false
 })
 export class LoginComponent implements OnInit, OnDestroy {
-    private readonly unsubscribe: Subject<void> = new Subject();
+    private readonly formBuilder = inject(FormBuilder);
+    private readonly router = inject(Router);
+    private readonly authService = inject(AuthService);
+
+    private readonly unsubscribe = new Subject();
 
     loginForm!: FormGroup;
     returnUrl: string | undefined;
-    error: string = '';
-    type: boolean = false;
-
-    constructor(
-        private readonly formBuilder: FormBuilder,
-        private readonly router: Router,
-        private readonly authService: AuthService
-    ) { }
+    error = '';
+    type = false;
 
     ngOnInit() {
         if (this.authService.isLoggedIn()) {
@@ -80,7 +78,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.unsubscribe.next();
+        this.unsubscribe.next(null);
         this.unsubscribe.complete();
     }
 

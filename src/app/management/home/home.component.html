@@ -4,7 +4,7 @@
             <div class="sticky">
                 <div class="sidebar-header">
                     <a #home id="home" routerLink="/management/{{tenant}}" (click)="toggleMenu(home)">
-                        <img src="assets\trackerforce_1280_white_trans.png" style="width: 200px;" />
+                        <img src="assets\trackerforce_1280_white_trans.png" style="width: 200px;" alt="TrackerForce Logo" />
                     </a>
                 </div>
                 <mat-divider></mat-divider>
@@ -40,7 +40,7 @@
 
         <div id="content">
             <div id="sidebarCollapse" class="container-fluid sticky">
-                <img class="logo" src="assets\trackerforce_1280_white_trans.png" />
+                <img class="logo" src="assets\trackerforce_1280_white_trans.png" alt="TrackerForce Logo" />
                 <button type="button" id="sidebarCollapseBtn" class="btn btn-dark" (click)="toggleMenu()">
                     <i class="fas fa-align-left"></i>
                 </button>

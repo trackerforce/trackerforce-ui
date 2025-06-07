@@ -1,6 +1,6 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
@@ -12,18 +12,16 @@ import { TaskService } from 'src/app/services/task.service';
   standalone: false
 })
 export class TaskSelectionComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly taskService = inject(TaskService);
+
+  private readonly unsubscribe = new Subject();
 
   @Output() selectedTask = new EventEmitter<Task>();
   tasks!: Task[];
 
-  error: string = '';
+  error = '';
   taskForm = new FormControl();
   filteredOptions!: Observable<Task[]>;
-
-  constructor(
-    private readonly taskService: TaskService,
-  ) { }
 
   ngOnInit(): void {
     this.filteredOptions = this.taskForm.valueChanges
@@ -31,12 +29,12 @@ export class TaskSelectionComponent implements OnInit, OnDestroy {
         startWith(''),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(value => this.filter(value || ''))
+        switchMap(value => this.filter(value ?? ''))
       );
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

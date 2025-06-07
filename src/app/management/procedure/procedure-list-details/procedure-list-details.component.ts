@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -15,21 +15,19 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly procedureService = inject(ProcedureService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private readonly unsubscribe = new Subject();
 
   @Input() procedure?: Procedure;
-  @Input() editable: boolean = false;
+  @Input() editable = false;
   @Output() procedureChanged = new EventEmitter<Procedure>();
 
   tasksSubject = new BehaviorSubject<Task[] | undefined>(undefined);
   procedureForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly procedureService: ProcedureService,
-    private readonly snackBar: MatSnackBar
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.procedureForm = this.formBuilder.group({
@@ -43,7 +41,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

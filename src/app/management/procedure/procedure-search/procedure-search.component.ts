@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Procedure } from 'src/app/models/procedure';
 
@@ -9,14 +9,12 @@ import { Procedure } from 'src/app/models/procedure';
   standalone: false
 })
 export class ProcedureSearchComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+
   @Output() procedureSearched = new EventEmitter<Procedure>();
 
   procedureForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.procedureForm = this.formBuilder.group({

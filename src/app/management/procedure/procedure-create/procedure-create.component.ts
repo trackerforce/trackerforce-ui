@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,24 +15,22 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class ProcedureCreateComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly procedureService = inject(ProcedureService);
+  private readonly helperService = inject(HelperService);
 
-  procedureSubject: Subject<Procedure> = new Subject();
+  private readonly unsubscribe = new Subject();
+
+  procedureSubject = new Subject();
   procedure!: Procedure;
-  error: string = '';
-
-  constructor(
-    private readonly snackBar: MatSnackBar,
-    private readonly procedureService: ProcedureService,
-    private readonly helperService: HelperService
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.procedure = new Procedure();
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 
@@ -41,7 +39,7 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const helper: Helper = this.procedure?.helper!;
+    const helper: Helper = this.procedure.helper!;
     const procedure: Procedure = {
       name: this.procedure.name,
       description: this.procedure.description,

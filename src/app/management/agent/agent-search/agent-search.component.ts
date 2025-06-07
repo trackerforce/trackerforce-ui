@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AgentService } from 'src/app/services/agent.service';
 
@@ -9,14 +9,11 @@ import { AgentService } from 'src/app/services/agent.service';
   standalone: false
 })
 export class AgentSearchComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly agentService = inject(AgentService);
 
   agentForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly agentService: AgentService
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.agentForm = this.formBuilder.group({

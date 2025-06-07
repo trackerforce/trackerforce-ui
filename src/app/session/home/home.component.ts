@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -16,24 +16,21 @@ import { ConsoleLogger } from 'src/app/_helpers/console-logger';
   standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly templateService = inject(TemplateService);
+  private readonly sessionService = inject(SessionService);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
+  private readonly unsubscribe = new Subject();
 
   sessionForm!: FormGroup;
-  error: string = '';
-  type: boolean = false;
-  loading: boolean = false;
+  error = '';
+  type = false;
+  loading = false;
 
   templates!: Template[];
   filteredOptions!: Observable<Template[]>;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly templateService: TemplateService,
-    private readonly sessionService: SessionService,
-    private readonly router: Router,
-    private readonly authService: AuthService
-  ) {
-  }
 
   ngOnInit() {
     this.sessionForm = this.formBuilder.group({
@@ -52,7 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
@@ -12,12 +12,9 @@ import { Template } from '../models/template';
   providedIn: 'root'
 })
 export class TemplateService extends ApiService {
+  private readonly http = inject(HttpClient);
 
   public template = new Subject<Template>();
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
 
   public listTemplates(template?: Template, pageSetup?: PageSetup): Observable<Paginable<Template>> {
     let params = this.paramFromObject(template);
@@ -33,7 +30,7 @@ export class TemplateService extends ApiService {
   }
 
   public createTemplate(template: Template, helper: Helper): Observable<Template> {
-    let body: any = { template };
+    const body: any = { template };
 
     if (helper.content)
       body.helper = helper;

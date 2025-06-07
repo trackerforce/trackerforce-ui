@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
@@ -13,16 +13,14 @@ import { TemplateService } from 'src/app/services/template.service';
   standalone: false
 })
 export class TemplateDetailComponent implements OnInit, AfterViewInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly templateService = inject(TemplateService);
+
   @Input() template!: Template;
   @Output() templateChanged = new EventEmitter<Template>();
 
   proceduresSubject = new BehaviorSubject<Procedure[] | undefined>(undefined);
   templateForm!: FormGroup;
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly templateService: TemplateService
-  ) { }
 
   ngOnInit(): void {
     this.templateService.template.subscribe(template => {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalService } from 'src/app/services/global.service';
 
@@ -9,14 +9,11 @@ import { GlobalService } from 'src/app/services/global.service';
   standalone: false
 })
 export class GlobalSearchComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly globalService = inject(GlobalService);
 
   globalForm!: FormGroup;
-  error: string = '';
-
-  constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly globalService: GlobalService
-  ) { }
+  error = '';
 
   ngOnInit(): void {
     this.globalForm = this.formBuilder.group({

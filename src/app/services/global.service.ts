@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
@@ -11,12 +11,9 @@ import { Global } from '../models/global';
   providedIn: 'root'
 })
 export class GlobalService extends ApiService {
+  private readonly http = inject(HttpClient);
 
   public global = new Subject<Global>();
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
 
   public listGlobals(global?: Global, pageSetup?: PageSetup): Observable<Paginable<Global>> {
     let params = this.paramFromObject(global);

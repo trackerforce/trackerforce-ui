@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -11,20 +11,17 @@ import { Task } from 'src/app/models/task';
   standalone: false
 })
 export class CaseTaskComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly formBuilder = inject(FormBuilder);
+
+  private readonly unsubscribe = new Subject();
 
   @Input() task!: Task;
-  @Input() open: boolean = true;
+  @Input() open = true;
   @Output() eventChange = new EventEmitter<Task>();
 
-  iconClass: string = "";
+  iconClass = "";
   taskForm!: FormGroup;
-  type: string = "TEXT";
-  
-  constructor(
-    private readonly formBuilder: FormBuilder
-  ) { 
-  }
+  type = "TEXT";
 
   ngOnInit(): void {
     this.type = this.task.type!;
@@ -49,7 +46,7 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

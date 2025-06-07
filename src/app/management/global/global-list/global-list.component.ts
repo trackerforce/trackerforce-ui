@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -15,7 +15,9 @@ import { detailsAnimation } from 'src/app/_helpers/animations';
   standalone: false
 })
 export class GlobalListComponent implements AfterViewInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly globalService = inject(GlobalService);
+
+  private readonly unsubscribe = new Subject();
 
   displayedColumns: string[] = ['description'];
   expandedElement: Global | undefined;
@@ -27,10 +29,6 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(
-    private readonly globalService: GlobalService
-  ) { }
-
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     this.globalService.global.pipe(takeUntil(this.unsubscribe)).subscribe(global => this.loadData(global));
@@ -39,7 +37,7 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 

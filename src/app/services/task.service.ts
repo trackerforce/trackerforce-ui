@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
@@ -12,12 +12,9 @@ import { Helper } from '../models/helper';
   providedIn: 'root'
 })
 export class TaskService extends ApiService {
+  private readonly http = inject(HttpClient);
 
   public task = new Subject<Task>();
-
-  constructor(private readonly http: HttpClient) {
-    super();
-  }
 
   public listTasks(task?: Task, pageSetup?: PageSetup): Observable<Paginable<Task>> {
     let params = this.paramFromObject(task);
@@ -33,7 +30,7 @@ export class TaskService extends ApiService {
   }
 
   public createTask(task: Task, helper: Helper): Observable<Task> {
-    let body: any = { task };
+    const body: any = { task };
 
     if (helper.content)
       body.helper = helper;

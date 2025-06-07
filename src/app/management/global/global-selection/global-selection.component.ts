@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
@@ -12,18 +12,16 @@ import { GlobalService } from 'src/app/services/global.service';
   standalone: false
 })
 export class GlobalSelectionComponent implements OnInit, OnDestroy {
-  private readonly unsubscribe: Subject<void> = new Subject();
+  private readonly globalService = inject(GlobalService);
+
+  private readonly unsubscribe = new Subject();
   
   @Output() selectedGlobal = new EventEmitter<Global>();
   globals!: Global[];
 
-  error: string = '';
+  error = '';
   globalForm = new FormControl();
   filteredOptions!: Observable<Global[]>;
-
-  constructor(
-    private readonly globalService: GlobalService,
-  ) { }
 
   ngOnInit(): void {
     this.globalService.listAvailableGlobals()
@@ -38,7 +36,7 @@ export class GlobalSelectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe.next();
+    this.unsubscribe.next(null);
     this.unsubscribe.complete();
   }
 
