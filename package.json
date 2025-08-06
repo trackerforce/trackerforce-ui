@@ -40,11 +40,11 @@
     "@angular/cli": "~20.1.4",
     "@angular/compiler-cli": "~20.1.4",
     "@types/jasmine": "~5.1.8",
-    "@types/node": "^22.15.30",
+    "@types/node": "^24.2.0",
     "angular-eslint": "20.1.1",
     "eslint": "^9.32.0",
     "typescript": "~5.8.3",
-    "typescript-eslint": "8.38.0"
+    "typescript-eslint": "8.39.0"
   },
   "repository": {
     "type": "git",
