@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
@@ -6,13 +6,11 @@ import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
-import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-procedure-list',
   templateUrl: './procedure-list.component.html',
   styleUrls: ['./procedure-list.component.scss'],
-  animations: [detailsAnimation],
   standalone: false
 })
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -28,7 +26,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   @Output() removeProcedure = new EventEmitter<Procedure>();
 
   displayedColumns: string[] = ['action', 'name'];
-  expandedElement: Procedure | undefined;
+  expandedElement = signal<Procedure | null>(null);
   dataSource$!: Observable<Procedure[]>;
 
   resultsLength = 0;
@@ -124,6 +122,20 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
     } else {
       this.loadData();
     }
+  }
+
+  toggleExpanded(element: Procedure) {
+    const currentExpanded = this.expandedElement();
+
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: Procedure): boolean {
+    return this.expandedElement() === element;
   }
 
 }

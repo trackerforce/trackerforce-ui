@@ -3,7 +3,6 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule, provideZonelessChangeDetection, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,7 +23,6 @@ import { SignupComponent } from './signup/signup.component';
   imports: [
     FormsModule,
     BrowserModule,
-    BrowserAnimationsModule,
     CommonModule,
     ReactiveFormsModule,
     AppRoutingModule,

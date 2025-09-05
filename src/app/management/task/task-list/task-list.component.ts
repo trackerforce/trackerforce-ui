@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
@@ -6,13 +6,11 @@ import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
-import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
-  animations: [detailsAnimation],
   standalone: false
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -28,7 +26,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() removeTask = new EventEmitter<Task>();
 
   displayedColumns: string[] = ['action', 'description'];
-  expandedElement: Task | undefined;
+  expandedElement = signal<Task | null>(null);
   dataSource$!: Observable<Task[]>;
 
   resultsLength = 0;
@@ -112,6 +110,20 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.tasksSubject.next(current.filter(task => task.id !== selectedTask.id));
       this.resultsLength--;
     }
+  }
+
+  toggleExpanded(element: Task) {
+    const currentExpanded = this.expandedElement();
+
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: Task): boolean {
+    return this.expandedElement() === element;
   }
 
 }

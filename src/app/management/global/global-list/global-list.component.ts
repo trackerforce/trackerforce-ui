@@ -1,17 +1,15 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
-import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-global-list',
   templateUrl: './global-list.component.html',
   styleUrls: ['./global-list.component.scss'],
-  animations: [detailsAnimation],
   standalone: false
 })
 export class GlobalListComponent implements AfterViewInit, OnDestroy {
@@ -20,7 +18,7 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
   private readonly unsubscribe = new Subject();
 
   displayedColumns: string[] = ['description'];
-  expandedElement: Global | undefined;
+  expandedElement = signal<Global | null>(null);
   dataSource$!: Observable<Global[]>;
 
   resultsLength = 0;
@@ -68,6 +66,20 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
 
   getColumns(): string[] {
     return this.displayedColumns.filter(col => !col.startsWith('action'));
+  }
+
+  toggleExpanded(element: Global) {
+    const currentExpanded = this.expandedElement();
+
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: Global): boolean {
+    return this.expandedElement() === element;
   }
 
 }

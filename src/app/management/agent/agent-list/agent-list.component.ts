@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -6,13 +6,11 @@ import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
 import { AgentService } from 'src/app/services/agent.service';
-import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-agent-list',
   templateUrl: './agent-list.component.html',
   styleUrls: ['./agent-list.component.scss'],
-  animations: [detailsAnimation],
   standalone: false
 })
 export class AgentListComponent implements AfterViewInit, OnDestroy {
@@ -22,7 +20,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   private readonly unsubscribe = new Subject();
 
   displayedColumns: string[] = ['action_edit', 'name', 'email'];
-  expandedElement: Agent | undefined;
+  expandedElement = signal<Agent | null>(null);
   data$!: Observable<Agent[]>;
 
   resultsLength = 0;
@@ -77,6 +75,20 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
 
   getAgentEdit(agentId: string): string {
     return `/${this.authService.getManagementOrgPath()}/agent/${agentId}`
+  }
+
+  toggleExpanded(element: Agent) {
+    const currentExpanded = this.expandedElement();
+
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: Agent): boolean {
+    return this.expandedElement() === element;
   }
 
 }

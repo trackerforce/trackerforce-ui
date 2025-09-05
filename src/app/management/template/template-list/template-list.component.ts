@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -6,13 +6,11 @@ import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
-import { detailsAnimation } from 'src/app/_helpers/animations';
 
 @Component({
   selector: 'app-template-list',
   templateUrl: './template-list.component.html',
   styleUrls: ['./template-list.component.scss'],
-  animations: [detailsAnimation],
   standalone: false
 })
 export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -23,7 +21,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() filter?: Subject<Template>
 
   displayedColumns: string[] = ['action', 'name'];
-  expandedElement: Template | undefined;
+  expandedElement = signal<Template | null>(null);
   dataSource$!: Observable<Template[]>;
 
   resultsLength = 0;
@@ -84,6 +82,20 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTemplateChanged(selectedTemplate: Template) {
     this.loadData();
+  }
+
+  toggleExpanded(element: Template) {
+    const currentExpanded = this.expandedElement();
+
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: Template): boolean {
+    return this.expandedElement() === element;
   }
 
 }
