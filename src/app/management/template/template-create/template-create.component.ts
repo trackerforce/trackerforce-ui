@@ -7,12 +7,18 @@ import { Template } from 'src/app/models/template';
 import { HelperService } from 'src/app/services/helper.service';
 import { TemplateService } from 'src/app/services/template.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { TemplateDetailComponent } from '../template-detail/template-detail.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-template-create',
-  templateUrl: './template-create.component.html',
-  styleUrls: ['./template-create.component.scss'],
-  standalone: false
+    selector: 'app-template-create',
+    templateUrl: './template-create.component.html',
+    styleUrls: ['./template-create.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIcon, 
+      MatExpansionPanelDescription, TemplateDetailComponent, MatButton
+    ]
 })
 export class TemplateCreateComponent implements OnInit, OnDestroy {
   private readonly snackBar = inject(MatSnackBar);

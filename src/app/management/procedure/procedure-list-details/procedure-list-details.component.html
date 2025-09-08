@@ -25,16 +25,24 @@
             </mat-error>
         </mat-form-field>
     </div>
-    <div *ngIf="editable" class="element-control">
+    @if (editable) {
+    <div class="element-control">
         <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Update</button>
         <button type="button" mat-raised-button [disabled]=true>Delete</button>
     </div>
-    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    }
+    @if (error) {
+    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    }
 </form>
-<div *ngIf="procedure?.tasks?.length">
+@if (procedure?.tasks?.length) {
+<div>
     <mat-label><h2>Tasks</h2></mat-label>
-    <app-task-list *ngIf="procedure"
+    @if (procedure) {
+    <app-task-list
         [procedureChild]="true"
         [tasksSubject]="tasksSubject">
     </app-task-list>
+    }
 </div>
+}

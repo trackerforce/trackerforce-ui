@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,12 +7,25 @@ import { Procedure } from 'src/app/models/procedure';
 import { Task } from 'src/app/models/task';
 import { SessionService } from 'src/app/services/session.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatDivider } from '@angular/material/divider';
+import { CaseTaskComponent } from '../case-task/case-task.component';
+import { MatButton } from '@angular/material/button';
+import { CasePredictNextComponent } from '../case-predict-next/case-predict-next.component';
 
 @Component({
-  selector: 'app-case-procedure',
-  templateUrl: './case-procedure.component.html',
-  styleUrls: ['./case-procedure.component.scss'],
-  standalone: false
+    selector: 'app-case-procedure',
+    templateUrl: './case-procedure.component.html',
+    styleUrls: ['./case-procedure.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatProgressSpinner, MatIcon, 
+      ReactiveFormsModule, MatFormField, MatLabel, MatInput, CdkTextareaAutosize, MatCard, MatCardTitleGroup, MatCardTitle, 
+      MatCardSubtitle, MatDivider, MatCardContent, CaseTaskComponent, MatButton, CasePredictNextComponent
+    ]
 })
 export class CaseProcedureComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

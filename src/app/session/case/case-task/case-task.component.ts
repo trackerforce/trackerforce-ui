@@ -1,14 +1,23 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Task } from 'src/app/models/task';
+import { NgClass } from '@angular/common';
+import { MatLabel, MatFormField, MatInput } from '@angular/material/input';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
-  selector: 'app-case-task',
-  templateUrl: './case-task.component.html',
-  styleUrls: ['./case-task.component.scss'],
-  standalone: false
+    selector: 'app-case-task',
+    templateUrl: './case-task.component.html',
+    styleUrls: ['./case-task.component.scss'],
+    imports: [ReactiveFormsModule, NgClass, MatLabel, MatFormField, MatInput, MatRadioGroup, 
+      MatRadioButton, MatSelect, MatOption, MatCheckbox, MatDivider
+    ]
 })
 export class CaseTaskComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

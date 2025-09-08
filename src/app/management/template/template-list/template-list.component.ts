@@ -1,17 +1,25 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
+import { TemplateListDetailsComponent } from '../template-list-details/template-list-details.component';
 
 @Component({
-  selector: 'app-template-list',
-  templateUrl: './template-list.component.html',
-  styleUrls: ['./template-list.component.scss'],
-  standalone: false
+    selector: 'app-template-list',
+    templateUrl: './template-list.component.html',
+    styleUrls: ['./template-list.component.scss'],
+    imports: [MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, RouterLink, 
+      MatTooltip, MatSortHeader, TemplateListDetailsComponent, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, 
+      MatPaginator, AsyncPipe
+    ]
 })
 export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly authService = inject(AuthService);

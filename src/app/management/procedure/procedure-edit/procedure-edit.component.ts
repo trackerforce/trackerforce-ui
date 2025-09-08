@@ -6,12 +6,20 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDivider } from '@angular/material/divider';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { ProcedureDetailComponent } from '../procedure-detail/procedure-detail.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-procedure-edit',
-  templateUrl: './procedure-edit.component.html',
-  styleUrls: ['./procedure-edit.component.scss'],
-  standalone: false
+    selector: 'app-procedure-edit',
+    templateUrl: './procedure-edit.component.html',
+    styleUrls: ['./procedure-edit.component.scss'],
+    imports: [MatProgressSpinner, MatDivider, MatCard, MatCardHeader, MatCardTitle, 
+      MatCardContent, ProcedureDetailComponent, MatButton, AsyncPipe
+    ]
 })
 export class ProcedureEditComponent implements OnInit, OnDestroy {
   private readonly procedureService = inject(ProcedureService);

@@ -8,12 +8,20 @@ import { Procedure } from 'src/app/models/procedure';
 import { AgentService } from 'src/app/services/agent.service';
 import { SessionService } from 'src/app/services/session.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { AsyncPipe, DatePipe } from '@angular/common';
+import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatDivider } from '@angular/material/divider';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { CaseProcedureComponent } from '../case-procedure/case-procedure.component';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: false
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatDivider, MatCardContent, 
+      MatFormField, MatLabel, MatInput, CdkTextareaAutosize, CaseProcedureComponent, AsyncPipe, DatePipe
+    ]
 })
 export class IndexHomeComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);

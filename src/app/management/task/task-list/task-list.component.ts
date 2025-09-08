@@ -1,17 +1,25 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { TaskListDetailsComponent } from '../task-list-details/task-list-details.component';
 
 @Component({
-  selector: 'app-task-list',
-  templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.scss'],
-  standalone: false
+    selector: 'app-task-list',
+    templateUrl: './task-list.component.html',
+    styleUrls: ['./task-list.component.scss'],
+    imports: [MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, 
+      MatCell, RouterLink, MatTooltip, MatSortHeader, TaskListDetailsComponent, MatHeaderRowDef, 
+      MatHeaderRow, MatRowDef, MatRow, MatPaginator, AsyncPipe
+    ]
 })
 export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly authService = inject(AuthService);

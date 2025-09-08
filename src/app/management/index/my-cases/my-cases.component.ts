@@ -1,5 +1,4 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
@@ -10,19 +9,22 @@ import { Case } from 'src/app/models/case';
 import { AgentService } from 'src/app/services/agent.service';
 import { SessionService } from 'src/app/services/session.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe, DatePipe } from '@angular/common';
+import { MatLabel, MatFormField, MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'app-my-cases',
-  templateUrl: './my-cases.component.html',
-  styleUrls: ['./my-cases.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
-  standalone: false
+    selector: 'app-my-cases',
+    templateUrl: './my-cases.component.html',
+    styleUrls: ['./my-cases.component.scss'],
+    imports: [MatCard, MatCardTitleGroup, MatCardTitle, MatIcon, MatCardContent, MatTable, MatSort, MatColumnDef, 
+      MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, RouterLink, MatTooltip, MatLabel, MatFormField, MatInput, 
+      MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator, AsyncPipe, DatePipe
+    ]
 })
 export class MyCasesComponent implements AfterViewInit, OnDestroy {
   private readonly authService = inject(AuthService);
@@ -33,7 +35,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
   private readonly unsubscribe = new Subject();
 
   displayedColumns: string[] = ['custom_view', 'context', 'custom_status'];
-  expandedElement: Case | undefined;
+  expandedElement = signal<Case | null>(null);
   dataSource$!: Observable<Case[]>
 
   resultsLength = 0;
@@ -98,6 +100,20 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
           ConsoleLogger.printError('Failed to unWatch', error);
         }
       });
+  }
+
+  toggleExpanded(element: Case) {
+    const currentExpanded = this.expandedElement();
+
+    if (currentExpanded === element) {
+      this.expandedElement.set(null);
+    } else {
+      this.expandedElement.set(element);
+    }
+  }
+
+  isExpanded(element: Case): boolean {
+    return this.expandedElement() === element;
   }
 
 }

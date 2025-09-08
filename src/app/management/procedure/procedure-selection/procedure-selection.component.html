@@ -5,12 +5,16 @@
             <input type="text" placeholder="Select..." matInput [formControl]="procedureForm"
                 [matAutocomplete]="auto" required>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let procedure of filteredOptions | async" [value]="procedure">
+                @for (procedure of filteredOptions | async; track procedure) {
+                <mat-option [value]="procedure">
                     {{procedure.name}}
                 </mat-option>
+                }
             </mat-autocomplete>
         </mat-form-field>
         <button type="button" (click)="onSubmit()" mat-raised-button color="primary">Select</button>
     </form>
 </div>
-<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+@if (error) {
+<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}

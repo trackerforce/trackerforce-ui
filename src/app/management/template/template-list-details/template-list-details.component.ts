@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -8,12 +8,18 @@ import { Procedure } from 'src/app/models/procedure';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { DatePipe } from '@angular/common';
+import { ProcedureListComponent } from '../../procedure/procedure-list/procedure-list.component';
 
 @Component({
-  selector: 'app-template-list-details',
-  templateUrl: './template-list-details.component.html',
-  styleUrls: ['./template-list-details.component.scss'],
-  standalone: false
+    selector: 'app-template-list-details',
+    templateUrl: './template-list-details.component.html',
+    styleUrls: ['./template-list-details.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, 
+      MatButton, ProcedureListComponent, DatePipe
+    ]
 })
 export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

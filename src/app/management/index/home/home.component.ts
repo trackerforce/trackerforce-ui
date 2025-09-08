@@ -5,12 +5,14 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
 import { AgentService } from 'src/app/services/agent.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardSmImage, MatCardContent } from '@angular/material/card';
+import { MyCasesComponent } from '../my-cases/my-cases.component';
 
 @Component({
-  selector: 'app-index-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: false
+    selector: 'app-index-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardSmImage, MatCardContent, MyCasesComponent]
 })
 export class IndexHomeComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);

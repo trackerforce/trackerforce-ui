@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: false
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [RouterLink, MatDivider, RouterOutlet]
 })
 export class HomeComponent implements AfterViewInit {
   private readonly route = inject(ActivatedRoute);

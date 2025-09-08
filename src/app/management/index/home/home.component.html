@@ -7,4 +7,7 @@
     <mat-card-content>
     </mat-card-content>
 </mat-card>
-<app-my-cases *ngIf="isAgent()"></app-my-cases>
+
+@if (isAgent()) {
+<app-my-cases></app-my-cases>
+}

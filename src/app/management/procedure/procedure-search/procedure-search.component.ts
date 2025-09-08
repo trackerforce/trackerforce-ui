@@ -1,12 +1,18 @@
 import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Procedure } from 'src/app/models/procedure';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-procedure-search',
-  templateUrl: './procedure-search.component.html',
-  styleUrls: ['./procedure-search.component.scss'],
-  standalone: false
+    selector: 'app-procedure-search',
+    templateUrl: './procedure-search.component.html',
+    styleUrls: ['./procedure-search.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIcon, 
+      MatExpansionPanelDescription, ReactiveFormsModule, MatFormField, MatInput, MatButton
+    ]
 })
 export class ProcedureSearchComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);

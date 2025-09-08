@@ -1,17 +1,25 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Observable } from 'rxjs';
 import { startWith, debounceTime, distinctUntilChanged, switchMap, takeUntil, map } from 'rxjs/operators';
 import { Procedure } from 'src/app/models/procedure';
 import { SessionService } from 'src/app/services/session.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { MatDivider } from '@angular/material/divider';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
+import { AsyncPipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-case-predict-next',
-  templateUrl: './case-predict-next.component.html',
-  styleUrls: ['./case-predict-next.component.scss'],
-  standalone: false
+    selector: 'app-case-predict-next',
+    templateUrl: './case-predict-next.component.html',
+    styleUrls: ['./case-predict-next.component.scss'],
+    imports: [MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatDivider, MatCardContent, ReactiveFormsModule, 
+      MatFormField, MatLabel, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatOption, MatError, MatButton, AsyncPipe
+    ]
 })
 export class CasePredictNextComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

@@ -9,17 +9,29 @@
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-item nav-link" routerLink="/management/{{tenant}}" *ngIf="currentToken">Management</a>
+        @if (currentToken) {
+        <a class="nav-item nav-link" routerLink="/management/{{tenant}}">Management</a>
+        }
       </li>
-      <li *ngIf="isAgent" class="nav-item">
-        <a class="nav-item nav-link" routerLink="/session/{{tenant}}" *ngIf="currentToken">Session</a>
-      </li>
+      @if (isAgent) {
       <li class="nav-item">
-        <a class="nav-item nav-link" routerLink="/login" *ngIf="!currentToken">Sign in</a>
+        @if (currentToken) {
+        <a class="nav-item nav-link" routerLink="/session/{{tenant}}">Session</a>
+        }
+      </li>
+      }
+      <li class="nav-item">
+        @if (!currentToken) {
+        <a class="nav-item nav-link" routerLink="/login">Sign in</a>
+        }
       </li>
     </ul>
-    <a class="nav-item nav-link menu-border-left" routerLink="/signup" *ngIf="!currentToken">Sign Up</a>
-    <a class="nav-item nav-link menu-border-left" routerLink="/" (click)="logout()" *ngIf="currentToken">Sign Out</a>
+    @if (!currentToken) {
+    <a class="nav-item nav-link menu-border-left" routerLink="/signup">Sign Up</a>
+    }
+    @if (currentToken) {
+    <a class="nav-item nav-link menu-border-left" routerLink="/" (click)="logout()">Sign Out</a>
+    }
   </div>
 </nav>
 

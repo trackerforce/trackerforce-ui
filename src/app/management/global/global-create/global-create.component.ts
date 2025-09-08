@@ -1,17 +1,26 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { GlobalSelectionComponent } from '../global-selection/global-selection.component';
+import { MatDivider } from '@angular/material/divider';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-global-create',
-  templateUrl: './global-create.component.html',
-  styleUrls: ['./global-create.component.scss'],
-  standalone: false
+    selector: 'app-global-create',
+    templateUrl: './global-create.component.html',
+    styleUrls: ['./global-create.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIcon, 
+      MatExpansionPanelDescription, GlobalSelectionComponent, ReactiveFormsModule, MatDivider, MatFormField, 
+      MatLabel, MatInput, MatError, MatButton
+    ]
 })
 export class GlobalCreateComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

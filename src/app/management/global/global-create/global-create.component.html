@@ -10,10 +10,12 @@
         </mat-expansion-panel-header>
 
         <app-global-selection (selectedGlobal)="selectGlobal($event)"></app-global-selection>
-        <form *ngIf="selectedGlobal" class="form-container" [formGroup]="globalForm">
+        @if (selectedGlobal) {
+        <form class="form-container" [formGroup]="globalForm">
             <section>
                 <mat-divider class="col"></mat-divider>
-                <mat-form-field class="element-editable" appearance="fill" *ngFor=" let attrib of getAttributes()">
+                @for (attrib of getAttributes(); track attrib) {
+                <mat-form-field class="element-editable" appearance="fill">
                     <mat-label>{{attrib}}</mat-label>
                     <input matInput [value]="selectedGlobal.attributes[attrib]" formControlName="{{attrib}}" autocomplete="off"
                         required>
@@ -21,12 +23,16 @@
                         Please provide a valid value
                     </mat-error>
                 </mat-form-field>
+                }
             </section>
             <div>
                 <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Create</button>
                 <button type="button" (click)="mep.expanded = false;" mat-raised-button>Cancel</button>
             </div>
-            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            @if (error) {
+            <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            }
         </form>
+        }
     </mat-expansion-panel>
 </mat-accordion>

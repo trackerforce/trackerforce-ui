@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
@@ -8,12 +8,22 @@ import { Template } from 'src/app/models/template';
 import { SessionService } from 'src/app/services/session.service';
 import { TemplateService } from 'src/app/services/template.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatCard, MatCardImage, MatCardContent } from '@angular/material/card';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { AsyncPipe } from '@angular/common';
+import { MatFormField, MatInput, MatError, MatLabel } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  standalone: false
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [MatCard, MatCardImage, MatCardContent, ReactiveFormsModule, MatRadioGroup, MatRadioButton, 
+      MatFormField, MatInput, MatError, MatLabel, MatAutocompleteTrigger, MatAutocomplete, MatOption, 
+      MatButton, MatProgressSpinner, AsyncPipe
+    ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

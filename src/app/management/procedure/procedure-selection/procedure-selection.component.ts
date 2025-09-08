@@ -1,15 +1,21 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
+import { AsyncPipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-procedure-selection',
-  templateUrl: './procedure-selection.component.html',
-  styleUrls: ['./procedure-selection.component.scss'],
-  standalone: false
+    selector: 'app-procedure-selection',
+    templateUrl: './procedure-selection.component.html',
+    styleUrls: ['./procedure-selection.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatAutocompleteTrigger, 
+      MatAutocomplete, MatOption, MatButton, AsyncPipe
+    ]
 })
 export class ProcedureSelectionComponent implements OnInit, OnDestroy {
   private readonly procedureService = inject(ProcedureService);

@@ -7,12 +7,18 @@ import { Task } from 'src/app/models/task';
 import { HelperService } from 'src/app/services/helper.service';
 import { TaskService } from 'src/app/services/task.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { TaskDetailComponent } from '../task-detail/task-detail.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-task-create',
-  templateUrl: './task-create.component.html',
-  styleUrls: ['./task-create.component.scss'],
-  standalone: false
+    selector: 'app-task-create',
+    templateUrl: './task-create.component.html',
+    styleUrls: ['./task-create.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIcon, 
+      MatExpansionPanelDescription, TaskDetailComponent, MatButton
+    ]
 })
 export class TaskCreateComponent implements OnInit, OnDestroy {
   private readonly snackBar = inject(MatSnackBar);

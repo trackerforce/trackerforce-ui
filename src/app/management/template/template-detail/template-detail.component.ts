@@ -1,16 +1,24 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Helper } from 'src/app/models/helper';
 import { Procedure } from 'src/app/models/procedure';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatDivider } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
+import { ProcedureSelectionComponent } from '../../procedure/procedure-selection/procedure-selection.component';
+import { ProcedureListComponent } from '../../procedure/procedure-list/procedure-list.component';
+import { HelperComponent } from '../../helper/helper.component';
 
 @Component({
-  selector: 'app-template-detail',
-  templateUrl: './template-detail.component.html',
-  styleUrls: ['./template-detail.component.scss'],
-  standalone: false
+    selector: 'app-template-detail',
+    templateUrl: './template-detail.component.html',
+    styleUrls: ['./template-detail.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, 
+      MatDivider, MatIcon, ProcedureSelectionComponent,ProcedureListComponent, HelperComponent
+    ]
 })
 export class TemplateDetailComponent implements OnInit, AfterViewInit {
   private readonly formBuilder = inject(FormBuilder);

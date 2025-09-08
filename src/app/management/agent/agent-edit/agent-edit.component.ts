@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,12 +7,19 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
 import { AgentService } from 'src/app/services/agent.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDivider } from '@angular/material/divider';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-agent-edit',
-  templateUrl: './agent-edit.component.html',
-  styleUrls: ['./agent-edit.component.scss'],
-  standalone: false
+    selector: 'app-agent-edit',
+    templateUrl: './agent-edit.component.html',
+    styleUrls: ['./agent-edit.component.scss'],
+    imports: [MatProgressSpinner, MatDivider, MatCard, MatCardHeader, MatCardTitle, MatCardContent, 
+      ReactiveFormsModule, MatFormField, MatInput, MatError, MatButton
+    ]
 })
 export class AgentEditComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

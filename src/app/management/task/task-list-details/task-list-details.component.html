@@ -1,7 +1,9 @@
 <div class="element-description">
-    <div *ngIf="task?.helper" class="helper-content">
+    @if (task?.helper) {
+    <div class="helper-content">
         <mat-label class="title"><mat-icon>help</mat-icon>{{task?.helper?.content}}</mat-label>
     </div>
+    }
     <mat-form-field appearance="outline">
         <mat-label>Created At</mat-label>
         <input matInput [value]="task?.createdAt | date:'short'" [readonly]=true>
@@ -22,12 +24,16 @@
         <mat-label>Hidden</mat-label>
         <input matInput [value]="task?.hidden" [readonly]=true>
     </mat-form-field>
-    <mat-form-field *ngIf="task?.options?.length" appearance="outline">
+    @if (task?.options?.length) {
+    <mat-form-field appearance="outline">
         <mat-label>Options</mat-label>
         <mat-select>
-            <mat-option *ngFor="let option of task?.options">
-                {{option.value}}
-            </mat-option>
+            @for (option of task?.options; track option) {
+                <mat-option>
+                    {{option.value}}
+                </mat-option>
+            }
         </mat-select>
     </mat-form-field>
+    }
 </div>

@@ -6,12 +6,20 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Template } from 'src/app/models/template';
 import { TemplateService } from 'src/app/services/template.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatDivider } from '@angular/material/divider';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { TemplateDetailComponent } from '../template-detail/template-detail.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-template-edit',
-  templateUrl: './template-edit.component.html',
-  styleUrls: ['./template-edit.component.scss'],
-  standalone: false
+    selector: 'app-template-edit',
+    templateUrl: './template-edit.component.html',
+    styleUrls: ['./template-edit.component.scss'],
+    imports: [MatProgressSpinner, MatDivider, MatCard, MatCardHeader, MatCardTitle, 
+      MatCardContent, TemplateDetailComponent, MatButton, AsyncPipe
+    ]
 })
 export class TemplateEditComponent implements OnInit, OnDestroy {
   private readonly templateService = inject(TemplateService);

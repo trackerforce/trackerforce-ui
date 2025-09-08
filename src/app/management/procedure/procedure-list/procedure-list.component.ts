@@ -1,17 +1,25 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { delay, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Procedure } from 'src/app/models/procedure';
 import { ProcedureService } from 'src/app/services/procedure.service';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ProcedureListDetailsComponent } from '../procedure-list-details/procedure-list-details.component';
 
 @Component({
-  selector: 'app-procedure-list',
-  templateUrl: './procedure-list.component.html',
-  styleUrls: ['./procedure-list.component.scss'],
-  standalone: false
+    selector: 'app-procedure-list',
+    templateUrl: './procedure-list.component.html',
+    styleUrls: ['./procedure-list.component.scss'],
+    imports: [MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, 
+      RouterLink, MatTooltip, MatSortHeader, ProcedureListDetailsComponent, MatHeaderRowDef, MatHeaderRow, 
+      MatRowDef, MatRow, MatPaginator, AsyncPipe
+    ]
 })
 export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly authService = inject(AuthService);

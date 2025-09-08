@@ -1,16 +1,20 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
 import { ConsoleLogger } from '../_helpers/console-logger';
+import { MatCard, MatCardImage, MatCardContent } from '@angular/material/card';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardImage, MatCardContent, ReactiveFormsModule, MatRadioGroup, MatRadioButton, MatFormField, MatInput, MatError, MatButton]
 })
 export class LoginComponent implements OnInit, OnDestroy {
     private readonly formBuilder = inject(FormBuilder);

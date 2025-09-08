@@ -2,8 +2,12 @@
     <mat-expansion-panel #mep="matExpansionPanel">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-spinner *ngIf="loading" [diameter]=20></mat-spinner>
-                <mat-icon *ngIf="!loading" class="{{open ? '' : 'done'}}">label_important</mat-icon><span>{{procedure.name}}</span>
+                @if (loading) {
+                <mat-spinner [diameter]=20></mat-spinner>
+                }
+                @if (!loading) {
+                <mat-icon class="{{open ? '' : 'done'}}">label_important</mat-icon><span>{{procedure.name}}</span>
+                }
             </mat-panel-title>
         </mat-expansion-panel-header>
 
@@ -13,45 +17,59 @@
                     <mat-label>Description</mat-label>
                     <textarea matInput cdkTextareaAutosize type="text" formControlName="description" [readonly]="true"></textarea>
                 </mat-form-field>
-                <mat-card *ngIf="procedure?.helper">
+                @if (procedure.helper) {
+                <mat-card>
                     <mat-card-title-group>
                         <mat-card-title><i class="fas fa-question-circle"></i>Instructions</mat-card-title>
                         <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
                     </mat-card-title-group>
                     <mat-card-content>
-                        <div *ngIf="procedure!.helper!.renderType === 'HTML'" [innerHTML]="procedure!.helper!.content"></div>
-                        <div *ngIf="procedure!.helper!.renderType === 'PLAINTEXT'">
+                        @if (procedure!.helper!.renderType === 'HTML') {
+                        <div [innerHTML]="procedure!.helper!.content"></div>
+                        }
+                        @if (procedure!.helper!.renderType === 'PLAINTEXT') {
+                        <div>
                             <mat-label>{{procedure!.helper!.content}}</mat-label>
                         </div>
+                        }
                     </mat-card-content>
                 </mat-card>
+                }
             </section>
-            <section *ngIf="hasTasks()">
+            @if (hasTasks()) {
+            <section>
                 <mat-card>
                     <mat-card-title-group>
                         <mat-card-title><i class="fas fa-tasks"></i>Tasks</mat-card-title>
                         <mat-card-subtitle><mat-divider></mat-divider></mat-card-subtitle>
                     </mat-card-title-group>
                     <mat-card-content>
-                        <div *ngFor="let task of procedure?.tasks">
+                        @for (task of procedure.tasks; track task) {
+                        <div>
                             <app-case-task [task]="task" [open]="open" (eventChange)="onTaskChange($event)"></app-case-task>
                         </div>
+                        }
                     </mat-card-content>
                 </mat-card>
             </section>
+            }
             <section class="buttons-section">
                 <button mat-stroked-button type="button" (click)="onSave()" color="primary" [disabled]="!open || loading">Save</button>
                 <button mat-stroked-button type="button" (click)="mep.expanded = false;">Close</button>
                 <button mat-stroked-button type="button" class="float-left" (click)="onSubmit()" color="warn" [disabled]="!canSubmit() || loading">Submit</button>
             </section>
             <section class="case-predict-section">
-                <app-case-predict-next *ngIf="!open && !resolved"
+                @if (!open && !resolved) {
+                <app-case-predict-next
                     [procedure]="procedure" 
                     [caseid]="caseid"
                     (eventChange)="onResolved($event)">
                 </app-case-predict-next>
+                }
             </section>
-            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            @if (error) {
+            <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+            }
         </form>
     </mat-expansion-panel>
 </mat-accordion>

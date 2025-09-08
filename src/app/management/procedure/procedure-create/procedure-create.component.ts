@@ -7,12 +7,18 @@ import { Procedure } from 'src/app/models/procedure';
 import { HelperService } from 'src/app/services/helper.service';
 import { ProcedureService } from 'src/app/services/procedure.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { ProcedureDetailComponent } from '../procedure-detail/procedure-detail.component';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-procedure-create',
-  templateUrl: './procedure-create.component.html',
-  styleUrls: ['./procedure-create.component.scss'],
-  standalone: false
+    selector: 'app-procedure-create',
+    templateUrl: './procedure-create.component.html',
+    styleUrls: ['./procedure-create.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIcon, 
+      MatExpansionPanelDescription, ProcedureDetailComponent, MatButton
+    ]
 })
 export class ProcedureCreateComponent implements OnInit, OnDestroy {
   private readonly snackBar = inject(MatSnackBar);

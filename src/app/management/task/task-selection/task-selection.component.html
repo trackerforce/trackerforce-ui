@@ -5,12 +5,16 @@
             <input type="text" placeholder="Select..." aria-label="Number" matInput [formControl]="taskForm"
                 [matAutocomplete]="auto" required>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let task of filteredOptions | async" [value]="task">
+                @for (task of filteredOptions | async; track task) {
+                <mat-option [value]="task">
                     {{task.description}}
                 </mat-option>
+                }
             </mat-autocomplete>
         </mat-form-field>
             <button type="button" (click)="onSubmit()" mat-raised-button color="primary">Select</button>
     </form>
 </div>
-<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+@if (error) {
+<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}

@@ -19,9 +19,11 @@
             <mat-form-field appearance="fill">
                 <mat-label>Render Type</mat-label>
                 <mat-select id="renderType" formControlName="renderType">
-                    <mat-option *ngFor="let type of displayRenderTypes" [value]="type">
+                    @for (type of displayRenderTypes; track type) {
+                    <mat-option [value]="type">
                         {{type}}
                     </mat-option>
+                    }
                 </mat-select>
             </mat-form-field>
         </div>

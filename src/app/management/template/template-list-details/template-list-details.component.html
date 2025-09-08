@@ -29,12 +29,18 @@
         <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Update</button>
         <button type="button" mat-raised-button [disabled]=true>Delete</button>
     </div>
-    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    @if (error) {
+    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    }
 </form>
-<div *ngIf="template?.procedures?.length">
+@if (template?.procedures?.length) {
+<div>
     <mat-label><h2>Procedures</h2></mat-label>
-    <app-procedure-list *ngIf="template"
+    @if (template) {
+    <app-procedure-list
         [templateChild]="true"
         [proceduresSubject]="proceduresSubject">
     </app-procedure-list>
+    }
 </div>
+}

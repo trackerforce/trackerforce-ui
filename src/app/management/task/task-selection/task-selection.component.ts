@@ -1,15 +1,21 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Task } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
+import { AsyncPipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-task-selection',
-  templateUrl: './task-selection.component.html',
-  styleUrls: ['./task-selection.component.scss'],
-  standalone: false
+    selector: 'app-task-selection',
+    templateUrl: './task-selection.component.html',
+    styleUrls: ['./task-selection.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatAutocompleteTrigger, MatAutocomplete, 
+      MatOption, MatButton, AsyncPipe
+    ]
 })
 export class TaskSelectionComponent implements OnInit, OnDestroy {
   private readonly taskService = inject(TaskService);

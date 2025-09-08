@@ -1,15 +1,19 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
+import { MatAutocompleteTrigger, MatAutocomplete, MatOption } from '@angular/material/autocomplete';
+import { AsyncPipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-global-selection',
-  templateUrl: './global-selection.component.html',
-  styleUrls: ['./global-selection.component.scss'],
-  standalone: false
+    selector: 'app-global-selection',
+    templateUrl: './global-selection.component.html',
+    styleUrls: ['./global-selection.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatOption, MatButton, AsyncPipe]
 })
 export class GlobalSelectionComponent implements OnInit, OnDestroy {
   private readonly globalService = inject(GlobalService);

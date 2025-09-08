@@ -1,14 +1,23 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Helper } from 'src/app/models/helper';
 import { Option, Task, TASK_TYPES } from 'src/app/models/task';
 import { TaskService } from 'src/app/services/task.service';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatDivider } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { HelperComponent } from '../../helper/helper.component';
 
 @Component({
-  selector: 'app-task-detail',
-  templateUrl: './task-detail.component.html',
-  styleUrls: ['./task-detail.component.scss'],
-  standalone: false
+    selector: 'app-task-detail',
+    templateUrl: './task-detail.component.html',
+    styleUrls: ['./task-detail.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, MatSelect, MatOption, 
+      MatDivider, MatIcon, MatCheckbox, HelperComponent
+    ]
 })
 export class TaskDetailComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
@@ -68,9 +77,10 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
-  private toOptions(options: string): Option[] | null {
+  private toOptions(options: string | string[]): Option[] | null {
     if (options) {
-      return options.split(',').map(opt => new Option(opt.trim()));
+      return (Array.isArray(options) ? options : options.split(','))
+        .map(opt => new Option(opt.trim()));
     }
     
     return null;

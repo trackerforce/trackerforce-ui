@@ -12,7 +12,8 @@
             <mat-label>Updated At</mat-label>
             <input matInput [value]="global?.updatedAt | date:'short'" [readonly]=true>
         </mat-form-field>
-        <mat-form-field class="element-editable" appearance="fill" *ngFor="let attrib of getAttributes()">
+        @for (attrib of getAttributes(); track attrib) {
+        <mat-form-field class="element-editable" appearance="fill">
             <mat-label>{{attrib}}</mat-label>
             <input matInput [value]="global?.attributes[attrib]" formControlName="{{attrib}}" autocomplete="off"
                 required>
@@ -20,10 +21,13 @@
                 Please provide a valid value
             </mat-error>
         </mat-form-field>
+        }
     </div>
     <div class="element-control">
         <button type="submit" (click)="onSubmit()" mat-raised-button color="primary">Update</button>
         <button type="button" mat-raised-button [disabled]=true>Delete</button>
     </div>
-    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    @if (error) {
+    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    }
 </form>

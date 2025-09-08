@@ -1,17 +1,20 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
 import { ConsoleLogger } from 'src/app/_helpers/console-logger';
+import { MatFormField, MatLabel, MatInput, MatError } from '@angular/material/input';
+import { DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-global-list-details',
-  templateUrl: './global-list-details.component.html',
-  styleUrls: ['./global-list-details.component.scss'],
-  standalone: false
+    selector: 'app-global-list-details',
+    templateUrl: './global-list-details.component.html',
+    styleUrls: ['./global-list-details.component.scss'],
+    imports: [ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatError, MatButton, DatePipe]
 })
 export class GlobalListDetailsComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);

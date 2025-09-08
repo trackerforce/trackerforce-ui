@@ -1,12 +1,18 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { GlobalService } from 'src/app/services/global.service';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelDescription } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatInput, MatError } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-global-search',
-  templateUrl: './global-search.component.html',
-  styleUrls: ['./global-search.component.scss'],
-  standalone: false
+    selector: 'app-global-search',
+    templateUrl: './global-search.component.html',
+    styleUrls: ['./global-search.component.scss'],
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIcon, 
+      MatExpansionPanelDescription, ReactiveFormsModule, MatFormField, MatInput, MatError, MatButton
+    ]
 })
 export class GlobalSearchComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);

@@ -21,13 +21,15 @@
                         Please provide a valid E-mail
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field *ngIf="type">
+                @if (type) {
+                <mat-form-field>
                     <input matInput type="text" id="temp_password" (keyup)="onKey($event)" maxlength="10"
                         placeholder="Access Code" formControlName="temp_password" autocomplete="off" required>
                     <mat-error>
                         Please provide a valid Access Code
                     </mat-error>
                 </mat-form-field>
+                }
                 <mat-form-field>
                     <input matInput type="password" id="password" (keyup)="onKey($event)" maxlength="50"
                         placeholder="Password" formControlName="password" required>
@@ -36,7 +38,9 @@
                     </mat-error>
                 </mat-form-field>
                 <button mat-raised-button color="warn">Signup</button>
-                <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                @if (error) {
+                <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                }
             </form>
         </mat-card-content>
     </mat-card>

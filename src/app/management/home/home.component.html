@@ -9,11 +9,13 @@
                 </div>
                 <mat-divider></mat-divider>
                 <ul class="components">
-                    <li *ngIf="!isAgent()"><a #agents id="agents" 
+                    @if (!isAgent()) {
+                    <li><a #agents id="agents" 
                         routerLink="/management/{{tenant}}/agents"
                         (click)="toggleMenu(agents)">
                         <i class="fas fa-users"></i>Agents</a>
                     </li>
+                    }
                     <li><a #tasks id="tasks" 
                         routerLink="/management/{{tenant}}/tasks" 
                         (click)="toggleMenu(tasks)">
@@ -29,11 +31,13 @@
                         (click)="toggleMenu(templates)">
                         <i class="fas fa-book-open"></i>Templates</a>
                     </li>
-                    <li *ngIf="!isAgent()"><a #globals id="globals" 
+                    @if (!isAgent()) {
+                    <li><a #globals id="globals" 
                         routerLink="/management/{{tenant}}/globals"
                         (click)="toggleMenu(globals)">
                         <i class="fas fa-globe"></i>Globals</a>
                     </li>
+                    }
                 </ul>
             </div>
         </nav>

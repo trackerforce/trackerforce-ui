@@ -1,16 +1,22 @@
 import { AfterViewInit, Component, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { Global } from 'src/app/models/global';
 import { GlobalService } from 'src/app/services/global.service';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { AsyncPipe } from '@angular/common';
+import { GlobalListDetailsComponent } from '../global-list-details/global-list-details.component';
 
 @Component({
-  selector: 'app-global-list',
-  templateUrl: './global-list.component.html',
-  styleUrls: ['./global-list.component.scss'],
-  standalone: false
+    selector: 'app-global-list',
+    templateUrl: './global-list.component.html',
+    styleUrls: ['./global-list.component.scss'],
+    imports: [MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, 
+      MatCellDef, MatCell, GlobalListDetailsComponent, MatHeaderRowDef, MatHeaderRow, 
+      MatRowDef, MatRow, MatPaginator, AsyncPipe
+    ]
 })
 export class GlobalListComponent implements AfterViewInit, OnDestroy {
   private readonly globalService = inject(GlobalService);

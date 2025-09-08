@@ -1,6 +1,8 @@
 <div id="component" class="container">
-    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-    <ng-container *ngIf="sessionCase$ | async as sessionCase">
+    @if (error) {
+    <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    }
+    @if (sessionCase$ | async; as sessionCase) {
         <section>
             <mat-card>
                 <mat-card-title-group>
@@ -29,12 +31,14 @@
                 </mat-card-content>
             </mat-card>
         </section>
-        <div class="procedure-component" *ngFor="let procedure of sessionCase?.procedures">
+        @for (procedure of sessionCase?.procedures; track procedure) {
+        <div class="procedure-component">
             <app-case-procedure
                 [procedure]="procedure" 
                 [caseid]="sessionCase?.id"
                 (eventChange)="onProcedureChanged($event)">
             </app-case-procedure>
         </div>
-    </ng-container>
+        }
+    }
 </div>

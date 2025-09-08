@@ -10,14 +10,20 @@
                 <input type="text" placeholder="Select..." matInput formControlName="next_procedure"
                     [matAutocomplete]="auto" autocomplete="off">
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option *ngFor="let procedure of filteredOptions | async" [value]="procedure">
-                        <span *ngIf="procedure.id === prediction_id">
+                    @for (procedure of filteredOptions | async; track procedure) {
+                    <mat-option [value]="procedure">
+                        @if (procedure.id === prediction_id) {
+                        <span>
                             <strong>{{getOption(procedure)}}</strong>
                         </span>
-                        <span *ngIf="procedure.id !== prediction_id">
+                        }
+                        @if (procedure.id !== prediction_id) {
+                        <span>
                             <span>{{getOption(procedure)}}</span>
                         </span>
+                        }
                     </mat-option>
+                    }
                 </mat-autocomplete>
                 <mat-error>
                     Please select a valid Procedure

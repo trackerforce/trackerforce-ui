@@ -1,17 +1,25 @@
 import { AfterViewInit, Component, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { merge, Observable, Subject } from 'rxjs';
 import { map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Agent } from 'src/app/models/agent';
 import { AgentService } from 'src/app/services/agent.service';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
+import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 
 @Component({
-  selector: 'app-agent-list',
-  templateUrl: './agent-list.component.html',
-  styleUrls: ['./agent-list.component.scss'],
-  standalone: false
+    selector: 'app-agent-list',
+    templateUrl: './agent-list.component.html',
+    styleUrls: ['./agent-list.component.scss'],
+    imports: [MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, 
+      RouterLink, MatTooltip, MatSortHeader, MatFormField, MatLabel, MatInput, MatHeaderRowDef, 
+      MatHeaderRow, MatRowDef, MatRow, MatPaginator, AsyncPipe
+    ]
 })
 export class AgentListComponent implements AfterViewInit, OnDestroy {
   private readonly authService = inject(AuthService);
@@ -19,7 +27,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
 
   private readonly unsubscribe = new Subject();
 
-  displayedColumns: string[] = ['action_edit', 'name', 'email'];
+  displayedColumns: string[] = ['action_edit'];
   expandedElement = signal<Agent | null>(null);
   data$!: Observable<Agent[]>;
 
@@ -70,7 +78,19 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   }
 
   getColumns(): string[] {
-    return this.displayedColumns.filter(col => !col.startsWith('action'));
+    return ['name', 'email']; // Define the actual data columns here
+  }
+
+  getDisplayedColumns(): string[] {
+    return [...this.displayedColumns, ...this.getColumns()];
+  }
+
+  getColumnDisplayName(column: string): string {
+    const columnNames: Record<string, string> = {
+      'name': 'Name',
+      'email': 'Email'
+    };
+    return columnNames[column] || column;
   }
 
   getAgentEdit(agentId: string): string {

@@ -13,9 +13,11 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Type</mat-label>
                     <mat-select formControlName="type" (selectionChange)="onTypeChange()" required>
-                        <mat-option *ngFor="let type of displayTaskTypes" [value]="type.value">
+                        @for (type of displayTaskTypes; track type) {
+                        <mat-option [value]="type.value">
                             {{type.name}}
                         </mat-option>
+                        }
                     </mat-select>
                     <mat-error>
                         Please provide a valid Type
@@ -29,7 +31,8 @@
                 </mat-label>
             </div>
         </div>
-        <div *ngIf="showOptions" class="row">
+        @if (showOptions) {
+        <div class="row">
             <div class="col">
                 <mat-form-field appearance="fill">
                     <mat-label>Options</mat-label>
@@ -47,6 +50,7 @@
                 </mat-label>
             </div>
         </div>
+        }
     </section>
     <section>
         <mat-divider class="col"></mat-divider>

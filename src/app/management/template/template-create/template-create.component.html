@@ -19,5 +19,7 @@
             <button type="button" (click)="mep.expanded = false; error = ''; onCancel();" mat-raised-button>Cancel</button>
         </div>
     </mat-expansion-panel>
-</mat-accordion>
-<div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </mat-accordion>
+@if (error) {
+<div class="alert alert-danger mt-3 mb-0">{{error}}</div>
+}
