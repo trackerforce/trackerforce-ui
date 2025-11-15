@@ -7,9 +7,10 @@ export class ApiService {
         let params = concat ?? new HttpParams();
         if (obj) {
             Object.keys(obj).forEach(item => {
-                const value = JSON.parse(JSON.stringify(obj))[item];
-                if (value)
+                const value = structuredClone(obj)[item];
+                if (value) {
                     params = params.set(item, value);
+                }
             });
         }
         
