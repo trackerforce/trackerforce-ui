@@ -32,8 +32,9 @@ export class ProcedureService extends ApiService {
   public createProcedure(procedure: Procedure, helper: Helper): Observable<Procedure> {
     const body: any = { procedure };
 
-    if (helper.content)
+    if (helper.content) {
       body.helper = helper;
+    }
 
     return this.http.post<Procedure>(`${environment.managementServiceUrl}/management/procedure/v1/create`, body)
       .pipe(catchError(super.handleError));

@@ -29,8 +29,9 @@ export class TaskSearchComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.taskForm?.invalid)
+    if (this.taskForm?.invalid) {
       return;
+    }
 
     this.taskSearched.emit({
       description: this.taskForm.get('description')?.value

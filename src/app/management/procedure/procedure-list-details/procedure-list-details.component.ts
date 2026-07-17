@@ -52,14 +52,15 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
   }
 
   onSubmit() {
-    if (this.procedureForm?.invalid)
+    if (this.procedureForm?.invalid) {
       return;
+    }
 
     const updatedProcedure: Procedure = {
       id: this.procedure?.id,
       name: this.procedureForm.get('name')?.value,
       description: this.procedureForm.get('description')?.value,
-    }
+    };
 
     this.procedureService.updateProcedure(updatedProcedure)
       .pipe(takeUntil(this.unsubscribe))
@@ -67,7 +68,7 @@ export class ProcedureListDetailsComponent implements OnInit, AfterViewInit, OnD
         next: (procedure: Procedure) => {
           this.procedure = procedure;
           this.procedureChanged.emit(procedure);
-          this.snackBar.open(`Procedure updated`, 'Close', { duration: 2000 });
+          this.snackBar.open('Procedure updated', 'Close', { duration: 2000 });
         },
         error: error => {
           ConsoleLogger.printError('Failed to update Procedure', error);

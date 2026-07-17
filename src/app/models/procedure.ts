@@ -1,5 +1,5 @@
-import { Helper } from "./helper";
-import { Task } from "./task";
+import { Helper } from './helper';
+import { Task } from './task';
 
 export class Procedure {
     id?: string;

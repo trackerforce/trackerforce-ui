@@ -36,7 +36,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['custom_view', 'context', 'custom_status'];
   expandedElement = signal<Case | null>(null);
-  dataSource$!: Observable<Case[]>
+  dataSource$!: Observable<Case[]>;
 
   resultsLength = 0;
 
@@ -45,7 +45,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent))
+    this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent));
 
     this.loadData();
   }
@@ -63,7 +63,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
         return this.sessionService.listAgentCases(sessionid, { 
           size: this.paginator.pageSize, 
           page: this.paginator.pageIndex 
-        }).pipe(takeUntil(this.unsubscribe))
+        }).pipe(takeUntil(this.unsubscribe));
       }),
       map(data => {
         if (data === null) return [];
@@ -84,7 +84,7 @@ export class MyCasesComponent implements AfterViewInit, OnDestroy {
   }
 
   getCaseLink(sessionCase: Case): string {
-    return `/${this.authService.getSessionOrgPath()}/case/${sessionCase.protocol}`
+    return `/${this.authService.getSessionOrgPath()}/case/${sessionCase.protocol}`;
   }
 
   onStopWatching(sessionCase: Case) {

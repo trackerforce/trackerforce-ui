@@ -14,7 +14,7 @@ export class HomeComponent implements AfterViewInit {
   private readonly authService = inject(AuthService);
 
   tenant: string | undefined;
-  currentView = 'home'
+  currentView = 'home';
 
   constructor() {
     this.route.params.subscribe(params => this.tenant = params.tenant ?? this.authService.getUserInfo('tenant'));
@@ -37,11 +37,13 @@ export class HomeComponent implements AfterViewInit {
     const sideBar = document.getElementById('sidebar') || undefined;
     const content = document.getElementById('content') || undefined;
 
-    if (selection)
+    if (selection) {
       this.setMenuSelection(selection.id);
+    }
 
-    if (sideBar == undefined || content == undefined)
+    if (sideBar == undefined || content == undefined) {
       return;
+    }
 
     if (sideBar.className == 'active') {
       sideBar.className = '';

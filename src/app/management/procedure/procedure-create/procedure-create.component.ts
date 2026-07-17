@@ -51,13 +51,13 @@ export class ProcedureCreateComponent implements OnInit, OnDestroy {
       description: this.procedure.description,
       tasks: this.procedure.tasks,
       hook: this.procedure.hook
-    }
+    };
     
     this.procedureService.createProcedure(procedure, helper).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: (task) => {
           if (task) {
-            this.snackBar.open(`Procedure created`, 'Close', { duration: 2000 });
+            this.snackBar.open('Procedure created', 'Close', { duration: 2000 });
             this.procedureSubject.next(task);
             this.onCancel();
           }

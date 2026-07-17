@@ -27,7 +27,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly unsubscribe = new Subject();
 
-  @Input() filter?: Subject<Task>
+  @Input() filter?: Subject<Task>;
   @Input() procedureChild = false;
   @Input() editable = false;
   @Input() tasksSubject!: BehaviorSubject<Task[] | undefined>;
@@ -47,8 +47,9 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
     this.taskService.task.pipe(takeUntil(this.unsubscribe)).subscribe(task => this.loadData(task));
     
-    if (this.procedureChild)
+    if (this.procedureChild) {
       this.loadProcedureData();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -105,7 +106,7 @@ export class TaskListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getTaskEdit(taskid: string): string {
-    return `/${this.authService.getManagementOrgPath()}/task/${taskid}`
+    return `/${this.authService.getManagementOrgPath()}/task/${taskid}`;
   }
 
   onRemove(event: Event, selectedTask: Task) {

@@ -50,14 +50,14 @@ export class TemplateCreateComponent implements OnInit, OnDestroy {
       name: this.template.name,
       description: this.template.description,
       procedures: this.template.procedures
-    }
+    };
 
     this.templateService.createTemplate(newTemplate, helper)
     .pipe(takeUntil(this.unsubscribe))
     .subscribe({
       next: template => {
         if (template) {
-          this.snackBar.open(`Template created`, 'Close', { duration: 2000 });
+          this.snackBar.open('Template created', 'Close', { duration: 2000 });
           this.templateSubject.next(undefined);
           this.onCancel();
         }

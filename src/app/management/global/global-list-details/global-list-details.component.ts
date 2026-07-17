@@ -24,7 +24,7 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
 
   private readonly unsubscribe = new Subject();
 
-  @Input() global?: Global
+  @Input() global?: Global;
   globalForm!: FormGroup;
   error = '';
 
@@ -42,8 +42,9 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.globalForm?.invalid)
+    if (this.globalForm?.invalid) {
       return;
+    }
 
     this.getAttributes().forEach(attrib => {
       this.global!.attributes[attrib] = this.globalForm.get(attrib)?.value;
@@ -55,7 +56,7 @@ export class GlobalListDetailsComponent implements OnInit, OnDestroy {
         next: global => {
           this.global = global;
           this.cd.detectChanges();
-          this.snackBar.open(`Feature updated`, 'Close', { duration: 2000 });
+          this.snackBar.open('Feature updated', 'Close', { duration: 2000 });
         },
         error: error => {
           ConsoleLogger.printError('Failed to update feature', error);

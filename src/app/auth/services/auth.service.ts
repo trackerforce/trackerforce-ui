@@ -27,10 +27,10 @@ export class AuthService {
   private readonly userInfoSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  loggedUser = "";
+  loggedUser = '';
 
   constructor() {
-    this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN) ?? "");
+    this.currentTokenSubject = new BehaviorSubject<string>(localStorage.getItem(AuthService.JWT_TOKEN) ?? '');
     this.currentToken = this.currentTokenSubject.asObservable();
 
     this.userInfoSubject = new BehaviorSubject<any>(localStorage.getItem(AuthService.USER_INFO));
@@ -93,13 +93,13 @@ export class AuthService {
   }
 
   cleanSession() {
-    this.currentTokenSubject.next("");
+    this.currentTokenSubject.next('');
     this.doLogoutUser();
   }
 
   logout() {
     this.http.post<any>(`${environment.identityServiceUrl}/identity/v1/logout`, {}).subscribe(_ => {
-      this.currentTokenSubject.next("");
+      this.currentTokenSubject.next('');
       this.doLogoutUser();
     });
   }
@@ -132,7 +132,7 @@ export class AuthService {
 
   setUserInfo(key: string, value: string): void {
     if (localStorage.getItem(AuthService.USER_INFO)) {
-      const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO) ?? "");
+      const userData = JSON.parse(localStorage.getItem(AuthService.USER_INFO) ?? '');
       userData[key] = value;
 
       localStorage.setItem(AuthService.USER_INFO, JSON.stringify(userData));
@@ -141,9 +141,10 @@ export class AuthService {
   }
 
   getUserInfo(key: string): string {
-    if (localStorage.getItem(AuthService.USER_INFO))
-      return JSON.parse(localStorage.getItem(AuthService.USER_INFO) ?? "")[`${key}`];
-    return "";
+    if (localStorage.getItem(AuthService.USER_INFO)) {
+      return JSON.parse(localStorage.getItem(AuthService.USER_INFO) ?? '')[`${key}`];
+    }
+    return '';
   }
 
   getManagementOrgPath(): string {
@@ -157,8 +158,9 @@ export class AuthService {
   hasRole(role: string) {
     const token = localStorage.getItem(AuthService.JWT_TOKEN);
 
-    if (!token)
+    if (!token) {
       return true;
+    }
 
     const decodedToken = this.jwtHelper.decodeToken(token);
     return (decodedToken.roles as string[]).includes(role);
@@ -174,7 +176,7 @@ export class AuthService {
       errorMessage = result.error.error;
     } else {
       ConsoleLogger.printError(result);
-      errorMessage = `Trackerforce is offline`;
+      errorMessage = 'Trackerforce is offline';
     }
     return throwError(() => errorMessage);
   }
@@ -193,7 +195,7 @@ export class AuthService {
   }
 
   private doLogoutUser() {
-    this.loggedUser = "";
+    this.loggedUser = '';
     this.removeTokens();
   }
 

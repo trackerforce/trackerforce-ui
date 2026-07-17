@@ -28,7 +28,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
 
   private readonly unsubscribe = new Subject();
 
-  @Input() template?: Template
+  @Input() template?: Template;
   @Output() templateChanged = new EventEmitter<Template>();
 
   proceduresSubject = new BehaviorSubject<Procedure[] | undefined>(undefined);
@@ -52,19 +52,20 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
   }
 
   onSubmit() {
-    if (this.templateForm?.invalid)
+    if (this.templateForm?.invalid) {
       return;
+    }
 
     const updatedTemplate: Template = {
       id: this.template?.id,
       name: this.templateForm.get('name')?.value,
       description: this.templateForm.get('description')?.value,
-    }
+    };
 
     const helper: Helper = {
       content: this.templateForm.get('helper_content')?.value,
       renderType: this.templateForm.get('helper_renderType')?.value
-    }
+    };
 
     this.templateService.updateTemplate(updatedTemplate, helper)
       .pipe(takeUntil(this.unsubscribe))
@@ -73,7 +74,7 @@ export class TemplateListDetailsComponent implements OnInit, AfterViewInit, OnDe
           if (template) {
             this.template = template;
             this.templateChanged.emit(template);
-            this.snackBar.open(`Template updated`, 'Close', { duration: 2000 });
+            this.snackBar.open('Template updated', 'Close', { duration: 2000 });
           }
         },
         error: error => {

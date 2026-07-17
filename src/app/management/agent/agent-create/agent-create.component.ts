@@ -41,8 +41,9 @@ export class AgentCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.agentForm?.invalid)
+    if (this.agentForm?.invalid) {
       return;
+    }
 
     this.agentService.createAgent({ 
       name: this.agentForm.get('name')?.value,

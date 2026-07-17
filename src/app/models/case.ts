@@ -1,5 +1,5 @@
-import { Helper } from "./helper";
-import { Procedure } from "./procedure";
+import { Helper } from './helper';
+import { Procedure } from './procedure';
 
 export class Case {
     id?: string;

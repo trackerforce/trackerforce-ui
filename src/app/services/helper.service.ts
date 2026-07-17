@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
-import { Helper } from "../models/helper";
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Helper } from '../models/helper';
 
 @Injectable({
-    providedIn: "root"
+    providedIn: 'root'
 })
 export class HelperService {
     

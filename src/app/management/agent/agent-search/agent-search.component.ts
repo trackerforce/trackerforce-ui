@@ -29,8 +29,9 @@ export class AgentSearchComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.agentForm?.invalid)
+    if (this.agentForm?.invalid) {
       return;
+    }
 
     this.agentService.agent.next({
       name: this.agentForm.get('name')?.value,

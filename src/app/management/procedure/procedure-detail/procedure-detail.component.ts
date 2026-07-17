@@ -46,7 +46,7 @@ export class ProcedureDetailComponent implements OnInit, AfterViewInit {
     this.procedureForm.valueChanges.subscribe(procedure => {
       this.procedure.name = procedure.name;
       this.procedure.description = procedure.description;
-      this.procedure.hook = { resolverUri: procedure.hook }
+      this.procedure.hook = { resolverUri: procedure.hook };
       this.procedureChanged.emit(this.procedure);
     });
   }

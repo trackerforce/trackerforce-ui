@@ -30,8 +30,9 @@ export class ProcedureSearchComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.procedureForm?.invalid)
+    if (this.procedureForm?.invalid) {
       return;
+    }
 
     this.procedureSearched.emit({
       name: this.procedureForm.get('name')?.value,

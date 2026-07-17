@@ -58,10 +58,11 @@ export class TaskDetailComponent implements OnInit {
     const formOptions = this.taskForm.get('options');
     this.showOptions = value[0].options;
 
-    if (this.showOptions)
+    if (this.showOptions) {
       formOptions?.setValidators([Validators.required]);
-    else
+    } else {
       formOptions?.setValidators([]);
+    }
 
     formOptions?.updateValueAndValidity();
   }

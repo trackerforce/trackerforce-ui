@@ -1,5 +1,5 @@
-import { HttpParams } from "@angular/common/http";
-import { throwError } from "rxjs";
+import { HttpParams } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 export class ApiService {
 

@@ -28,8 +28,9 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.globalForm?.invalid)
+    if (this.globalForm?.invalid) {
       return;
+    }
 
     this.globalService.global.next({
       description: this.globalForm.get('description')?.value

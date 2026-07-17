@@ -27,7 +27,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
 
   private readonly unsubscribe = new Subject();
 
-  @Input() filter?: Subject<Procedure>
+  @Input() filter?: Subject<Procedure>;
   @Input() templateChild!: boolean;
   @Input() editable = false;
   @Input() proceduresSubject!: BehaviorSubject<Procedure[] | undefined>;
@@ -47,8 +47,9 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
     this.filter?.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
     this.procedureService.procedure.pipe(takeUntil(this.unsubscribe)).subscribe(procedure => this.loadData(procedure));
     
-    if (this.templateChild)
+    if (this.templateChild) {
       this.loadTemplateData();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -89,7 +90,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex,
             sortBy
-          }).pipe(takeUntil(this.unsubscribe))
+          }).pipe(takeUntil(this.unsubscribe));
         }),
         map(data => {
           this.loading = false;
@@ -105,7 +106,7 @@ export class ProcedureListComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   getProcedureEdit(procedureid: string): string {
-    return `/${this.authService.getManagementOrgPath()}/procedure/${procedureid}`
+    return `/${this.authService.getManagementOrgPath()}/procedure/${procedureid}`;
   }
 
   onRemove(event: Event, selectedProcedure: Procedure) {

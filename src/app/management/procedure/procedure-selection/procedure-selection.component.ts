@@ -49,7 +49,7 @@ export class ProcedureSelectionComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.unsubscribe),
         map(response => response.data)
-      )
+      );
   }
 
   onSubmit() {

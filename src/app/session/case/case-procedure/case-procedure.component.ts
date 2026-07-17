@@ -72,7 +72,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
 
   private onError(error: any) {
     ConsoleLogger.printError('Failed to save Procedure', error);
-    this.snackBar.open(`Something went wrong`, 'Close');
+    this.snackBar.open('Something went wrong', 'Close');
     this.loading = false;
   }
   
@@ -86,8 +86,9 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    if (!this.caseid)
+    if (!this.caseid) {
       return;
+    }
 
     this.loading = true;
     this.save(this.caseid)
@@ -96,7 +97,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
           this.loading = false;
           if (data) {
             this.procedure = data;
-            this.snackBar.open(`Procedure saved`, 'Close', { duration: 3000 });
+            this.snackBar.open('Procedure saved', 'Close', { duration: 3000 });
           }
         },
         error: error => this.onError(error)
@@ -104,8 +105,9 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (!this.caseid)
+    if (!this.caseid) {
       return;
+    }
 
     this.loading = true;
     this.save(this.caseid).subscribe(data => {
@@ -117,7 +119,7 @@ export class CaseProcedureComponent implements OnInit, OnDestroy {
               if (procedure) {
                 this.procedure = procedure;
                 this.readProcedureStatuses();
-                this.snackBar.open(`Procedure submitted`, 'Close', { duration: 3000 });
+                this.snackBar.open('Procedure submitted', 'Close', { duration: 3000 });
                 this.loading = false;
                 this.eventChange.emit(this.procedure);
               }

@@ -17,7 +17,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
   constructor() { 
     this.authService.releaseOldSessions.subscribe(() => {
       this.isRefreshing = false;
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -26,7 +26,7 @@ export class TokenInterceptor implements HttpInterceptor, OnDestroy {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.authService.getJwtToken()) {
-      request = this.setHeader(request, this.authService.getJwtToken() ?? "");
+      request = this.setHeader(request, this.authService.getJwtToken() ?? '');
     }
     
     return next.handle(request).pipe(catchError(error => {

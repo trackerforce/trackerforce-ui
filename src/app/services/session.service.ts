@@ -43,7 +43,7 @@ export class SessionService extends ApiService {
         return {
           id: task.id,
           response: task.response
-        }
+        };
       })
     }).pipe(catchError(super.handleError));
   }

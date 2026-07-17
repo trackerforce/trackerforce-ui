@@ -59,7 +59,7 @@ export class GlobalListComponent implements AfterViewInit, OnDestroy {
           size: this.paginator.pageSize, 
           page: this.paginator.pageIndex,
           sortBy
-        }).pipe(takeUntil(this.unsubscribe))
+        }).pipe(takeUntil(this.unsubscribe));
       }),
       map(data => {
         this.loading = false;

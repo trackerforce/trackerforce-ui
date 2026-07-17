@@ -30,8 +30,9 @@ export class TemplateSearchComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.templateForm?.invalid)
+    if (this.templateForm?.invalid) {
       return;
+    }
 
     this.templateSearched.emit({
       name: this.templateForm.get('name')?.value,

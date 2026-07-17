@@ -1,7 +1,7 @@
 <div class="element-description">
     @if (task?.helper) {
     <div class="helper-content">
-        <mat-label class="title"><mat-icon>help</mat-icon>{{task?.helper?.content}}</mat-label>
+        <mat-label class="title"><mat-icon>help</mat-icon>{{task.helper.content}}</mat-label>
     </div>
     }
     <mat-form-field appearance="outline">
@@ -28,7 +28,7 @@
     <mat-form-field appearance="outline">
         <mat-label>Options</mat-label>
         <mat-select>
-            @for (option of task?.options; track option) {
+            @for (option of task.options; track option) {
                 <mat-option>
                     {{option.value}}
                 </mat-option>

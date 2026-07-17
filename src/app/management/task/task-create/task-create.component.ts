@@ -52,14 +52,14 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       learn: this.task.learn,
       hidden: this.task.hidden,
       options: this.task.options
-    }
+    };
 
     this.taskService.createTask(newTask, helper)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: task => {
           if (task) {
-            this.snackBar.open(`Task created`, 'Close', { duration: 2000 });
+            this.snackBar.open('Task created', 'Close', { duration: 2000 });
             this.taskSubject.next(task);
             this.onCancel();
           }

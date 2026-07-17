@@ -26,7 +26,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly templateService = inject(TemplateService);
 
   private readonly unsubscribe = new Subject();
-  @Input() filter?: Subject<Template>
+  @Input() filter?: Subject<Template>;
 
   displayedColumns: string[] = ['action', 'name'];
   expandedElement = signal<Template | null>(null);
@@ -67,12 +67,13 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
             size: this.paginator.pageSize, 
             page: this.paginator.pageIndex,
             sortBy
-          }).pipe(takeUntil(this.unsubscribe))
+          }).pipe(takeUntil(this.unsubscribe));
         }),
         map(data => {
           this.loading = false;
-          if (data === null)
+          if (data === null) {
             return [];
+          }
 
           this.resultsLength = data.items;
           return data.data;
@@ -85,7 +86,7 @@ export class TemplateListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getTemplateEdit(templateid: string): string {
-    return `/${this.authService.getManagementOrgPath()}/template/${templateid}`
+    return `/${this.authService.getManagementOrgPath()}/template/${templateid}`;
   }
 
   onTemplateChanged(selectedTemplate: Template) {

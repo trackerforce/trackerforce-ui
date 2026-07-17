@@ -53,8 +53,9 @@ export class GlobalCreateComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.globalForm?.invalid)
+    if (this.globalForm?.invalid) {
       return;
+    }
 
     const attributes: any = {};
     this.getAttributes().forEach(attrib => attributes[attrib] = this.globalForm.get(attrib)?.value);
@@ -64,7 +65,7 @@ export class GlobalCreateComponent implements OnInit, OnDestroy {
     }).pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: _global => {
-          this.snackBar.open(`New feature has succesfully added`, 'Close', { duration: 2000 });
+          this.snackBar.open('New feature has succesfully added', 'Close', { duration: 2000 });
           this.globalService.global.next(_global);
         },
         error: error => {

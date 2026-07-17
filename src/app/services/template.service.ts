@@ -32,8 +32,9 @@ export class TemplateService extends ApiService {
   public createTemplate(template: Template, helper: Helper): Observable<Template> {
     const body: any = { template };
 
-    if (helper.content)
+    if (helper.content) {
       body.helper = helper;
+    }
 
     return this.http.post<Template>(`${environment.managementServiceUrl}/management/template/v1/create`, body)
       .pipe(catchError(super.handleError));

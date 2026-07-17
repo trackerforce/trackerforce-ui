@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     loginForm!: FormGroup;
     returnUrl: string | undefined;
-    error = '';
-    type = false;
+    error = signal('');
+    type = signal(false);
 
     ngOnInit() {
         if (this.authService.isLoggedIn()) {
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             next: success => this.onSuccess(success),
             error: error => {
                 ConsoleLogger.printError(error);
-                this.error = error;
+                this.error.set(error);
             }
         });
     }
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             next: success => this.onSuccess(success),
             error: error => {
                 ConsoleLogger.printError(error);
-                this.error = error;
+                this.error.set(error);
             }
         });
     }
@@ -87,27 +87,30 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
-        if (this.loginForm?.invalid)
+        if (this.loginForm?.invalid) {
             return;
+        }
 
-        if (this.type)
+        if (this.type()) {
             this.onSubmitAgent();
-        else
+        } else {
             this.onSubmitAdmin();
+        }
     }
 
     onKey(_event: any) {
-        this.error = '';
+        this.error.set('');
     }
 
     onChangeType() {
-        this.type = this.f.selectedLoginType.value == 'agent'
+        this.type.set(this.f.selectedLoginType.value == 'agent');
 
         const tenant = this.loginForm.get('tenant')!;
-        if (this.type)
+        if (this.type()) {
             tenant.setValidators([Validators.required]);
-        else
+        } else {
             tenant.setValidators([]);
+        }
 
         tenant.updateValueAndValidity();
     }

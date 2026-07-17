@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.unsubscribe),
         map(response => response.data)
-      )
+      );
   }
 
   private onSubmitNewCase() {
@@ -79,8 +79,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe({
         next: data => {
-          if (data)
+          if (data) {
             this.router.navigate([`${this.authService.getSessionOrgPath()}/case/${data.protocol}`]);
+          }
         },
         error: error => {
           ConsoleLogger.printError('Failed to create new Case', error);
@@ -100,13 +101,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.sessionForm?.invalid)
+    if (this.sessionForm?.invalid) {
       return;
+    }
 
-    if (this.type)
+    if (this.type) {
       this.onSubmitOpenCase();
-    else
+    } else {
       this.onSubmitNewCase();
+    }
   }
 
   onKey(_event: any) {

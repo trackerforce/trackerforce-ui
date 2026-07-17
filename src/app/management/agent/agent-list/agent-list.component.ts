@@ -39,7 +39,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent))
+    this.agentService.agent.pipe(takeUntil(this.unsubscribe)).subscribe(agent => this.loadData(agent));
 
     this.loadData();
   }
@@ -68,9 +68,10 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
         }),
         map(data => {
           this.loading = false;
-          if (data === null)
+          if (data === null) {
             return [];
-          
+          }
+
           this.resultsLength = data.items;
           return data.data;
         })
@@ -94,7 +95,7 @@ export class AgentListComponent implements AfterViewInit, OnDestroy {
   }
 
   getAgentEdit(agentId: string): string {
-    return `/${this.authService.getManagementOrgPath()}/agent/${agentId}`
+    return `/${this.authService.getManagementOrgPath()}/agent/${agentId}`;
   }
 
   toggleExpanded(element: Agent) {

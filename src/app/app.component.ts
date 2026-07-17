@@ -13,8 +13,8 @@ export class AppComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly cdr = inject(ChangeDetectorRef);
   
-  currentToken = ""
-  tenant = "";
+  currentToken = '';
+  tenant = '';
   isAgent = false;
 
   ngOnInit() {

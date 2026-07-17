@@ -1,60 +1,52 @@
-// @ts-check
-const eslint = require("@eslint/js");
-const tseslint = require("typescript-eslint");
-const angular = require("angular-eslint");
+import tseslint from 'typescript-eslint';
+import angular from 'angular-eslint';
+import { defineConfig } from 'eslint/config';
 
-module.exports = tseslint.config(
-  {
-    files: ["**/*.ts"],
+export default defineConfig({
+    files: ['**/*.ts'],
     extends: [
-      eslint.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
     rules: {
-      "@angular-eslint/directive-selector": [
-        "error",
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
+      curly: ['error', 'multi-line'],
+      '@angular-eslint/component-selector': [
+        'error',
         {
-          type: "attribute",
-          prefix: "app",
-          style: "camelCase"
+          type: 'element',
+          style: 'kebab-case',
         },
       ],
-      "@angular-eslint/component-selector": [
-        "error",
-        {
-          type: "element",
-          style: "kebab-case",
-        },
-      ],
-      "@typescript-eslint/no-unused-expressions": [
-        "error",
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
         {
           allowShortCircuit: true,
           allowTernary: true,
         },
       ],
-      "@typescript-eslint/no-empty-function": [
-        "error",
+      '@typescript-eslint/no-empty-function': [
+        'error',
         {
-          allow: ["arrowFunctions"],
+          allow: ['arrowFunctions'],
         },
       ],
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
   {
-    files: ["**/*.html"],
+    files: ['**/*.html'],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
     rules: {
-      "@angular-eslint/template/click-events-have-key-events": "off",
-      "@angular-eslint/template/interactive-supports-focus": "off"
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off'
     },
   }
 );

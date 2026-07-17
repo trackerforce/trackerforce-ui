@@ -28,9 +28,9 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   @Input() open = true;
   @Output() eventChange = new EventEmitter<Task>();
 
-  iconClass = "";
+  iconClass = '';
   taskForm!: FormGroup;
-  type = "TEXT";
+  type = 'TEXT';
 
   ngOnInit(): void {
     this.type = this.task.type!;
@@ -45,11 +45,11 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
         if (data?.response != undefined) {
           this.task.response = data.response;
           this.eventChange.emit(this.task);
-          this.iconClass = "task-done";
+          this.iconClass = 'task-done';
         } else {
           this.task.response = undefined;
           this.eventChange.emit(this.task);
-          this.iconClass = "";
+          this.iconClass = '';
         }
       });
   }
@@ -60,11 +60,13 @@ export class CaseTaskComponent implements OnInit, OnDestroy {
   }
 
   private defaultResponse() {
-    if (this.isTaskDone())
-      this.iconClass = "task-done";
+    if (this.isTaskDone()) {
+      this.iconClass = 'task-done';
+    }
 
-    if (this.task.type === 'CHECK')
+    if (this.task.type === 'CHECK') {
       return this.task.response ?? false;
+    }
 
     return this.task.response;
   }
